@@ -4,18 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Usama Arshad — Business Development Specialist &amp; Tech Sales Strategist</title>
-  <meta name="description" content="Official portfolio of Usama Arshad, a Business Development Specialist with a Computer Science background specializing in B2B lead generation, high-ticket freelance website bidding, outbound outreach, and technical project scoping.">
-  <meta name="keywords" content="Usama Arshad, Business Development Specialist, B2B Lead Generation, Freelance Website Bidding, Outbound Outreach, Technical Sales, Computer Science, Neksogix, SMJ Solutions, Lahore, Rahim Yar Khan, Pakistan">
+  <meta name="description" content="Official portfolio of Usama Arshad, a Business Development Specialist with a Computer Science background specializing in B2B lead generation, high-ticket freelance platform bidding, outbound outreach, and technical project scoping.">
+  <meta name="keywords" content="Usama Arshad, Business Development Specialist, B2B Lead Generation, Freelance Platform Bidding, Outbound Outreach, Technical Sales, Computer Science, Neksogix, SMJ Solutions, Lahore, Rahim Yar Khan, Pakistan">
   <meta name="author" content="Usama Arshad">
   <meta name="copyright" content="Usama Arshad">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <link rel="canonical" href="https://usamaarshad.site/" />
+  <link rel="canonical" href="https://usamaarshad.me/" />
+
+  <!-- Favicon & Brand Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
   <!-- Open Graph / Social Previews -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://usamaarshad.site/">
+  <meta property="og:url" content="https://usamaarshad.me/">
   <meta property="og:title" content="Usama Arshad — Business Development Specialist &amp; Tech Sales Strategist">
-  <meta property="og:description" content="Bridging the gap between engineering and revenue. Computer Science graduate driving high-conversion B2B client acquisition, freelance website bidding, and outbound outreach for tech agencies and software enterprises.">
+  <meta property="og:description" content="Bridging the gap between engineering and revenue. Computer Science graduate driving high-conversion B2B client acquisition, freelance platform bidding, and outbound outreach for tech agencies and software enterprises.">
   <meta property="og:image" content="./usama/ezgif-frame-001.jpg">
   <meta property="og:site_name" content="Usama Arshad Portfolio">
   <meta property="profile:first_name" content="Usama">
@@ -24,7 +30,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Usama Arshad — Business Development Specialist &amp; Tech Sales Strategist">
-  <meta name="twitter:description" content="Bridging the gap between engineering and revenue. CS graduate driving high-conversion B2B client acquisition, freelance website bidding, and outbound outreach.">
+  <meta name="twitter:description" content="Bridging the gap between engineering and revenue. CS graduate driving high-conversion B2B client acquisition, freelance platform bidding, and outbound outreach.">
   <meta name="twitter:image" content="./usama/ezgif-frame-001.jpg">
 
   <!-- Resource Pre-connections -->
@@ -73,7 +79,7 @@
         ],
         "knowsAbout": [
           "B2B Lead Generation",
-          "Freelance Website Bidding & BD",
+          "Freelance Platform Bidding & BD",
           "Outbound Outreach Strategies",
           "Apollo.io & LinkedIn Sales Navigator",
           "Technical Proposal Writing",
@@ -91,12 +97,12 @@
       },
       {
         "@type": "WebSite",
-        "@id": "https://usamaarshad.site/#website",
-        "url": "https://usamaarshad.site/",
+        "@id": "https://usamaarshad.me/#website",
+        "url": "https://usamaarshad.me/",
         "name": "Usama Arshad — Business Development Specialist",
         "description": "Official portfolio of Usama Arshad, Business Development Specialist and Tech Sales Strategist.",
         "publisher": {
-          "@id": "https://usamaarshad.site/#person"
+          "@id": "https://usamaarshad.me/#person"
         }
       }
     ]
@@ -133,13 +139,62 @@
       padding: 0;
     }
 
-    html, body {
+    html {
+      width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    body {
       width: 100%;
       background-color: var(--bg-dark);
       color: var(--text-white);
       font-family: var(--font-body);
       overflow-x: hidden;
-      overscroll-behavior-y: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body.menu-open {
+      overflow: hidden !important;
+      touch-action: none;
+    }
+
+    /* Mobile Navigation Backdrop */
+    .nav-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 98;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     /* Fixed Canvas Background */
@@ -180,7 +235,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 22px 60px;
+      padding: 18px max(24px, calc((100vw - 1280px) / 2 + 32px));
       background: linear-gradient(180deg, rgba(10,12,16,0.92) 0%, rgba(10,12,16,0) 100%);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -191,68 +246,82 @@
     .brand-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       text-decoration: none;
+      transition: opacity 0.25s ease;
     }
 
-    .brand-monogram {
-      font-family: var(--font-serif);
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: var(--text-white);
-      display: inline-block;
-      border: 1.5px solid rgba(255, 255, 255, 0.3);
-      padding: 2px 10px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.04);
-      transition: all 0.3s ease;
+    .brand-icon-img {
+      height: 48px;
+      width: auto;
+      aspect-ratio: 1121 / 728;
+      border-radius: 10px;
+      object-fit: contain;
+      object-position: center;
+      border: 1.5px solid rgba(255, 255, 255, 0.26);
+      background: #000000;
+      padding: 3px 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 14px rgba(0, 217, 149, 0.18);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: block;
+      flex-shrink: 0;
     }
 
-    .brand-logo:hover .brand-monogram {
-      border-color: #ffffff;
-      background: rgba(255, 255, 255, 0.12);
-      transform: scale(1.04);
+    .brand-logo:hover .brand-icon-img {
+      border-color: rgba(0, 217, 149, 0.85);
+      transform: translateY(-1px) scale(1.05);
+      box-shadow: 0 6px 22px rgba(0, 217, 149, 0.4);
     }
 
     .brand-text {
       display: flex;
       flex-direction: column;
+      gap: 3px;
     }
 
     .brand-name {
       font-family: var(--font-heading);
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.4px;
       text-transform: uppercase;
-      color: var(--text-white);
+      color: #ffffff;
+      line-height: 1.15;
+      transition: color 0.3s ease;
     }
 
     .brand-sub {
+      font-family: var(--font-heading);
       font-size: 10.5px;
-      letter-spacing: 1px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: #2ee6a8;
+      line-height: 1.15;
+    }
+
+    .brand-logo:hover .brand-name {
+      color: #2ee6a8;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: clamp(12px, 1.6vw, 28px);
     }
 
     .nav-item {
       color: rgba(255, 255, 255, 0.72);
       text-decoration: none;
       font-family: var(--font-heading);
-      font-size: 12px;
+      font-size: clamp(11px, 0.85vw, 12px);
       font-weight: 600;
-      letter-spacing: 1.5px;
+      letter-spacing: clamp(1px, 0.1vw, 1.5px);
       text-transform: uppercase;
       position: relative;
       padding: 6px 0;
       transition: color 0.3s ease;
+      white-space: nowrap;
     }
 
     .nav-item::after {
@@ -454,11 +523,32 @@
       max-width: 720px;
       margin-top: 36px;
       margin-bottom: 40px;
+      min-height: 92px;
     }
 
     .hero-desc strong {
       color: #ffffff;
       font-weight: 600;
+    }
+
+    .type-cursor {
+      display: inline-block;
+      font-weight: 300;
+      color: var(--accent-color);
+      margin-left: 2px;
+      animation: blinkCursor 0.8s infinite;
+      vertical-align: baseline;
+    }
+
+    .type-cursor.fade-out {
+      animation: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
     .hero-cta-row {
@@ -706,6 +796,15 @@
       box-shadow: none;
     }
 
+    .company-heading-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
     .subrole-header {
       display: flex;
       justify-content: space-between;
@@ -896,67 +995,120 @@
     }
 
     /* Tools Grid Card */
-    .tools-grid {
+    .tools-grid-full {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
     }
 
     .tool-box {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 12px;
-      padding: 16px 18px;
+      border-radius: 14px;
+      padding: 18px 20px;
       display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: all 0.25s ease;
+      align-items: flex-start;
+      gap: 15px;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
     }
 
     .tool-box:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(0, 217, 149, 0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
     }
 
-    .tool-abbr {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+    .tool-logo-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-heading);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-white);
       flex-shrink: 0;
+      transition: all 0.25s ease;
+      margin-top: 2px;
+    }
+
+    .tool-box:hover .tool-logo-wrap {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: scale(1.06);
+    }
+
+    .tool-logo-wrap svg {
+      width: 24px;
+      height: 24px;
+      display: block;
     }
 
     .tool-icon-lbl {
       font-family: var(--font-heading);
-      font-size: 13.5px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--text-white);
+      margin-bottom: 3px;
     }
 
     .tool-sub-lbl {
-      font-size: 11.5px;
+      font-size: 12px;
       color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    .tool-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 9px;
+    }
+
+    .tool-pill {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.78);
+      transition: all 0.2s ease;
+      line-height: 1.35;
+    }
+
+    .tool-box:hover .tool-pill {
+      border-color: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    .tool-pill:hover {
+      background: rgba(0, 217, 149, 0.12) !important;
+      border-color: rgba(0, 217, 149, 0.35) !important;
+      color: #2ee6a8 !important;
     }
 
     /* Education List Cards */
     .edu-list {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
     .edu-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .edu-info-col {
+      display: flex;
+      flex-direction: column;
     }
 
     .edu-title {
@@ -966,10 +1118,70 @@
       color: var(--text-white);
     }
 
+    .edu-inst-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+      font-size: 14.5px;
+      color: var(--text-muted);
+    }
+
+    .edu-inst-name {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .edu-loc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3px 11px;
+      border-radius: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .edu-loc-badge:hover {
+      background: rgba(0, 217, 149, 0.08);
+      border-color: rgba(0, 217, 149, 0.3);
+      color: #ffffff;
+    }
+
+    .edu-loc-badge svg {
+      color: #00d995;
+      flex-shrink: 0;
+    }
+
     .edu-inst-text {
       font-size: 14.5px;
       color: var(--text-muted);
       margin-top: 4px;
+    }
+
+    .edu-meta-col {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .edu-session-tag {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.04);
+      white-space: nowrap;
     }
 
     .edu-badge-tag {
@@ -983,6 +1195,59 @@
       color: var(--text-white);
       background: rgba(255, 255, 255, 0.04);
       white-space: nowrap;
+    }
+
+    .edu-divider {
+      border: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 8px 0;
+    }
+
+    /* Floating Back to Top Button */
+    .back-to-top-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(14, 18, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 99;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px) scale(0.9);
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    }
+
+    .back-to-top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .back-to-top-btn:hover {
+      background: rgba(0, 217, 149, 0.16);
+      border-color: rgba(0, 217, 149, 0.65);
+      color: #00d995;
+      transform: translateY(-4px) scale(1.08);
+      box-shadow: 0 10px 24px rgba(0, 217, 149, 0.25);
+    }
+
+    .back-to-top-btn svg {
+      transition: transform 0.25s ease;
+    }
+
+    .back-to-top-btn:hover svg {
+      transform: translateY(-2px);
     }
 
     /* Large Editorial Contact Footer Box */
@@ -1060,23 +1325,48 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
       color: var(--text-dim);
       font-size: 13px;
     }
 
-    .footer-links {
+    .footer-copy {
+      margin: 0;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.5;
+    }
+
+    .footer-right {
       display: flex;
-      gap: 20px;
+      align-items: center;
     }
 
-    .footer-links a {
-      color: var(--text-dim);
+    .back-to-top-link {
+      color: rgba(255, 255, 255, 0.75);
       text-decoration: none;
-      transition: color 0.25s ease;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .footer-links a:hover {
-      color: var(--text-white);
+    .back-to-top-link:hover {
+      color: #ffffff;
+      border-color: rgba(0, 217, 149, 0.6);
+      background: rgba(0, 217, 149, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 217, 149, 0.2);
     }
 
     /* Preloader */
@@ -1134,9 +1424,9 @@
     }
 
     /* Responsive Queries */
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       header {
-        padding: 18px 24px;
+        padding: 16px 24px;
       }
 
       .mobile-toggle {
@@ -1148,19 +1438,23 @@
         top: 0;
         right: -100%;
         width: 82%;
-        max-width: 340px;
+        max-width: 320px;
+        height: 100dvh;
         height: 100vh;
         background: rgba(10, 12, 16, 0.98);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
         border-left: 1px solid rgba(255, 255, 255, 0.1);
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        gap: 28px;
+        gap: 20px;
+        padding: 85px 24px 36px 24px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 99;
-        box-shadow: -15px 0 35px rgba(0, 0, 0, 0.6);
+        box-shadow: -15px 0 35px rgba(0, 0, 0, 0.7);
       }
 
       .nav-links.active {
@@ -1170,10 +1464,16 @@
       .nav-item {
         font-size: 15px;
         letter-spacing: 2px;
+        padding: 8px 0;
+        width: 100%;
+        text-align: center;
       }
 
       .mobile-only-talk {
         display: inline-flex !important;
+        width: 100%;
+        justify-content: center;
+        margin-top: 8px;
       }
 
       .header-right .btn-talk {
@@ -1192,11 +1492,13 @@
 
       .capabilities-split {
         grid-template-columns: 1fr;
+        gap: 24px;
       }
 
       .contact-banner-card {
         grid-template-columns: 1fr;
         padding: 40px 24px;
+        gap: 28px;
       }
 
       .experience-grid {
@@ -1204,87 +1506,100 @@
       }
     }
 
-    @media (max-width: 600px) {
-      .content-wrapper {
-        padding: 0 18px;
+    @media (max-width: 768px) {
+      .hero-name-title {
+        font-size: clamp(38px, 11vw, 68px);
+        letter-spacing: 2px;
+        margin-bottom: 12px;
       }
 
-      section {
-        padding: 75px 0;
+      .hero-role-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: clamp(16px, 4.5vw, 24px);
+        letter-spacing: 1.5px;
+        margin-bottom: 24px;
       }
 
-      .hero-section {
-        padding-top: 110px;
-        padding-bottom: 40px;
+      .hero-role-right {
+        margin-left: 0;
+        text-align: left;
+        color: #2ee6a8;
       }
 
       .hero-desc {
         font-size: 16px;
-        margin-top: 24px;
+        line-height: 1.6;
+        margin-top: clamp(260px, 35vh, 340px);
         margin-bottom: 28px;
+        min-height: 110px;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+      }
+    }
+
+    @media (max-width: 768px) and (orientation: landscape) {
+      .hero-desc {
+        margin-top: 24px !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .content-wrapper {
+        padding: 0 16px;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .hero-section {
+        padding-top: 96px;
+        padding-bottom: 30px;
+        min-height: auto;
+      }
+
+      .hero-desc {
+        font-size: 15.5px;
+        line-height: 1.62;
+        margin-top: clamp(270px, 36vh, 350px);
+        margin-bottom: 26px;
+        min-height: 100px;
+      }
+
+      .av-card {
+        padding: 22px 16px !important;
+        border-radius: 16px;
+      }
+
+      .hero-name-title {
+        font-size: clamp(32px, 11.5vw, 52px);
+        letter-spacing: 1.5px;
       }
 
       .hero-cta-row {
         flex-direction: column;
         width: 100%;
-        gap: 12px;
+        gap: 10px;
       }
 
       .hero-cta-row .btn-white,
       .hero-cta-row .btn-outline {
         width: 100%;
         justify-content: center;
-      }
-
-      .av-card {
-        padding: 24px 18px;
-        border-radius: 16px;
-      }
-
-      .tools-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .edu-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .contact-banner-card {
-        padding: 30px 18px;
-        border-radius: 18px;
-      }
-
-      .contact-detail-row {
-        word-break: break-all;
-        overflow-wrap: anywhere;
-        font-size: 13.5px;
-      }
-
-      footer {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .brand-monogram {
-        font-size: 20px;
-        padding: 2px 8px;
-      }
-
-      .btn-talk {
-        padding: 8px 14px;
-        font-size: 11px;
+        padding: 13px 20px;
+        font-size: 11.5px;
       }
 
       .stats-bar-card {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 20px 10px;
-        gap: 16px 8px;
+        grid-template-columns: repeat(2, 1fr) !important;
+        padding: 20px 10px !important;
+        gap: 16px 8px !important;
+        margin-top: 36px;
+      }
+
+      .stat-col {
+        padding: 0 8px;
       }
 
       .stat-number {
@@ -1293,7 +1608,249 @@
 
       .stat-label {
         font-size: 9.5px;
+        letter-spacing: 0.8px;
+        line-height: 1.35;
+      }
+
+      .exp-role-title {
+        font-size: 22px !important;
+      }
+
+      .exp-company {
+        font-size: 13px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .company-heading-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .subrole-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .subrole-title {
+        font-size: 16.5px;
+      }
+
+      .subrole-badge {
+        font-size: 10px;
+        padding: 2px 10px;
+      }
+
+      .exp-desc-list li {
+        font-size: 13.5px;
+        line-height: 1.55;
+        padding-left: 18px;
+        margin-bottom: 8px;
+      }
+
+      .services-grid,
+      .process-grid,
+      .capabilities-split,
+      .experience-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
+      .tools-grid,
+      .tools-grid-full {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+
+      .tool-box {
+        padding: 14px 16px;
+        gap: 14px;
+      }
+
+      .tool-icon-lbl {
+        font-size: 13.5px;
+      }
+
+      .tool-sub-lbl {
+        font-size: 11.5px;
+      }
+
+      .edu-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .edu-title {
+        font-size: 17px;
+      }
+
+      .edu-inst-row {
+        font-size: 13px;
+        gap: 8px;
+      }
+
+      .edu-meta-col {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .edu-session-tag,
+      .edu-badge-tag {
+        font-size: 11px;
+        padding: 4px 12px;
+      }
+
+      .contact-banner-card {
+        padding: 26px 16px !important;
+        border-radius: 18px;
+        gap: 24px;
+      }
+
+      .banner-title {
+        font-size: clamp(26px, 8.5vw, 40px);
+        line-height: 1;
+      }
+
+      .banner-sub {
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      .contact-detail-row {
+        padding: 10px 14px;
+        font-size: 13px;
+        gap: 10px;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+      }
+
+      .contact-banner-card .btn-white,
+      .contact-banner-card .btn-outline {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 18px;
+        font-size: 11.5px;
+      }
+
+      footer {
+        padding: 30px 0 36px 0;
+        gap: 16px;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .footer-copy {
+        font-size: 12px;
+      }
+
+      .footer-right {
+        justify-content: center;
+      }
+
+      .back-to-top-link {
+        font-size: 11px;
+        padding: 8px 14px;
+      }
+
+      .back-to-top-btn {
+        bottom: 20px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 14px 16px;
+      }
+
+      .brand-icon-img {
+        height: 38px;
+        padding: 2px 4px;
+        border-radius: 8px;
+      }
+
+      .brand-name {
+        font-size: 13px;
         letter-spacing: 1px;
+      }
+
+      .brand-sub {
+        font-size: 9.5px;
+        letter-spacing: 0.8px;
+      }
+
+      .btn-talk {
+        padding: 8px 14px;
+        font-size: 11px;
+      }
+
+      .card-top-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .brand-icon-img {
+        height: 34px;
+      }
+
+      .brand-name {
+        font-size: 11.5px;
+      }
+
+      .brand-sub {
+        font-size: 8.5px;
+      }
+
+      .hero-name-title {
+        font-size: 32px;
+        letter-spacing: 1px;
+      }
+
+      .stats-bar-card {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    /* Touch Device Optimizations (No sticky hover states on mobile/tablet) */
+    @media (hover: none) {
+      .av-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .tool-box:hover {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .btn-white:hover,
+      .btn-outline:hover {
+        transform: none !important;
+      }
+      .contact-detail-row:hover {
+        transform: none !important;
+      }
+    }
+
+    /* Ultra-wide Displays (1600px - 4K monitors) */
+    @media (min-width: 1600px) {
+      .content-wrapper {
+        max-width: 1360px;
+      }
+      .hero-desc {
+        font-size: 20px;
+        max-width: 780px;
       }
     }
   </style>
@@ -1302,6 +1859,7 @@
 
   <!-- Preloader Screen -->
   <div class="loader" id="loader">
+    <img src="Minimalist_letter_logo_design_2K_20260930152134.jpg" alt="Usama Arshad Logo" class="brand-icon-img" style="height: 60px; width: auto; margin-bottom: 20px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 217, 149, 0.3);">
     <div class="loader-title">USAMA ARSHAD</div>
     <div class="loader-text" id="loaderText">Initializing Experience 0%</div>
     <div class="loader-bar-bg">
@@ -1312,11 +1870,12 @@
   <!-- Background Canvas for Frame Animation -->
   <canvas id="canvas" aria-label="Interactive background animation for Usama Arshad Portfolio"></canvas>
   <div class="bg-overlay"></div>
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- Header Navigation -->
   <header>
     <a href="#hero" class="brand-logo" aria-label="Usama Arshad Home">
-      <span class="brand-monogram">UA</span>
+      <img src="Minimalist_letter_logo_design_2K_20260930152134.jpg" alt="Usama Arshad Logo" class="brand-icon-img">
       <div class="brand-text">
         <span class="brand-name">Usama Arshad</span>
         <span class="brand-sub">Business Development</span>
@@ -1328,7 +1887,7 @@
       <a href="#experience" class="nav-item">Experience</a>
       <a href="#services" class="nav-item">Services</a>
       <a href="#strategy" class="nav-item">Strategy</a>
-      <a href="#capabilities" class="nav-item">Skills &amp; Tech</a>
+      <a href="#capabilities" class="nav-item">Tech Stack</a>
       <a href="#about" class="nav-item">About</a>
       <a href="#education" class="nav-item">Education</a>
       <a href="#contact" class="nav-item">Contact</a>
@@ -1360,7 +1919,7 @@
 
 
       <p class="hero-desc">
-        Most sales strategies fail because they miss the <strong>technical depth</strong>. With a background in CS, I help software and AI companies connect with the right decision-makers and convert complex specs into <strong>winning proposals</strong>.
+        <span id="heroDescText">Most sales strategies fail because they miss the <strong>technical depth</strong>. With a background in CS, I help software and AI companies connect with the right decision-makers and convert complex specs into <strong>winning proposals</strong>.</span><span class="type-cursor" id="heroTypeCursor">|</span>
       </p>
 
       <div class="hero-cta-row">
@@ -1392,7 +1951,7 @@
         <div class="stat-col">
           <span class="stat-icon">🌐</span>
           <span class="stat-number">Multi</span>
-          <span class="stat-label">Channel Outbound (Freelance Website + Email)</span>
+          <span class="stat-label">Channel Outbound / Inbound (Freelance Platforms + Email)</span>
         </div>
       </div>
     </section>
@@ -1417,7 +1976,7 @@
               <span class="exp-date">August 2025 – Present</span>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 22px;">
+            <div class="company-heading-row">
               <div>
                 <h3 class="exp-role-title" style="font-size: 30px; margin-bottom: 4px;">Neksogix</h3>
                 <p class="exp-company" style="margin-bottom: 0;">
@@ -1426,7 +1985,7 @@
                   <span style="color: var(--text-dim);">Software &amp; Digital Solutions</span>
                 </p>
               </div>
-              <div style="font-family: var(--font-heading); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2ee6a8; background: rgba(0, 217, 149, 0.08); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(0, 217, 149, 0.25);">
+              <div class="company-badge-promo" style="font-family: var(--font-heading); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2ee6a8; background: rgba(0, 217, 149, 0.08); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(0, 217, 149, 0.25);">
                 3 Consecutive Promotions &amp; Roles
               </div>
             </div>
@@ -1456,10 +2015,10 @@
                 <span class="subrole-badge">Nov 2025 – Apr 2026 • 6 mos</span>
               </div>
               <ul class="exp-desc-list">
-                <li>Managed client acquisition through LinkedIn outreach, targeted cold email campaigns, and multi-touch prospecting.</li>
-                <li>Generated and qualified high-intent B2B leads by analyzing company profiles, decision-makers, and emerging opportunities.</li>
-                <li>Conducted freelancing platform bidding with customized value pitches, case study references, and follow-up sequences.</li>
-                <li>Prepared tailored project proposals and coordinated with developers to align technical solutions with client needs.</li>
+                <li>Executed targeted cold email and LinkedIn messaging sequences to build early-stage sales pipeline for tech services.</li>
+                <li>Conducted freelance platform job vetting, submitting value-focused bids backed by relevant case studies and portfolio proofs.</li>
+                <li>Mapped decision-makers across US/UK tech agencies and software companies to expand outbound prospecting reach.</li>
+                <li>Maintained lead status, call notes, and follow-up cadences in CRM to ensure zero prospect leakage.</li>
               </ul>
             </div>
 
@@ -1527,7 +2086,7 @@
                 <span class="card-badge">Growth &amp; Client Networks</span>
                 <span class="card-badge" style="background: rgba(0, 217, 149, 0.1); border-color: rgba(0, 217, 149, 0.3); color: #2ee6a8;">🌐 Remote</span>
               </div>
-              <span class="exp-date">June 2023 – Present (3+ yrs)</span>
+              <span class="exp-date">Jun 2023 – Jun 2024 (1 yr)</span>
             </div>
             <h3 class="exp-role-title">Sales And Marketing Specialist</h3>
             <p class="exp-company">
@@ -1564,12 +2123,12 @@
             <ul class="exp-desc-list">
               <li>Organized nationwide AI seminars, technical workshops, hands-on hackathons, and webinar series.</li>
               <li>Forged strategic partnerships with tech organizations for student internship placements and skills training.</li>
-              <li>Developed AI solutions using Python and C++; performed system testing, code optimization, and architecture debugging.</li>
+              <li>Developed AI solutions using Python; performed system testing, code optimization, and architecture debugging.</li>
               <li>Bridged academic tech talent with commercial AI industry initiatives.</li>
             </ul>
           </div>
           <div class="exp-tags-row">
-            <span class="exp-tag">Python &amp; C++</span>
+            <span class="exp-tag">Python</span>
             <span class="exp-tag">AI Workflows</span>
             <span class="exp-tag">Tech Partnerships</span>
             <span class="exp-tag">Event Leadership</span>
@@ -1620,13 +2179,13 @@
         <div class="av-card service-card">
           <div>
             <div class="service-icon-box">🚀</div>
-            <h3 class="service-title">Freelance Website Bidding &amp; BD</h3>
+            <h3 class="service-title">Freelance Platforms Bidding &amp; BD</h3>
             <p class="service-desc">
               Transforming freelance channels into high-ticket revenue engines. Zero copy-paste templates; every pitch directly diagnoses the client's bottleneck with technical clarity.
             </p>
           </div>
           <ul class="service-bullet-list">
-            <li>High-ticket freelance website job research &amp; vetting</li>
+            <li>High-ticket freelance platform job research &amp; vetting</li>
             <li>Customized technical pitches &amp; scope breakdown</li>
             <li>Client interview preparation &amp; negotiation</li>
             <li>Milestone planning &amp; contract closure</li>
@@ -1637,7 +2196,7 @@
         <div class="av-card service-card">
           <div>
             <div class="service-icon-box">🎯</div>
-            <h3 class="service-title">Targeted Outbound B2B Outreach</h3>
+            <h3 class="service-title">Targeted Outbound &amp; Inbound B2B Outreach</h3>
             <p class="service-desc">
               Building qualified prospect lists and high-response messaging campaigns across LinkedIn Sales Navigator and cold email databases.
             </p>
@@ -1729,100 +2288,130 @@
       </div>
     </section>
 
-    <!-- CAPABILITIES & TOOLS SECTION -->
+    <!-- TOOLS & TECH STACK SECTION -->
     <section id="capabilities">
-      <div class="capabilities-split">
-        <!-- Left: Core Capabilities -->
-        <div>
-          <div class="section-category">Core Competencies</div>
-          
-          <div class="capabilities-list">
-            <div class="capability-item">
-              <span class="cap-icon">▹</span>
-              <div>
-                <h4 class="cap-title">B2B Lead Generation &amp; Prospecting</h4>
-                <p class="cap-desc">Sourcing decision-makers via LinkedIn, Apollo.io, Google Maps, and business directories based on strict ICP metrics.</p>
-              </div>
-            </div>
+      <div class="section-category">
+        <span>Tools &amp; Tech Stack</span>
+        <span class="section-category-link">Sales Intelligence &amp; Technical Infrastructure ➔</span>
+      </div>
 
-            <div class="capability-item">
-              <span class="cap-icon">▹</span>
-              <div>
-                <h4 class="cap-title">Freelance Website Bidding</h4>
-                <p class="cap-desc">Job opportunity identification, high-relevance bidding, and personalized pitches for software and digital transformation agencies.</p>
-              </div>
+      <div class="av-card">
+        <div class="tools-grid-full">
+          <!-- 1. B2B Lead Intelligence -->
+          <div class="tool-box">
+            <div class="tool-logo-wrap" title="B2B Lead Intelligence &amp; ICP Scraping">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.5L3.5 19.5L7.5 18L12 9.5L16.5 18L20.5 19.5L12 2.5Z" fill="#F79009"/>
+                <path d="M12 9.5L14.8 15.5H9.2L12 9.5Z" fill="#FDB022"/>
+              </svg>
             </div>
-
-            <div class="capability-item">
-              <span class="cap-icon">▹</span>
-              <div>
-                <h4 class="cap-title">Technical Project Scoping</h4>
-                <p class="cap-desc">Deciphering architecture, AI workflows, databases, and APIs to give clients accurate estimates without dev overhead.</p>
-              </div>
-            </div>
-
-            <div class="capability-item">
-              <span class="cap-icon">▹</span>
-              <div>
-                <h4 class="cap-title">Pipeline &amp; CRM Hygiene</h4>
-                <p class="cap-desc">Tracking multi-touch outreach cadences, follow-ups, call notes, and deal stages for data-backed sales visibility.</p>
+            <div>
+              <div class="tool-icon-lbl">B2B Lead Intelligence</div>
+              <div class="tool-sub-lbl">ICP Scraping, Data Enrichment &amp; Verification</div>
+              <div class="tool-pills-row">
+                <span class="tool-pill">Apollo.io</span>
+                <span class="tool-pill">Hunter.io</span>
+                <span class="tool-pill">NeverBounce</span>
+                <span class="tool-pill">BuiltWith</span>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Right: Tools & Technologies -->
-        <div>
-          <div class="section-category">Tools &amp; Tech Stack</div>
-          
-          <div class="av-card">
-            <div class="tools-grid">
-              <div class="tool-box">
-                <div class="tool-abbr">Ap</div>
-                <div>
-                  <div class="tool-icon-lbl">Apollo.io</div>
-                  <div class="tool-sub-lbl">B2B Lead Intelligence</div>
-                </div>
+          <!-- 2. LinkedIn Sales Navigator -->
+          <div class="tool-box">
+            <div class="tool-logo-wrap" title="LinkedIn Sales Navigator">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#0A66C2" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-icon-lbl">LinkedIn Sales Nav</div>
+              <div class="tool-sub-lbl">Outbound &amp; Inbound Prospecting</div>
+              <div class="tool-pills-row">
+                <span class="tool-pill">Sales Nav</span>
+                <span class="tool-pill">Boolean Search</span>
+                <span class="tool-pill">Account Mapping</span>
+                <span class="tool-pill">InMail Cadence</span>
               </div>
+            </div>
+          </div>
 
-              <div class="tool-box">
-                <div class="tool-abbr">SN</div>
-                <div>
-                  <div class="tool-icon-lbl">LinkedIn Sales Nav</div>
-                  <div class="tool-sub-lbl">Outbound Prospecting</div>
-                </div>
+          <!-- 3. Freelance Platforms -->
+          <div class="tool-box">
+            <div class="tool-logo-wrap" title="Freelance Platforms (Upwork, etc.)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.56 12.83c-.88 0-1.64.44-2.13 1.12l-.08.12-.13-.53-.45-1.74a7.92 7.92 0 0 0-3.6-4.63l-.42-.23-.28.4a7.48 7.48 0 0 1-3.64 2.76 4.3 4.3 0 0 1-1.39.22 4.45 4.45 0 0 1-4.44-4.45V2.5H0v3.39A6.96 6.96 0 0 0 6.94 12.83c.87 0 1.7-.17 2.47-.5a9.8 9.8 0 0 0 2.22-1.42l.74 2.87c-1.33 1.58-2.12 3.6-2.12 5.82v1.9h2.5v-1.9c0-1.66.66-3.2 1.79-4.38l.19-.2.24.13a4.7 4.7 0 0 0 2.4.67c2.65 0 4.8-2.15 4.8-4.8 0-2.64-2.15-4.79-4.81-4.79zm0 7.1c-1.27 0-2.31-1.03-2.31-2.31 0-1.27 1.04-2.31 2.31-2.31s2.31 1.04 2.31 2.31c0 1.28-1.04 2.31-2.31 2.31z" fill="#14a800"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-icon-lbl">Freelance Platforms</div>
+              <div class="tool-sub-lbl">Bidding &amp; Proposals (Upwork, etc.)</div>
+              <div class="tool-pills-row">
+                <span class="tool-pill">Upwork</span>
+                <span class="tool-pill">Fiverr Pro</span>
+                <span class="tool-pill">Custom Proposals</span>
+                <span class="tool-pill">Deal Closing</span>
               </div>
+            </div>
+          </div>
 
-              <div class="tool-box">
-                <div class="tool-abbr">FW</div>
-                <div>
-                  <div class="tool-icon-lbl">Freelance Websites</div>
-                  <div class="tool-sub-lbl">Bidding &amp; Proposals</div>
-                </div>
+          <!-- 4. Python -->
+          <div class="tool-box">
+            <div class="tool-logo-wrap" title="Python">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.91 2c-5.06 0-4.74 2.2-4.74 2.2l.01 2.28h4.81v.69H5.15S2 6.81 2 11.9c0 5.1 2.75 4.93 2.75 4.93h1.64v-2.31s-.09-2.75 2.71-2.75h4.66s2.61.04 2.61-2.55V4.55S16.97 2 11.91 2zm-2.59 1.48a.95.95 0 1 1 0 1.9.95.95 0 0 1 0-1.9z" fill="#3776AB"/>
+                <path d="M12.09 22c5.06 0 4.74-2.2 4.74-2.2l-.01-2.28h-4.81v-.69h6.84S22 17.19 22 12.1c0-5.1-2.75-4.93-2.75-4.93h-1.64v2.31s.09 2.75-2.71 2.75H10.24s-2.61-.04-2.61 2.55v4.67S7.03 22 12.09 22zm2.59-1.48a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z" fill="#FFD43B"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-icon-lbl">Python</div>
+              <div class="tool-sub-lbl">Technical Foundations &amp; Automation</div>
+              <div class="tool-pills-row">
+                <span class="tool-pill">BeautifulSoup</span>
+                <span class="tool-pill">Selenium</span>
+                <span class="tool-pill">Pandas</span>
+                <span class="tool-pill">API Automation</span>
               </div>
+            </div>
+          </div>
 
-              <div class="tool-box">
-                <div class="tool-abbr">Py</div>
-                <div>
-                  <div class="tool-icon-lbl">Python &amp; C++</div>
-                  <div class="tool-sub-lbl">Technical Foundations</div>
-                </div>
+          <!-- 5. AI & Automation -->
+          <div class="tool-box">
+            <div class="tool-logo-wrap" title="AI & Automation">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.28 9.87a5.98 5.98 0 0 0-.52-4.9 6.07 6.07 0 0 0-6.52-2.82A6 6 0 0 0 4.3 4.2 6.07 6.07 0 0 0 1.7 10.4a6 6 0 0 0 1.48 6.4 6.07 6.07 0 0 0 6.52 2.82 6.02 6.02 0 0 0 4.14 1.78 6.04 6.04 0 0 0 4.78-2.35 6 6 0 0 0 3.66-9.18zm-8.8 10.7a4.54 4.54 0 0 1-3.08-1.22l.14-.08 5.1-2.95a.78.78 0 0 0 .39-.68v-5.8l1.74 1a.06.06 0 0 1 .04.05v6.14a4.56 4.56 0 0 1-4.33 3.54zM3.86 16.6a4.5 4.5 0 0 1-.58-3.26l.15.09 5.1 2.95a.78.78 0 0 0 .78 0l5.03-2.9v2a.08.08 0 0 1-.03.07l-5.32 3.07a4.56 4.56 0 0 1-5.13-2.02zm-1.1-8.58a4.5 4.5 0 0 1 2.5-2.04v6.07a.78.78 0 0 0 .39.68l5.02 2.9-1.74 1a.08.08 0 0 1-.08 0L3.53 13.56a4.56 4.56 0 0 1-.77-5.54zm14.68 2.25l-5.1-2.95a.78.78 0 0 0-.78 0l-5.03 2.9v-2a.08.08 0 0 1 .03-.07l5.32-3.07a4.55 4.55 0 0 1 5.56 5.19zm2.46 3.65a4.55 4.55 0 0 1-2.5 2.05v-6.07a.78.78 0 0 0-.39-.68l-5.02-2.9 1.74-1a.08.08 0 0 1 .08 0l5.32 3.07a4.56 4.56 0 0 1 .77 5.53zM13.2 13.2l-2.2 1.27-2.2-1.27v-2.54l2.2-1.27 2.2 1.27z" fill="#00d995"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-icon-lbl">AI &amp; Automation</div>
+              <div class="tool-sub-lbl">Solution Scoping &amp; Workflows</div>
+              <div class="tool-pills-row">
+                <span class="tool-pill">OpenAI / GPT-4</span>
+                <span class="tool-pill">Claude</span>
+                <span class="tool-pill">Make.com</span>
+                <span class="tool-pill">Zapier</span>
               </div>
+            </div>
+          </div>
 
-              <div class="tool-box">
-                <div class="tool-abbr">AI</div>
-                <div>
-                  <div class="tool-icon-lbl">AI &amp; Automation</div>
-                  <div class="tool-sub-lbl">Solution Scoping</div>
-                </div>
-              </div>
-
-              <div class="tool-box">
-                <div class="tool-abbr">HS</div>
-                <div>
-                  <div class="tool-icon-lbl">HubSpot &amp; CRM</div>
-                  <div class="tool-sub-lbl">Pipeline Tracking</div>
-                </div>
+          <!-- 6. Microsoft Suite & Teams -->
+          <div class="tool-box">
+            <div class="tool-logo-wrap" title="Microsoft Suite &amp; Teams">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.5 7.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5zm2 1.5h-4a1.5 1.5 0 0 0-1.5 1.5v3.25c.5.38 1.11.62 1.78.68h3.72a1.5 1.5 0 0 0 1.5-1.5V10.5a1.5 1.5 0 0 0-1.5-1.5z" fill="#7B83EB"/>
+                <path d="M13.5 6a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5zm2.5 1.75h-5A1.75 1.75 0 0 0 9.25 9.5v5.25c0 .97.78 1.75 1.75 1.75h5a1.75 1.75 0 0 0 1.75-1.75V9.5A1.75 1.75 0 0 0 16 7.75z" fill="#505AC9"/>
+                <rect x="2" y="8" width="9" height="9" rx="1.5" fill="#464EB8"/>
+                <path d="M4.5 10.5h4M6.5 10.5v4" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-icon-lbl">Microsoft Suite &amp; Teams</div>
+              <div class="tool-sub-lbl">Teams, Client Calls &amp; Workspace Collaboration</div>
+              <div class="tool-pills-row">
+                <span class="tool-pill">MS Teams</span>
+                <span class="tool-pill">Excel Analytics</span>
+                <span class="tool-pill">Outlook Cadence</span>
+                <span class="tool-pill">Client Scoping</span>
               </div>
             </div>
           </div>
@@ -1834,7 +2423,7 @@
     <section id="about">
       <div class="section-category">About Usama</div>
 
-      <div class="av-card" style="padding: 48px;">
+      <div class="av-card">
         <h2 style="font-family: var(--font-heading); font-size: clamp(24px, 4vw, 36px); font-weight: 700; margin-bottom: 20px; line-height: 1.3;">
           Why Technical Background Changes The Rules of Business Development
         </h2>
@@ -1866,21 +2455,45 @@
       <div class="av-card">
         <div class="edu-list">
           <div class="edu-row">
-            <div>
+            <div class="edu-info-col">
               <div class="edu-title">Bachelor of Science in Computer Science (BS CS)</div>
-              <div class="edu-inst-text">The University of Lahore • Lahore, Pakistan (Feb 2022 – Jan 2026)</div>
+              <div class="edu-inst-row">
+                <span class="edu-inst-name">The University of Lahore</span>
+                <span class="edu-loc-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  Lahore, Pakistan
+                </span>
+              </div>
             </div>
-            <div class="edu-badge-tag">Computer Science</div>
+            <div class="edu-meta-col">
+              <span class="edu-session-tag">Feb 2022 – Jan 2026</span>
+              <span class="edu-badge-tag">Computer Science</span>
+            </div>
           </div>
 
-          <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.06); margin: 12px 0;">
+          <hr class="edu-divider">
 
           <div class="edu-row">
-            <div>
+            <div class="edu-info-col">
               <div class="edu-title">FSc Pre-Medical</div>
-              <div class="edu-inst-text">Oxbridge College • Pakistan (Feb 2019 – Nov 2021)</div>
+              <div class="edu-inst-row">
+                <span class="edu-inst-name">Oxbridge College</span>
+                <span class="edu-loc-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  Rahim Yar Khan, Pakistan
+                </span>
+              </div>
             </div>
-            <div class="edu-badge-tag">Higher Secondary</div>
+            <div class="edu-meta-col">
+              <span class="edu-session-tag">Feb 2019 – Nov 2021</span>
+              <span class="edu-badge-tag">Higher Secondary</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1896,7 +2509,7 @@
             REVENUE ENGINE
           </h2>
           <p class="banner-sub">
-            Looking to scale your agency's pipeline, win high-ticket freelance website contracts, or close technical enterprise clients? Let's discuss your growth targets.
+            Looking to scale your agency's pipeline, win high-ticket freelance platform contracts, or close technical enterprise clients? Let's discuss your growth targets.
           </p>
           <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
             <a href="mailto:mailmeatusama@gmail.com?subject=Business%20Development%20Collaboration" class="btn-white">Let's Work Together ↗</a>
@@ -1923,13 +2536,11 @@
 
     <!-- Footer -->
     <footer>
-      <div>
+      <div class="footer-copy">
         © 2026 Usama Arshad. All rights reserved.
       </div>
-      <div class="footer-links">
-        <a href="#hero">Back to top ↑</a>
-        <a href="https://www.linkedin.com/in/usama-arshad-bd" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:mailmeatusama@gmail.com">Email</a>
+      <div class="footer-right">
+        <a href="#hero" class="back-to-top-link">Back to top ↑</a>
       </div>
     </footer>
 
@@ -1937,21 +2548,41 @@
 
   <!-- Background Canvas Frame Animation & Smooth Scroll Script -->
   <script>
-    // Mobile Drawer Navigation Toggle
+    // Mobile Drawer Navigation Toggle & Backdrop
     const mobileToggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
+    const navBackdrop = document.getElementById('navBackdrop');
 
-    if (mobileToggle && navLinks) {
-      mobileToggle.addEventListener('click', () => {
-        mobileToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
-      });
+    function closeMobileMenu() {
+      if (mobileToggle) mobileToggle.classList.remove('active');
+      if (navLinks) navLinks.classList.remove('active');
+      if (navBackdrop) navBackdrop.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    }
 
-      document.querySelectorAll('.nav-item').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileToggle.classList.remove('active');
-          navLinks.classList.remove('active');
-        });
+    function toggleMobileMenu() {
+      const isOpen = navLinks && navLinks.classList.contains('active');
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        if (mobileToggle) mobileToggle.classList.add('active');
+        if (navLinks) navLinks.classList.add('active');
+        if (navBackdrop) navBackdrop.classList.add('active');
+        document.body.classList.add('menu-open');
+      }
+    }
+
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', toggleMobileMenu);
+    }
+
+    if (navBackdrop) {
+      navBackdrop.addEventListener('click', closeMobileMenu);
+    }
+
+    if (navLinks) {
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
       });
     }
 
@@ -1974,13 +2605,27 @@
     let currentFrameIndex = -1;
     let isHydrated = false;
 
-    // High-DPI Canvas resize handler (clamped to max DPR 2)
+    // High-DPI Canvas resize handler with mobile scroll jitter protection
+    let lastInnerWidth = window.innerWidth;
+    let lastInnerHeight = window.innerHeight;
+
     function resizeCanvas() {
+      const curW = window.innerWidth;
+      const curH = window.innerHeight;
+      
+      // On mobile devices, ignore vertical scroll bar expand/collapse (<120px height change without width change)
+      if (currentFrameIndex >= 0 && Math.abs(curW - lastInnerWidth) < 10 && Math.abs(curH - lastInnerHeight) < 120) {
+        return;
+      }
+
+      lastInnerWidth = curW;
+      lastInnerHeight = curH;
+
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
+      canvas.width = Math.floor(curW * dpr);
+      canvas.height = Math.floor(curH * dpr);
+      canvas.style.width = curW + 'px';
+      canvas.style.height = curH + 'px';
       
       if (currentFrameIndex >= 0) {
         requestAnimationFrame(() => renderFrame(currentFrameIndex));
@@ -2016,18 +2661,19 @@
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'medium';
 
-      const isMobile = window.innerWidth <= 768;
+      const isMobile = window.innerWidth <= 600;
+      const isTablet = window.innerWidth > 600 && window.innerWidth <= 1024;
       const coverScale = Math.max(cw / bw, ch / bh);
-      // Extra scale allows comfortable vertical framing
-      const scale = coverScale * (isMobile ? 1.08 : 1.15);
+      // Fluid scale adapts across mobile portrait, tablet, and ultra-wide screens
+      const scale = coverScale * (isMobile ? 1.06 : (isTablet ? 1.10 : 1.16));
 
       const drawW = bw * scale;
       const drawH = bh * scale;
       const x = (cw - drawW) / 2; // Center horizontally
 
-      // Vertically center the face lower down:
-      // Face is at ~27% from top of image. Target screen position is 48% (44% on mobile).
-      const targetFaceY = ch * (isMobile ? 0.44 : 0.48);
+      // Vertically center the face with clear mobile viewing:
+      // Face is at ~27% from top of image. Target screen position: 39% on mobile, 45% on tablet, 48% on desktop.
+      const targetFaceY = ch * (isMobile ? 0.39 : (isTablet ? 0.45 : 0.48));
       let y = targetFaceY - (drawH * 0.27);
 
       // Protect against clipping top of hair
@@ -2051,7 +2697,8 @@
 
     // Preload & decode images using controlled queue concurrency
     async function preloadAllBitmaps() {
-      const BATCH_SIZE = 12;
+      const isMobile = window.innerWidth <= 768;
+      const BATCH_SIZE = isMobile ? 4 : 10;
       let nextFrameIndex = 1;
 
       async function worker() {
@@ -2092,12 +2739,74 @@
       onComplete();
     }
 
+    let typingStarted = false;
+    function initHeroTyping() {
+      if (typingStarted) return;
+      typingStarted = true;
+
+      const typedContainer = document.getElementById('heroDescText');
+      const cursor = document.getElementById('heroTypeCursor');
+      if (!typedContainer) return;
+
+      const segments = [
+        { text: "Most sales strategies fail because they miss the ", bold: false },
+        { text: "technical depth", bold: true },
+        { text: ". With a background in CS, I help software and AI companies connect with the right decision-makers and convert complex specs into ", bold: false },
+        { text: "winning proposals", bold: true },
+        { text: ".", bold: false }
+      ];
+
+      typedContainer.innerHTML = '';
+      let segmentIndex = 0;
+      let charIndex = 0;
+      let currentHTML = '';
+
+      function typeNext() {
+        if (segmentIndex >= segments.length) {
+          // Finished typing once
+          setTimeout(() => {
+            if (cursor) cursor.classList.add('fade-out');
+          }, 1800);
+          return;
+        }
+
+        const currentSeg = segments[segmentIndex];
+        charIndex++;
+        const currentTypedInSeg = currentSeg.text.substring(0, charIndex);
+
+        let html = currentHTML;
+        if (currentSeg.bold) {
+          html += '<strong>' + currentTypedInSeg + '</strong>';
+        } else {
+          html += currentTypedInSeg;
+        }
+        typedContainer.innerHTML = html;
+
+        if (charIndex >= currentSeg.text.length) {
+          currentHTML = html;
+          segmentIndex++;
+          charIndex = 0;
+        }
+
+        let delay = 18 + Math.floor(Math.random() * 8);
+        const lastChar = currentSeg.text[charIndex - 1];
+        if (lastChar === '.' || lastChar === ',') {
+          delay += 120;
+        }
+
+        setTimeout(typeNext, delay);
+      }
+
+      setTimeout(typeNext, 450);
+    }
+
     function triggerEarlyReady() {
       if (isHydrated) return;
       isHydrated = true;
       if (loader) loader.classList.add('hidden');
       initLenis();
       renderFrame(0);
+      initHeroTyping();
     }
 
     function onComplete() {
@@ -2105,6 +2814,20 @@
         triggerEarlyReady();
       }
     }
+
+    // Fallback ensure typing starts even if frame preloading is delayed
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        if (!typingStarted) initHeroTyping();
+      }, 1000);
+    });
+
+    // Mobile network safety: ensure loader never hangs if mobile network drops packets
+    setTimeout(() => {
+      if (!isHydrated) {
+        triggerEarlyReady();
+      }
+    }, 2200);
 
     // Update canvas frame directly based on scroll position
     function updateProgress(scroll) {
@@ -2121,10 +2844,20 @@
 
     // Initialize Lenis Smooth Scroll
     function initLenis() {
+      // Native scroll listener guarantees 60fps frame updates during touch momentum on all mobile devices
+      window.addEventListener('scroll', () => {
+        const sy = window.scrollY || window.pageYOffset || 0;
+        updateProgress(sy);
+        if (backToTopBtn) {
+          if (sy > 350) {
+            backToTopBtn.classList.add('visible');
+          } else {
+            backToTopBtn.classList.remove('visible');
+          }
+        }
+      }, { passive: true });
+
       if (typeof Lenis === 'undefined') {
-        window.addEventListener('scroll', () => {
-          updateProgress(window.scrollY || window.pageYOffset || 0);
-        }, { passive: true });
         return;
       }
 
@@ -2140,6 +2873,13 @@
 
       lenis.on('scroll', (e) => {
         updateProgress(e.scroll);
+        if (backToTopBtn) {
+          if (e.scroll > 350) {
+            backToTopBtn.classList.add('visible');
+          } else {
+            backToTopBtn.classList.remove('visible');
+          }
+        }
       });
 
       function raf(time) {
@@ -2165,8 +2905,36 @@
       });
     }
 
+    // Floating Back to Top Button Behavior
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        if (scrollY > 350) {
+          backToTopBtn.classList.add('visible');
+        } else {
+          backToTopBtn.classList.remove('visible');
+        }
+      }, { passive: true });
+
+      backToTopBtn.addEventListener('click', () => {
+        if (window.__lenisInstance) {
+          window.__lenisInstance.scrollTo(0, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
     // Start preloading
     preloadAllBitmaps();
   </script>
+
+  <!-- Floating Back to Top Button -->
+  <button id="backToTop" class="back-to-top-btn" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
 </body>
 </html>
