@@ -36,7 +36,6 @@
   <!-- Resource Pre-connections -->
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="dns-prefetch" href="https://unpkg.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="image" href="./usama/ezgif-frame-001.jpg" type="image/jpeg">
@@ -111,9 +110,6 @@
 
   <!-- Google Fonts: Bebas Neue, Cinzel, Space Grotesk, Plus Jakarta Sans -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Lenis Smooth Scroll -->
-  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
 
   <style>
     :root {
@@ -1859,7 +1855,7 @@
 
   <!-- Preloader Screen -->
   <div class="loader" id="loader">
-    <img src="Minimalist_letter_logo_design_2K_20260930152134.jpg" alt="Usama Arshad Logo" class="brand-icon-img" style="height: 60px; width: auto; margin-bottom: 20px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 217, 149, 0.3);">
+    <img src="logo-optimized.jpg" alt="Usama Arshad Logo" class="brand-icon-img" style="height: 60px; width: auto; margin-bottom: 20px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 217, 149, 0.3);">
     <div class="loader-title">USAMA ARSHAD</div>
     <div class="loader-text" id="loaderText">Initializing Experience 0%</div>
     <div class="loader-bar-bg">
@@ -1875,7 +1871,7 @@
   <!-- Header Navigation -->
   <header>
     <a href="#hero" class="brand-logo" aria-label="Usama Arshad Home">
-      <img src="Minimalist_letter_logo_design_2K_20260930152134.jpg" alt="Usama Arshad Logo" class="brand-icon-img">
+      <img src="logo-optimized.jpg" alt="Usama Arshad Logo" class="brand-icon-img">
       <div class="brand-text">
         <span class="brand-name">Usama Arshad</span>
         <span class="brand-sub">Business Development</span>
@@ -2546,6 +2542,9 @@
 
   </div>
 
+  <!-- Lenis Smooth Scroll (Local, Zero-CDN Blocking) -->
+  <script src="lenis.min.js"></script>
+
   <!-- Background Canvas Frame Animation & Smooth Scroll Script -->
   <script>
     // Mobile Drawer Navigation Toggle & Backdrop
@@ -2586,35 +2585,64 @@
       });
     }
 
-    // Canvas Frame Animation Setup
+    // ==========================================
+    // HIGH-PERFORMANCE CANVAS FRAME ANIMATION ENGINE
+    // ==========================================
     const frameCount = 251;
     const folderName = 'usama';
-    
-    const getFrameUrl = index => (
-      `./${folderName}/ezgif-frame-${index.toString().padStart(3, '0')}.jpg`
-    );
+    const getFrameUrl = index => `./${folderName}/ezgif-frame-${index.toString().padStart(3, '0')}.jpg`;
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d', { alpha: false });
     const loader = document.getElementById('loader');
     const loaderText = document.getElementById('loaderText');
     const loaderBar = document.getElementById('loaderBar');
+    const backToTopBtn = document.getElementById('backToTop');
 
+    // Storage for decoded frame bitmaps/drawables
     const bitmaps = new Array(frameCount);
-    let loadedCount = 0;
-    let currentFrameIndex = -1;
-    let isHydrated = false;
+    // 0: unrequested, 1: loading, 2: loaded, 3: error
+    const frameStatus = new Uint8Array(frameCount);
 
-    // High-DPI Canvas resize handler with mobile scroll jitter protection
+    let loadedCount = 0;
+    let currentRenderedIndex = -1;
+    let currentTargetFrame = 0;
+    let isHydrated = false;
+    let lastPriorityTarget = -1;
+
+    // Queue system
+    const priorityQueue = [];
+    const backgroundQueue = [];
+    let activeWorkers = 0;
+    const isMobileDevice = window.innerWidth <= 768;
+    const MAX_CONCURRENT = isMobileDevice ? 4 : 6;
+
+    // Precomputed render layout (avoids recalculating layout geometry on every scroll frame)
+    const renderLayout = {
+      cw: 0,
+      ch: 0,
+      x: 0,
+      y: 0,
+      drawW: 0,
+      drawH: 0,
+      drawTopGrad: false
+    };
+    let topGradPattern = null;
+
     let lastInnerWidth = window.innerWidth;
     let lastInnerHeight = window.innerHeight;
+    let cachedMaxScroll = 0;
+
+    function updateMaxScroll() {
+      cachedMaxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    }
 
     function resizeCanvas() {
       const curW = window.innerWidth;
       const curH = window.innerHeight;
-      
+
       // On mobile devices, ignore vertical scroll bar expand/collapse (<120px height change without width change)
-      if (currentFrameIndex >= 0 && Math.abs(curW - lastInnerWidth) < 10 && Math.abs(curH - lastInnerHeight) < 120) {
+      if (currentRenderedIndex >= 0 && Math.abs(curW - lastInnerWidth) < 10 && Math.abs(curH - lastInnerHeight) < 120) {
         return;
       }
 
@@ -2622,123 +2650,256 @@
       lastInnerHeight = curH;
 
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(curW * dpr);
-      canvas.height = Math.floor(curH * dpr);
+      const cw = Math.floor(curW * dpr);
+      const ch = Math.floor(curH * dpr);
+      canvas.width = cw;
+      canvas.height = ch;
       canvas.style.width = curW + 'px';
       canvas.style.height = curH + 'px';
-      
-      if (currentFrameIndex >= 0) {
-        requestAnimationFrame(() => renderFrame(currentFrameIndex));
+
+      // All original character frames are 1920x1080
+      const bw = 1920;
+      const bh = 1080;
+      const isMobile = curW <= 600;
+      const isTablet = curW > 600 && curW <= 1024;
+      const coverScale = Math.max(cw / bw, ch / bh);
+      const scale = coverScale * (isMobile ? 1.06 : (isTablet ? 1.10 : 1.16));
+
+      const drawW = bw * scale;
+      const drawH = bh * scale;
+      const x = (cw - drawW) / 2;
+
+      const targetFaceY = ch * (isMobile ? 0.39 : (isTablet ? 0.45 : 0.48));
+      let y = targetFaceY - (drawH * 0.27);
+
+      if (y < -drawH * 0.03) {
+        y = -drawH * 0.03;
+      }
+
+      renderLayout.cw = cw;
+      renderLayout.ch = ch;
+      renderLayout.x = x;
+      renderLayout.y = y;
+      renderLayout.drawW = drawW;
+      renderLayout.drawH = drawH;
+      renderLayout.drawTopGrad = (y > 0);
+
+      if (renderLayout.drawTopGrad) {
+        topGradPattern = ctx.createLinearGradient(0, 0, 0, y + 6);
+        topGradPattern.addColorStop(0, '#061324');
+        topGradPattern.addColorStop(0.55, '#05295c');
+        topGradPattern.addColorStop(1, 'rgb(5, 60, 134)');
+      } else {
+        topGradPattern = null;
+      }
+
+      updateMaxScroll();
+
+      if (currentRenderedIndex >= 0) {
+        requestAnimationFrame(() => renderFrame(currentTargetFrame));
       }
     }
 
     window.addEventListener('resize', resizeCanvas, { passive: true });
     resizeCanvas();
 
-    // Render single frame onto canvas with centered and lowered face
-    function renderFrame(index) {
-      let bitmap = bitmaps[index];
-      // Fast fallback to nearest loaded bitmap
-      if (!bitmap) {
-        for (let i = 1; i <= 20; i++) {
-          if (index - i >= 0 && bitmaps[index - i]) {
-            bitmap = bitmaps[index - i];
-            break;
-          }
-          if (index + i < frameCount && bitmaps[index + i]) {
-            bitmap = bitmaps[index + i];
-            break;
-          }
-        }
+    // Outward search for nearest available loaded frame (guarantees character is NEVER stuck!)
+    function getBestAvailableIndex(target) {
+      if (bitmaps[target]) return target;
+      let left = target - 1;
+      let right = target + 1;
+      while (left >= 0 || right < frameCount) {
+        if (left >= 0 && bitmaps[left]) return left;
+        if (right < frameCount && bitmaps[right]) return right;
+        left--;
+        right++;
       }
-      if (!bitmap) return;
+      return -1;
+    }
 
-      const cw = canvas.width;
-      const ch = canvas.height;
-      const bw = bitmap.width;
-      const bh = bitmap.height;
+    // High-priority on-demand frame request for active scroll area
+    function requestPriorityAround(target) {
+      if (Math.abs(target - lastPriorityTarget) < 2) return;
+      lastPriorityTarget = target;
+
+      const urgent = [target];
+      for (let d = 1; d <= 5; d++) {
+        if (target + d < frameCount) urgent.push(target + d);
+        if (target - d >= 0) urgent.push(target - d);
+      }
+
+      const unrequested = urgent.filter(idx => frameStatus[idx] === 0);
+      if (unrequested.length === 0) return;
+
+      for (const idx of unrequested) {
+        const existIdx = priorityQueue.indexOf(idx);
+        if (existIdx !== -1) priorityQueue.splice(existIdx, 1);
+      }
+
+      priorityQueue.unshift(...unrequested);
+      if (priorityQueue.length > 20) {
+        priorityQueue.length = 20;
+      }
+
+      drainQueue();
+    }
+
+    // Render frame to canvas with precomputed layout
+    function renderFrame(targetIndex) {
+      currentTargetFrame = targetIndex;
+      requestPriorityAround(targetIndex);
+
+      const bestIndex = getBestAvailableIndex(targetIndex);
+      if (bestIndex < 0) return;
+
+      const drawable = bitmaps[bestIndex];
+      if (!drawable) return;
 
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'medium';
 
-      const isMobile = window.innerWidth <= 600;
-      const isTablet = window.innerWidth > 600 && window.innerWidth <= 1024;
-      const coverScale = Math.max(cw / bw, ch / bh);
-      // Fluid scale adapts across mobile portrait, tablet, and ultra-wide screens
-      const scale = coverScale * (isMobile ? 1.06 : (isTablet ? 1.10 : 1.16));
-
-      const drawW = bw * scale;
-      const drawH = bh * scale;
-      const x = (cw - drawW) / 2; // Center horizontally
-
-      // Vertically center the face with clear mobile viewing:
-      // Face is at ~27% from top of image. Target screen position: 39% on mobile, 45% on tablet, 48% on desktop.
-      const targetFaceY = ch * (isMobile ? 0.39 : (isTablet ? 0.45 : 0.48));
-      let y = targetFaceY - (drawH * 0.27);
-
-      // Protect against clipping top of hair
-      if (y < -drawH * 0.03) {
-        y = -drawH * 0.03;
+      if (renderLayout.drawTopGrad && topGradPattern) {
+        ctx.fillStyle = topGradPattern;
+        ctx.fillRect(0, 0, renderLayout.cw, renderLayout.y + 6);
       }
 
-      // If top of image starts below canvas top (y > 0), blend canvas top with studio blue backdrop
-      if (y > 0) {
-        const topGrad = ctx.createLinearGradient(0, 0, 0, y + 6);
-        topGrad.addColorStop(0, '#061324');
-        topGrad.addColorStop(0.55, '#05295c');
-        topGrad.addColorStop(1, 'rgb(5, 60, 134)');
-        ctx.fillStyle = topGrad;
-        ctx.fillRect(0, 0, cw, y + 6);
-      }
-
-      ctx.drawImage(bitmap, x, y, drawW, drawH);
-      currentFrameIndex = index;
+      ctx.drawImage(drawable, renderLayout.x, renderLayout.y, renderLayout.drawW, renderLayout.drawH);
+      currentRenderedIndex = bestIndex;
     }
 
-    // Preload & decode images using controlled queue concurrency
-    async function preloadAllBitmaps() {
-      const isMobile = window.innerWidth <= 768;
-      const BATCH_SIZE = isMobile ? 4 : 10;
-      let nextFrameIndex = 1;
+    // Frame loaded callback - dynamically upgrades canvas if a closer frame arrives
+    function onFrameLoaded(index) {
+      loadedCount++;
+      const pct = Math.floor((loadedCount / frameCount) * 100);
+      if (loaderText && !isHydrated) loaderText.textContent = `Loading Experience ${pct}%`;
+      if (loaderBar && !isHydrated) loaderBar.style.width = `${pct}%`;
 
-      async function worker() {
-        while (nextFrameIndex <= frameCount) {
-          const index = nextFrameIndex++;
-          try {
-            const img = new Image();
-            img.src = getFrameUrl(index);
-            await img.decode();
-            const bitmap = await createImageBitmap(img);
-            bitmaps[index - 1] = bitmap;
-          } catch (e) {
-            console.warn(`Frame ${index} load fallback`);
-          } finally {
-            loadedCount++;
-            const progress = Math.floor((loadedCount / frameCount) * 100);
-            if (loaderText) loaderText.textContent = `Loading Experience ${progress}%`;
-            if (loaderBar) loaderBar.style.width = `${progress}%`;
+      if (!isHydrated && (bitmaps[0] || loadedCount >= 4)) {
+        triggerEarlyReady();
+      }
 
-            if (index === 1 && bitmaps[0]) {
-              renderFrame(0);
-            }
+      const currentDiff = currentRenderedIndex >= 0 ? Math.abs(currentRenderedIndex - currentTargetFrame) : 9999;
+      const newDiff = Math.abs(index - currentTargetFrame);
+      if (newDiff < currentDiff) {
+        requestAnimationFrame(() => renderFrame(currentTargetFrame));
+      }
+    }
 
-            // Hydrate and allow scrolling immediately once initial keyframes are ready
-            if (loadedCount >= 10 && !isHydrated) {
-              triggerEarlyReady();
-            }
+    // Single frame fetcher with robust decoders
+    async function loadSingleFrame(index) {
+      if (frameStatus[index] === 2) return bitmaps[index];
+      if (frameStatus[index] === 1) return null;
+
+      frameStatus[index] = 1;
+      const url = getFrameUrl(index + 1);
+
+      try {
+        const res = await fetch(url, { cache: 'force-cache' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const blob = await res.blob();
+        let drawable;
+        if (window.createImageBitmap) {
+          drawable = await createImageBitmap(blob);
+        } else {
+          const img = new Image();
+          img.src = URL.createObjectURL(blob);
+          await img.decode();
+          drawable = img;
+        }
+        bitmaps[index] = drawable;
+        frameStatus[index] = 2;
+        onFrameLoaded(index);
+        return drawable;
+      } catch (err) {
+        try {
+          const img = new Image();
+          img.src = url;
+          await img.decode();
+          let drawable = img;
+          if (window.createImageBitmap) {
+            drawable = await createImageBitmap(img);
           }
+          bitmaps[index] = drawable;
+          frameStatus[index] = 2;
+          onFrameLoaded(index);
+          return drawable;
+        } catch (e2) {
+          console.warn(`Frame ${index + 1} fallback warning`, e2);
+          frameStatus[index] = 3;
+          return null;
         }
       }
-
-      const workers = [];
-      for (let w = 0; w < BATCH_SIZE; w++) {
-        workers.push(worker());
-      }
-
-      await Promise.all(workers);
-      onComplete();
     }
 
+    // Queue worker dispatcher
+    function getNextIndex() {
+      while (priorityQueue.length > 0) {
+        const idx = priorityQueue.shift();
+        if (frameStatus[idx] === 0) return idx;
+      }
+      while (backgroundQueue.length > 0) {
+        const idx = backgroundQueue.shift();
+        if (frameStatus[idx] === 0) return idx;
+      }
+      return -1;
+    }
+
+    function drainQueue() {
+      while (activeWorkers < MAX_CONCURRENT) {
+        const nextIdx = getNextIndex();
+        if (nextIdx === -1) break;
+
+        activeWorkers++;
+        loadSingleFrame(nextIdx).finally(() => {
+          activeWorkers--;
+          drainQueue();
+        });
+      }
+    }
+
+    function enqueueBackground(indices) {
+      for (const idx of indices) {
+        if (frameStatus[idx] === 0 && !backgroundQueue.includes(idx)) {
+          backgroundQueue.push(idx);
+        }
+      }
+    }
+
+    // Multi-tier progressive background preloading
+    function startQueuePipelines() {
+      // Tier 1: Skeleton Keyframes (every 8 frames) across 0% - 100% of the entire page
+      const skeleton = [];
+      for (let i = 0; i < frameCount; i += 8) {
+        if (i !== 0) skeleton.push(i);
+      }
+      if (!skeleton.includes(frameCount - 1)) skeleton.push(frameCount - 1);
+      enqueueBackground(skeleton);
+
+      // Tier 2: Quarter Keyframes (every 4 frames)
+      const quarter = [];
+      for (let i = 4; i < frameCount; i += 8) {
+        quarter.push(i);
+      }
+      enqueueBackground(quarter);
+
+      // Tier 3: Half Keyframes (every 2 frames)
+      const half = [];
+      for (let i = 2; i < frameCount; i += 4) {
+        half.push(i);
+      }
+      enqueueBackground(half);
+
+      // Tier 4: Infill (all remaining odd frames)
+      const infill = [];
+      for (let i = 1; i < frameCount; i += 2) {
+        infill.push(i);
+      }
+      enqueueBackground(infill);
+
+      drainQueue();
+    }
+
+    // Hero Typewriter Animation
     let typingStarted = false;
     function initHeroTyping() {
       if (typingStarted) return;
@@ -2763,7 +2924,6 @@
 
       function typeNext() {
         if (segmentIndex >= segments.length) {
-          // Finished typing once
           setTimeout(() => {
             if (cursor) cursor.classList.add('fade-out');
           }, 1800);
@@ -2800,6 +2960,7 @@
       setTimeout(typeNext, 450);
     }
 
+    // Instant Hydration Trigger (Removes loader without delay)
     function triggerEarlyReady() {
       if (isHydrated) return;
       isHydrated = true;
@@ -2809,43 +2970,22 @@
       initHeroTyping();
     }
 
-    function onComplete() {
-      if (!isHydrated) {
-        triggerEarlyReady();
-      }
-    }
-
-    // Fallback ensure typing starts even if frame preloading is delayed
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        if (!typingStarted) initHeroTyping();
-      }, 1000);
-    });
-
-    // Mobile network safety: ensure loader never hangs if mobile network drops packets
-    setTimeout(() => {
-      if (!isHydrated) {
-        triggerEarlyReady();
-      }
-    }, 2200);
-
-    // Update canvas frame directly based on scroll position
+    // Smooth Scroll & Unified Scroll Handler
     function updateProgress(scroll) {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (maxScroll <= 0) return;
-      const progress = Math.max(0, Math.min(1, scroll / maxScroll));
+      if (cachedMaxScroll <= 0) updateMaxScroll();
+      const progress = Math.max(0, Math.min(1, scroll / cachedMaxScroll));
       const targetFrame = Math.min(frameCount - 1, Math.round(progress * (frameCount - 1)));
-      
-      // Skip redraw if target frame has not changed
-      if (targetFrame !== currentFrameIndex) {
+
+      if (targetFrame !== currentRenderedIndex || targetFrame !== currentTargetFrame) {
         renderFrame(targetFrame);
       }
     }
 
-    // Initialize Lenis Smooth Scroll
-    function initLenis() {
-      // Native scroll listener guarantees 60fps frame updates during touch momentum on all mobile devices
-      window.addEventListener('scroll', () => {
+    let scrollRafId = null;
+    function onUnifiedScroll() {
+      if (scrollRafId) return;
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = null;
         const sy = window.scrollY || window.pageYOffset || 0;
         updateProgress(sy);
         if (backToTopBtn) {
@@ -2855,7 +2995,14 @@
             backToTopBtn.classList.remove('visible');
           }
         }
-      }, { passive: true });
+      });
+    }
+
+    function initLenis() {
+      if (window.__lenisInitialized) return;
+      window.__lenisInitialized = true;
+
+      window.addEventListener('scroll', onUnifiedScroll, { passive: true });
 
       if (typeof Lenis === 'undefined') {
         return;
@@ -2871,24 +3018,15 @@
 
       window.__lenisInstance = lenis;
 
-      lenis.on('scroll', (e) => {
-        updateProgress(e.scroll);
-        if (backToTopBtn) {
-          if (e.scroll > 350) {
-            backToTopBtn.classList.add('visible');
-          } else {
-            backToTopBtn.classList.remove('visible');
-          }
-        }
-      });
+      lenis.on('scroll', onUnifiedScroll);
 
       function raf(time) {
         lenis.raf(time);
         requestAnimationFrame(raf);
       }
-
       requestAnimationFrame(raf);
-      updateProgress(window.scrollY || 0);
+
+      onUnifiedScroll();
 
       // Smooth internal anchor link navigation
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -2905,18 +3043,8 @@
       });
     }
 
-    // Floating Back to Top Button Behavior
-    const backToTopBtn = document.getElementById('backToTop');
+    // Floating Back to Top Button
     if (backToTopBtn) {
-      window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY || window.pageYOffset || 0;
-        if (scrollY > 350) {
-          backToTopBtn.classList.add('visible');
-        } else {
-          backToTopBtn.classList.remove('visible');
-        }
-      }, { passive: true });
-
       backToTopBtn.addEventListener('click', () => {
         if (window.__lenisInstance) {
           window.__lenisInstance.scrollTo(0, { duration: 1.2 });
@@ -2926,8 +3054,24 @@
       });
     }
 
-    // Start preloading
-    preloadAllBitmaps();
+    // Safety timeout: Ensure page is 100% visible and interactive within 600ms even on slow connections
+    setTimeout(() => {
+      if (!isHydrated) {
+        triggerEarlyReady();
+      }
+    }, 600);
+
+    // Initial Execution: Fetch and paint Frame 0 immediately
+    loadSingleFrame(0).then(bmp => {
+      if (bmp) {
+        renderFrame(0);
+      }
+      triggerEarlyReady();
+      startQueuePipelines();
+    }).catch(() => {
+      triggerEarlyReady();
+      startQueuePipelines();
+    });
   </script>
 
   <!-- Floating Back to Top Button -->
