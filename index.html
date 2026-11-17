@@ -69,11 +69,13 @@
         "worksFor": [
           {
             "@type": "Organization",
-            "name": "Neksogix"
+            "name": "Neksogix",
+            "url": "https://www.neksogix.com/"
           },
           {
             "@type": "Organization",
-            "name": "SMJ Solutions Ltd."
+            "name": "SMJ Solutions Ltd.",
+            "url": "https://www.smjsols.com/"
           }
         ],
         "knowsAbout": [
@@ -1849,6 +1851,667 @@
         max-width: 780px;
       }
     }
+
+    /* Company External Links in Experience */
+    .company-heading-link {
+      color: #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.25s ease;
+    }
+
+    .company-heading-link:hover {
+      color: #00d995;
+    }
+
+    .company-heading-link .ext-icon {
+      transition: transform 0.25s ease;
+      opacity: 0.75;
+    }
+
+    .company-heading-link:hover .ext-icon {
+      opacity: 1;
+      transform: translate(2px, -2px);
+    }
+
+    .company-site-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-family: var(--font-heading);
+      letter-spacing: 0.5px;
+      color: #2ee6a8;
+      background: rgba(0, 217, 149, 0.08);
+      border: 1px solid rgba(0, 217, 149, 0.25);
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .company-site-badge:hover {
+      background: rgba(0, 217, 149, 0.18);
+      border-color: rgba(0, 217, 149, 0.5);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Certifications Section */
+    .certifications-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .certifications-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .certifications-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cert-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border-color: rgba(255, 255, 255, 0.1);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cert-card:hover {
+      border-color: rgba(0, 217, 149, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 24px rgba(0, 217, 149, 0.12);
+    }
+
+    .cert-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cert-badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cert-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(0, 217, 149, 0.08);
+      border: 1px solid rgba(0, 217, 149, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cert-title {
+      font-family: var(--font-heading);
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .cert-issuer {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #2ee6a8;
+      margin-bottom: 12px;
+    }
+
+    .cert-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+      flex-grow: 1;
+    }
+
+    .cert-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+
+    .cert-actions-row {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .btn-cert-primary {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(0, 217, 149, 0.12);
+      border: 1px solid rgba(0, 217, 149, 0.35);
+      color: #2ee6a8;
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-cert-primary:hover {
+      background: #00d995;
+      color: #0a0c10;
+      border-color: #00d995;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 217, 149, 0.3);
+    }
+
+    .btn-cert-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text-white);
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-cert-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* Interactive Booking Modal */
+    .booking-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    .booking-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .booking-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 7, 10, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .booking-modal-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: linear-gradient(155deg, #131824 0%, #0c1017 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 217, 149, 0.15);
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .booking-modal-overlay.active .booking-modal-container {
+      transform: translateY(0) scale(1);
+    }
+
+    .booking-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .booking-modal-close:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      transform: scale(1.08);
+    }
+
+    .booking-live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      font-family: var(--font-heading);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #2ee6a8;
+      background: rgba(0, 217, 149, 0.08);
+      border: 1px solid rgba(0, 217, 149, 0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00d995;
+      box-shadow: 0 0 8px #00d995;
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .booking-modal-title {
+      font-family: var(--font-heading);
+      font-size: 25px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .booking-modal-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+
+    .booking-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .booking-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .booking-modal-container {
+        padding: 28px 20px;
+      }
+    }
+
+    .booking-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .booking-label {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .req-star {
+      color: #00d995;
+    }
+
+    .opt-tag {
+      font-size: 10.5px;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .booking-input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.25s ease;
+      width: 100%;
+    }
+
+    .booking-input::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .booking-input:focus {
+      border-color: #00d995;
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 0 0 3px rgba(0, 217, 149, 0.18);
+    }
+
+    .booking-select {
+      cursor: pointer;
+    }
+
+    .booking-select option {
+      background: #121722;
+      color: #ffffff;
+    }
+
+    .booking-textarea {
+      resize: vertical;
+      min-height: 70px;
+      line-height: 1.5;
+    }
+
+    .field-error-msg {
+      font-size: 11.5px;
+      color: #ff6b6b;
+      display: none;
+      margin-top: 2px;
+    }
+
+    .booking-field-group.has-error .booking-input {
+      border-color: #ff6b6b;
+    }
+
+    .booking-field-group.has-error .field-error-msg {
+      display: block;
+    }
+
+    /* Time Slots Grid */
+    .time-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .time-slot-btn {
+      padding: 8px 6px;
+      font-size: 12px;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .time-slot-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .time-slot-btn.active {
+      background: rgba(0, 217, 149, 0.16);
+      border-color: #00d995;
+      color: #2ee6a8;
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(0, 217, 149, 0.2);
+    }
+
+    /* Booking Submit Button */
+    .booking-submit-row {
+      margin-top: 22px;
+    }
+
+    .booking-btn-submit {
+      width: 100%;
+      background: #00d995;
+      color: #0a0c10;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 10px;
+      padding: 15px 24px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 24px rgba(0, 217, 149, 0.35);
+    }
+
+    .booking-btn-submit:hover {
+      background: #2ee6a8;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 217, 149, 0.5);
+    }
+
+    .booking-trust-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-dim);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .booking-trust-note svg {
+      flex-shrink: 0;
+    }
+
+    /* Success Step */
+    .booking-success-wrap {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .success-icon-badge {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(0, 217, 149, 0.12);
+      border: 2px solid rgba(0, 217, 149, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      box-shadow: 0 0 30px rgba(0, 217, 149, 0.35);
+    }
+
+    .success-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .success-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      max-width: 480px;
+      margin-bottom: 24px;
+    }
+
+    .meeting-summary-card {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+
+    .meeting-meta-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    @media (max-width: 540px) {
+      .meeting-meta-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+
+    .meeting-meta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .meeting-meta-label {
+      font-size: 11px;
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+    }
+
+    .meeting-meta-val {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .meet-link-box {
+      background: rgba(0, 217, 149, 0.08);
+      border: 1px solid rgba(0, 217, 149, 0.28);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .meet-link-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .meet-link-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #2ee6a8;
+    }
+
+    .meet-copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-white);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-family: var(--font-heading);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .meet-copy-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+    }
+
+    .meet-actual-link {
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 14px;
+      text-decoration: underline;
+      text-decoration-color: rgba(0, 217, 149, 0.5);
+      word-break: break-all;
+      display: block;
+      transition: color 0.2s;
+    }
+
+    .meet-actual-link:hover {
+      color: #00d995;
+    }
+
+    .success-action-btns {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .success-action-btns .btn-white,
+    .success-action-btns .btn-outline {
+      flex: 1;
+      min-width: 200px;
+      justify-content: center;
+      padding: 13px 20px;
+      font-size: 11.5px;
+      cursor: pointer;
+    }
+
+    .success-footer-note {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      margin-top: 20px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -1886,6 +2549,7 @@
       <a href="#capabilities" class="nav-item">Tech Stack</a>
       <a href="#about" class="nav-item">About</a>
       <a href="#education" class="nav-item">Education</a>
+      <a href="#certifications" class="nav-item">Certifications</a>
       <a href="#contact" class="nav-item">Contact</a>
       <a href="#contact" class="btn-talk mobile-only-talk" style="margin-top: 10px;">Let's Talk ↗</a>
     </div>
@@ -1921,7 +2585,7 @@
       <div class="hero-cta-row">
         <a href="#experience" class="btn-white">View Track Record ↗</a>
         <a href="./Usama_Arshad_Resume.pdf" download="Usama_Arshad_Resume.pdf" class="btn-outline">Download Resume ⤓</a>
-        <a href="mailto:mailmeatusama@gmail.com?subject=Strategic%20Business%20Development%20Inquiry" class="btn-outline">Book A Discovery Call ↗</a>
+        <a href="javascript:void(0)" class="btn-outline open-booking-btn" data-topic="B2B Lead Generation Pipeline">Book A Discovery Call ↗</a>
       </div>
 
       <!-- STATS BAR CARD -->
@@ -1974,11 +2638,18 @@
 
             <div class="company-heading-row">
               <div>
-                <h3 class="exp-role-title" style="font-size: 30px; margin-bottom: 4px;">Neksogix</h3>
+                <h3 class="exp-role-title" style="font-size: 30px; margin-bottom: 4px;">
+                  <a href="https://www.neksogix.com/" target="_blank" rel="noopener noreferrer" class="company-heading-link" title="Visit Neksogix website">
+                    Neksogix
+                    <svg class="ext-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  </a>
+                </h3>
                 <p class="exp-company" style="margin-bottom: 0;">
                   <span>📍 Lahore, Punjab, Pakistan</span>
                   <span style="opacity: 0.3; margin: 0 6px;">|</span>
                   <span style="color: var(--text-dim);">Software &amp; Digital Solutions</span>
+                  <span style="opacity: 0.3; margin: 0 6px;">|</span>
+                  <a href="https://www.neksogix.com/" target="_blank" rel="noopener noreferrer" class="company-site-badge" title="neksogix.com">neksogix.com ↗</a>
                 </p>
               </div>
               <div class="company-badge-promo" style="font-family: var(--font-heading); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2ee6a8; background: rgba(0, 217, 149, 0.08); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(0, 217, 149, 0.25);">
@@ -2056,7 +2727,11 @@
             </div>
             <h3 class="exp-role-title">Business Development Specialist</h3>
             <p class="exp-company">
-              <strong>SMJ Solutions Ltd. (CMIT)</strong> • Rahim Yar Khan
+              <a href="https://www.smjsols.com/" target="_blank" rel="noopener noreferrer" class="company-heading-link" title="Visit SMJ Solutions website">
+                <strong>SMJ Solutions Ltd. (CMIT)</strong>
+                <svg class="ext-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              • Rahim Yar Khan
             </p>
             <ul class="exp-desc-list">
               <li>Generate and qualify high-intent B2B leads across software development, AI automation, web/mobile solutions, SEO, and CRM integrations.</li>
@@ -2086,7 +2761,11 @@
             </div>
             <h3 class="exp-role-title">Sales And Marketing Specialist</h3>
             <p class="exp-company">
-              <strong>Forever Living Products Middle East</strong> • Pakistan / Regional
+              <a href="https://foreverliving.com/are/en-US/home" target="_blank" rel="noopener noreferrer" class="company-heading-link" title="Visit Forever Living Products">
+                <strong>Forever Living Products Middle East</strong>
+                <svg class="ext-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              • Pakistan / Regional
             </p>
             <ul class="exp-desc-list">
               <li>Manage client outreach campaigns, distributor network scaling, and consultative product marketing.</li>
@@ -2114,7 +2793,11 @@
             </div>
             <h3 class="exp-role-title">Campus Ambassador &amp; Programming Intern</h3>
             <p class="exp-company">
-              <strong>Artificial Intelligence Community of Pakistan (AICP)</strong> • Lahore
+              <a href="https://www.linkedin.com/company/aicommunitypakistan/" target="_blank" rel="noopener noreferrer" class="company-heading-link" title="Visit Artificial Intelligence Community of Pakistan">
+                <strong>Artificial Intelligence Community of Pakistan (AICP)</strong>
+                <svg class="ext-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              • Lahore
             </p>
             <ul class="exp-desc-list">
               <li>Organized nationwide AI seminars, technical workshops, hands-on hackathons, and webinar series.</li>
@@ -2143,7 +2826,11 @@
             </div>
             <h3 class="exp-role-title">Communications Specialist</h3>
             <p class="exp-company">
-              <strong>IZU Enterprises</strong> • Lahore / USA Logistics
+              <a href="https://www.linkedin.com/company/izu-enterprises/" target="_blank" rel="noopener noreferrer" class="company-heading-link" title="Visit IZU Enterprises">
+                <strong>IZU Enterprises</strong>
+                <svg class="ext-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              • Lahore / USA Logistics
             </p>
             <ul class="exp-desc-list">
               <li>Managed real-time international client communication for North American logistics and freight operations.</li>
@@ -2495,6 +3182,123 @@
       </div>
     </section>
 
+    <!-- CERTIFICATIONS SECTION -->
+    <section id="certifications">
+      <div class="section-category">Verified Accreditations &amp; Certifications</div>
+
+      <div class="certifications-grid">
+
+        <!-- Certificate 1: Business and Marketing Strategies Specialization -->
+        <div class="av-card cert-card">
+          <div class="cert-card-header">
+            <div class="cert-badge-row">
+              <span class="card-badge" style="background: rgba(0, 217, 149, 0.1); border-color: rgba(0, 217, 149, 0.35); color: #2ee6a8;">Coursera Specialization</span>
+              <span class="card-badge" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.15); color: #ffffff;">Verified</span>
+            </div>
+            <div class="cert-icon-wrap" title="University of London Credential">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2ee6a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            </div>
+          </div>
+
+          <h3 class="cert-title">Business and Marketing Strategies Specialization</h3>
+          <p class="cert-issuer">University of London • Coursera</p>
+          <p class="cert-desc">
+            Rigorous multi-course specialization covering market entry strategy, brand positioning, customer segmentation, competitive analysis, and sustainable revenue growth.
+          </p>
+
+          <div class="cert-tags-row">
+            <span class="exp-tag">Market Strategy</span>
+            <span class="exp-tag">Brand Leadership</span>
+            <span class="exp-tag">Competitive Moats</span>
+            <span class="exp-tag">Growth Strategy</span>
+          </div>
+
+          <div class="cert-actions-row">
+            <a href="https://www.coursera.org/account/accomplishments/specialization/9PMAL0CL653T" target="_blank" rel="noopener noreferrer" class="btn-cert-primary">
+              Verify Credential ↗
+            </a>
+            <a href="./Business%20and%20Marketing%20Strategies%20Specialization%E2%80%93%20University%20of%20London%20(Coursera).pdf" target="_blank" rel="noopener noreferrer" class="btn-cert-secondary" title="View Certificate Document">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              View PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Certificate 2: The Art of Sales: Fundamentals of Selling -->
+        <div class="av-card cert-card">
+          <div class="cert-card-header">
+            <div class="cert-badge-row">
+              <span class="card-badge" style="background: rgba(0, 217, 149, 0.1); border-color: rgba(0, 217, 149, 0.35); color: #2ee6a8;">Sales Fundamentals</span>
+              <span class="card-badge" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.15); color: #ffffff;">Verified</span>
+            </div>
+            <div class="cert-icon-wrap" title="HP LIFE Credential">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2ee6a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            </div>
+          </div>
+
+          <h3 class="cert-title">The Art of Sales: Fundamentals of Selling</h3>
+          <p class="cert-issuer">HP LIFE • LIFE Global</p>
+          <p class="cert-desc">
+            Core consultative sales methodology encompassing buyer psychology, structured discovery frameworks, value-focused proposition delivery, and objection closing techniques.
+          </p>
+
+          <div class="cert-tags-row">
+            <span class="exp-tag">Sales Discovery</span>
+            <span class="exp-tag">Value Proposition</span>
+            <span class="exp-tag">Objection Handling</span>
+            <span class="exp-tag">Closing Tactics</span>
+          </div>
+
+          <div class="cert-actions-row">
+            <a href="https://www.life-global.org/certificate/b0c1f8b8-1e94-4939-8f74-bbeb04c08e91" target="_blank" rel="noopener noreferrer" class="btn-cert-primary">
+              Verify Credential ↗
+            </a>
+            <a href="./The%20Art%20of%20Sales_%20Fundamentals%20of%20Selling.pdf" target="_blank" rel="noopener noreferrer" class="btn-cert-secondary" title="View Certificate Document">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              View PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Certificate 3: Business Communication and AI for Professionals -->
+        <div class="av-card cert-card">
+          <div class="cert-card-header">
+            <div class="cert-badge-row">
+              <span class="card-badge" style="background: rgba(0, 217, 149, 0.1); border-color: rgba(0, 217, 149, 0.35); color: #2ee6a8;">AI &amp; Communication</span>
+              <span class="card-badge" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.15); color: #ffffff;">Verified</span>
+            </div>
+            <div class="cert-icon-wrap" title="ilmX Credential">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2ee6a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            </div>
+          </div>
+
+          <h3 class="cert-title">Business Communication and AI for Professionals</h3>
+          <p class="cert-issuer">ilmX Platform</p>
+          <p class="cert-desc">
+            Leveraging generative AI tools in corporate communication, executive pitch drafting, data synthesis, and persuasive business negotiation for international markets.
+          </p>
+
+          <div class="cert-tags-row">
+            <span class="exp-tag">AI Workflows</span>
+            <span class="exp-tag">Executive Writing</span>
+            <span class="exp-tag">Consultative BD</span>
+            <span class="exp-tag">Deal Negotiation</span>
+          </div>
+
+          <div class="cert-actions-row">
+            <a href="https://ilmx.org/certificates/69bb881b17974ce5824d615476e8b9b8" target="_blank" rel="noopener noreferrer" class="btn-cert-primary">
+              Verify Credential ↗
+            </a>
+            <a href="./BUSINESS%20COMMUNICATION%20AND%20Al%20FOR%20PROFESSIONALS.pdf" target="_blank" rel="noopener noreferrer" class="btn-cert-secondary" title="View Certificate Document">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              View PDF
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- CONTACT BANNER SECTION -->
     <section id="contact">
       <div class="contact-banner-card">
@@ -2508,7 +3312,7 @@
             Looking to scale your agency's pipeline, win high-ticket freelance platform contracts, or close technical enterprise clients? Let's discuss your growth targets.
           </p>
           <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
-            <a href="mailto:mailmeatusama@gmail.com?subject=Business%20Development%20Collaboration" class="btn-white">Let's Work Together ↗</a>
+            <a href="javascript:void(0)" class="btn-white open-booking-btn" data-topic="Hiring / Business Development Collaboration">Let's Work Together ↗</a>
             <a href="./Usama_Arshad_Resume.pdf" download="Usama_Arshad_Resume.pdf" class="btn-outline" style="border-color: rgba(255,255,255,0.4);">Download Resume ⤓</a>
           </div>
         </div>
@@ -3072,6 +3876,424 @@
       triggerEarlyReady();
       startQueuePipelines();
     });
+
+    // --- DISCOVERY & COLLABORATION CALL BOOKING SYSTEM ---
+    (function initBookingSystem() {
+      const modal = document.getElementById('bookingModal');
+      const backdrop = document.getElementById('bookingModalBackdrop');
+      const closeBtn = document.getElementById('bookingModalClose');
+      const form = document.getElementById('bookingForm');
+      const formStep = document.getElementById('bookingStepForm');
+      const successStep = document.getElementById('bookingStepSuccess');
+      const submitBtn = document.getElementById('bookSubmitBtn');
+
+      const nameInput = document.getElementById('bookName');
+      const emailInput = document.getElementById('bookEmail');
+      const companyInput = document.getElementById('bookCompany');
+      const topicSelect = document.getElementById('bookTopic');
+      const dateInput = document.getElementById('bookDate');
+      const timeHiddenInput = document.getElementById('bookTime');
+      const notesInput = document.getElementById('bookNotes');
+
+      const timeSlotBtns = document.querySelectorAll('.time-slot-btn');
+
+      // Date helper: default to tomorrow or next business day
+      const now = new Date();
+      const padZero = n => String(n).padStart(2, '0');
+      const formatYmd = d => `${d.getFullYear()}-${padZero(d.getMonth() + 1)}-${padZero(d.getDate())}`;
+
+      if (dateInput) {
+        dateInput.min = formatYmd(now);
+        const nextDay = new Date(now);
+        nextDay.setDate(nextDay.getDate() + 1);
+        if (nextDay.getDay() === 0) nextDay.setDate(nextDay.getDate() + 1); // skip Sunday
+        dateInput.value = formatYmd(nextDay);
+      }
+
+      // Time slot selection
+      timeSlotBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          timeSlotBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (timeHiddenInput) {
+            timeHiddenInput.value = btn.getAttribute('data-time') || '02:00 PM';
+          }
+        });
+      });
+
+      // Google Meet code generator (standard 3-4-3 format: e.g. wkn-qorp-mtg)
+      function generateMeetLink() {
+        const letters = 'abcdefghijklmnopqrstuvwxyz';
+        const randPart = len => Array.from({ length: len }, () => letters[Math.floor(Math.random() * letters.length)]).join('');
+        return `https://meet.google.com/${randPart(3)}-${randPart(4)}-${randPart(3)}`;
+      }
+
+      // Google Calendar event deep link builder
+      function createGoogleCalendarLink(title, details, location, dateStr, timeStr) {
+        try {
+          const [hStr, mStrWithAmPm] = timeStr.split(':');
+          let hours = parseInt(hStr, 10);
+          const minutes = parseInt(mStrWithAmPm.substring(0, 2), 10);
+          if (mStrWithAmPm.toLowerCase().includes('pm') && hours < 12) hours += 12;
+          if (mStrWithAmPm.toLowerCase().includes('am') && hours === 12) hours = 0;
+          
+          const [y, mon, d] = dateStr.split('-').map(Number);
+          const startDt = new Date(y, mon - 1, d, hours, minutes, 0);
+          const endDt = new Date(startDt.getTime() + 30 * 60 * 1000); // 30 min duration
+
+          const formatIso = dt => `${dt.getFullYear()}${padZero(dt.getMonth() + 1)}${padZero(dt.getDate())}T${padZero(dt.getHours())}${padZero(dt.getMinutes())}00`;
+          
+          const gUrl = new URL('https://calendar.google.com/calendar/render');
+          gUrl.searchParams.set('action', 'TEMPLATE');
+          gUrl.searchParams.set('text', title);
+          gUrl.searchParams.set('dates', `${formatIso(startDt)}/${formatIso(endDt)}`);
+          gUrl.searchParams.set('details', details);
+          gUrl.searchParams.set('location', location);
+          gUrl.searchParams.set('add', 'mailmeatusama@gmail.com');
+          return gUrl.toString();
+        } catch (e) {
+          return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&location=${encodeURIComponent(location)}`;
+        }
+      }
+
+      // Open Modal
+      window.openBookingModal = function(preferredTopic) {
+        if (formStep && successStep) {
+          formStep.style.display = 'block';
+          successStep.style.display = 'none';
+        }
+        if (preferredTopic && topicSelect) {
+          for (let i = 0; i < topicSelect.options.length; i++) {
+            if (topicSelect.options[i].value.toLowerCase().includes(preferredTopic.toLowerCase()) ||
+                preferredTopic.toLowerCase().includes(topicSelect.options[i].value.toLowerCase())) {
+              topicSelect.selectedIndex = i;
+              break;
+            }
+          }
+        }
+        if (modal) {
+          modal.classList.add('active');
+          modal.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+
+      // Close Modal
+      function closeBookingModal() {
+        if (modal) {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', closeBookingModal);
+      if (backdrop) backdrop.addEventListener('click', closeBookingModal);
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+          closeBookingModal();
+        }
+      });
+
+      // Attach click events to all open-booking-btn buttons
+      document.querySelectorAll('.open-booking-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          const topic = btn.getAttribute('data-topic') || '';
+          window.openBookingModal(topic);
+        });
+      });
+
+      // Handle Booking Submission
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const nameVal = nameInput ? nameInput.value.trim() : '';
+          const emailVal = emailInput ? emailInput.value.trim() : '';
+          const dateVal = dateInput ? dateInput.value : '';
+          const timeVal = timeHiddenInput ? timeHiddenInput.value : '02:00 PM';
+          const companyVal = companyInput ? companyInput.value.trim() : '';
+          const topicVal = topicSelect ? topicSelect.value : 'Strategic Discovery Call';
+          const notesVal = notesInput ? notesInput.value.trim() : '';
+
+          // Reset errors
+          document.querySelectorAll('.booking-field-group').forEach(fg => fg.classList.remove('has-error'));
+
+          let hasError = false;
+          if (!nameVal) {
+            if (nameInput) nameInput.closest('.booking-field-group').classList.add('has-error');
+            hasError = true;
+          }
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailVal || !emailRegex.test(emailVal)) {
+            if (emailInput) emailInput.closest('.booking-field-group').classList.add('has-error');
+            hasError = true;
+          }
+          if (!dateVal) {
+            if (dateInput) dateInput.closest('.booking-field-group').classList.add('has-error');
+            hasError = true;
+          }
+
+          if (hasError) return;
+
+          // Loading state
+          const submitBtnText = submitBtn.querySelector('.btn-text');
+          if (submitBtnText) submitBtnText.textContent = 'Generating Google Meet Room...';
+          submitBtn.disabled = true;
+
+          // Generate real Google Meet link
+          const meetLink = generateMeetLink();
+
+          // Build Google Calendar template link
+          const calTitle = `Discovery Call: ${nameVal} & Usama Arshad`;
+          const calDetails = `Strategic Discovery Session\nClient: ${nameVal} (${emailVal})\nCompany: ${companyVal || 'N/A'}\nTopic: ${topicVal}\nNotes: ${notesVal || 'None provided'}\n\nGoogle Meet Room: ${meetLink}\nHost: Usama Arshad (mailmeatusama@gmail.com)`;
+          const gcalLink = createGoogleCalendarLink(calTitle, calDetails, meetLink, dateVal, timeVal);
+
+          // Dispatch email notification to Usama Arshad (mailmeatusama@gmail.com) via FormSubmit
+          const formData = new FormData();
+          formData.append('_subject', `📅 Discovery Call Booked: ${nameVal} (${companyVal || 'Individual'})`);
+          formData.append('_template', 'table');
+          formData.append('_captcha', 'false');
+          formData.append('Client Name', nameVal);
+          formData.append('Client Email', emailVal);
+          formData.append('Company / Agency', companyVal || 'Not Specified');
+          formData.append('Topic / Discussion Focus', topicVal);
+          formData.append('Preferred Date', dateVal);
+          formData.append('Preferred Time Slot', `${timeVal} (PKT / UTC+5)`);
+          formData.append('Google Meet Video Link', meetLink);
+          formData.append('Project Scope & Notes', notesVal || 'None provided');
+          formData.append('Google Calendar Event', gcalLink);
+          formData.append('Booked At', new Date().toLocaleString());
+
+          fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
+            method: 'POST',
+            body: formData
+          }).catch(err => {
+            console.warn('FormSubmit network notice:', err);
+          });
+
+          // Populate Confirmation Screen
+          document.getElementById('confirmName').textContent = nameVal;
+          document.getElementById('confirmDateTime').textContent = `${dateVal} • ${timeVal} (PKT)`;
+          document.getElementById('confirmTopic').textContent = topicVal;
+
+          const meetActualLink = document.getElementById('meetActualLink');
+          if (meetActualLink) {
+            meetActualLink.textContent = meetLink;
+            meetActualLink.href = meetLink;
+          }
+
+          const joinMeetBtn = document.getElementById('joinMeetBtn');
+          if (joinMeetBtn) joinMeetBtn.href = meetLink;
+
+          const addToCalBtn = document.getElementById('addToCalBtn');
+          if (addToCalBtn) addToCalBtn.href = gcalLink;
+
+          // Copy button handling
+          const copyBtn = document.getElementById('copyMeetBtn');
+          const copyBtnText = document.getElementById('copyBtnText');
+          if (copyBtn) {
+            copyBtn.onclick = function() {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(meetLink).then(() => {
+                  if (copyBtnText) copyBtnText.textContent = 'Copied!';
+                  setTimeout(() => {
+                    if (copyBtnText) copyBtnText.textContent = 'Copy Link';
+                  }, 2500);
+                }).catch(() => {
+                  prompt('Copy your Google Meet link:', meetLink);
+                });
+              } else {
+                prompt('Copy your Google Meet link:', meetLink);
+              }
+            };
+          }
+
+          // Transition to Success view
+          formStep.style.display = 'none';
+          successStep.style.display = 'block';
+
+          // Reset button for subsequent usage
+          if (submitBtnText) submitBtnText.textContent = 'Generate Google Meet & Confirm Booking ↗';
+          submitBtn.disabled = false;
+        });
+      }
+    })();
+  </script>
+
+  <!-- DISCOVERY CALL & WORK TOGETHER BOOKING MODAL -->
+  <div class="booking-modal-overlay" id="bookingModal" aria-hidden="true">
+    <div class="booking-modal-backdrop" id="bookingModalBackdrop"></div>
+    <div class="booking-modal-container" role="dialog" aria-labelledby="bookingModalTitle">
+      
+      <!-- Modal Close Button -->
+      <button class="booking-modal-close" id="bookingModalClose" aria-label="Close booking modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- STEP 1: BOOKING FORM -->
+      <div class="booking-step" id="bookingStepForm">
+        <div class="booking-modal-header">
+          <div class="booking-live-pill">
+            <span class="live-dot"></span> Available for Strategic Roles &amp; Projects
+          </div>
+          <h2 class="booking-modal-title" id="bookingModalTitle">Schedule Discovery &amp; Strategy Call</h2>
+          <p class="booking-modal-sub">
+            Book a 30-minute strategy session with Usama Arshad. A direct Google Meet link will be generated automatically and booking details sent to both parties.
+          </p>
+        </div>
+
+        <form id="bookingForm" class="booking-form" novalidate>
+          <div class="booking-form-grid">
+            
+            <!-- Full Name -->
+            <div class="booking-field-group">
+              <label for="bookName" class="booking-label">Your Name <span class="req-star">*</span></label>
+              <input type="text" id="bookName" name="name" class="booking-input" placeholder="e.g. Johnathan Vance" required>
+              <div class="field-error-msg" id="nameError">Please enter your name</div>
+            </div>
+
+            <!-- Email -->
+            <div class="booking-field-group">
+              <label for="bookEmail" class="booking-label">Work Email <span class="req-star">*</span></label>
+              <input type="email" id="bookEmail" name="email" class="booking-input" placeholder="e.g. jvance@company.com" required>
+              <div class="field-error-msg" id="emailError">Please enter a valid work email</div>
+            </div>
+
+            <!-- Company / Organization -->
+            <div class="booking-field-group">
+              <label for="bookCompany" class="booking-label">Company / Agency <span class="opt-tag">(Optional)</span></label>
+              <input type="text" id="bookCompany" name="company" class="booking-input" placeholder="e.g. Apex AI Labs">
+            </div>
+
+            <!-- Call Topic / Focus -->
+            <div class="booking-field-group">
+              <label for="bookTopic" class="booking-label">Strategy Focus <span class="req-star">*</span></label>
+              <select id="bookTopic" name="topic" class="booking-input booking-select" required>
+                <option value="B2B Lead Generation Pipeline">B2B Lead Generation &amp; Outbound Pipeline</option>
+                <option value="Freelance Platform Bidding (Upwork)">Upwork / Freelance Bidding Strategy</option>
+                <option value="Technical Sales & Scoping">Technical Project Scoping &amp; Proposal Strategy</option>
+                <option value="Full-Cycle Business Development Role">Hiring / Business Development Collaboration</option>
+                <option value="General Discovery & Growth Discussion">General Discovery &amp; Growth Consultation</option>
+              </select>
+            </div>
+
+            <!-- Preferred Date -->
+            <div class="booking-field-group">
+              <label for="bookDate" class="booking-label">Preferred Date <span class="req-star">*</span></label>
+              <input type="date" id="bookDate" name="date" class="booking-input" required>
+              <div class="field-error-msg" id="dateError">Please select an upcoming date</div>
+            </div>
+
+            <!-- Preferred Time -->
+            <div class="booking-field-group">
+              <label class="booking-label">Preferred Time (PKT / UTC+5) <span class="req-star">*</span></label>
+              <div class="time-slots-grid" id="timeSlotsContainer">
+                <button type="button" class="time-slot-btn active" data-time="02:00 PM">02:00 PM</button>
+                <button type="button" class="time-slot-btn" data-time="03:00 PM">03:00 PM</button>
+                <button type="button" class="time-slot-btn" data-time="04:00 PM">04:00 PM</button>
+                <button type="button" class="time-slot-btn" data-time="05:00 PM">05:00 PM</button>
+                <button type="button" class="time-slot-btn" data-time="06:00 PM">06:00 PM</button>
+                <button type="button" class="time-slot-btn" data-time="08:00 PM">08:00 PM</button>
+              </div>
+              <input type="hidden" id="bookTime" name="time" value="02:00 PM">
+            </div>
+
+          </div>
+
+          <!-- Project Notes -->
+          <div class="booking-field-group" style="margin-top: 14px;">
+            <label for="bookNotes" class="booking-label">Project Scope / Details <span class="opt-tag">(Optional)</span></label>
+            <textarea id="bookNotes" name="notes" class="booking-input booking-textarea" rows="2" placeholder="Briefly describe your target industry, revenue blockers, or project scope..."></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="booking-submit-row">
+            <button type="submit" class="booking-btn-submit" id="bookSubmitBtn">
+              <span class="btn-text">Generate Google Meet &amp; Confirm Booking ↗</span>
+            </button>
+          </div>
+
+          <div class="booking-trust-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2ee6a8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Instant Google Meet room generated. Direct booking notification sent to <strong>mailmeatusama@gmail.com</strong>.
+          </div>
+        </form>
+      </div>
+
+      <!-- STEP 2: CONFIRMATION & GOOGLE MEET READY -->
+      <div class="booking-step" id="bookingStepSuccess" style="display: none;">
+        <div class="booking-success-wrap">
+          
+          <div class="success-icon-badge">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00d995" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+
+          <h3 class="success-title">Discovery Call Confirmed!</h3>
+          <p class="success-subtitle">
+            Your Google Meet room is ready and booking notification has been dispatched to Usama Arshad (<strong>mailmeatusama@gmail.com</strong>).
+          </p>
+
+          <!-- Meeting Summary Card -->
+          <div class="meeting-summary-card">
+            <div class="meeting-meta-row">
+              <div class="meeting-meta-col">
+                <span class="meeting-meta-label">Client Name</span>
+                <span class="meeting-meta-val" id="confirmName">—</span>
+              </div>
+              <div class="meeting-meta-col">
+                <span class="meeting-meta-label">Date &amp; Time</span>
+                <span class="meeting-meta-val" id="confirmDateTime">—</span>
+              </div>
+              <div class="meeting-meta-col">
+                <span class="meeting-meta-label">Topic</span>
+                <span class="meeting-meta-val" id="confirmTopic">—</span>
+              </div>
+            </div>
+
+            <div class="meet-link-box">
+              <div class="meet-link-header">
+                <span class="meet-link-badge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                  Google Meet Room Link
+                </span>
+                <button type="button" class="meet-copy-btn" id="copyMeetBtn" title="Copy Meet link">
+                  <span id="copyBtnText">Copy Link</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+              <a href="#" target="_blank" rel="noopener noreferrer" class="meet-actual-link" id="meetActualLink">https://meet.google.com/xxx-yyyy-zzz</a>
+            </div>
+          </div>
+
+          <!-- Action CTAs -->
+          <div class="success-action-btns">
+            <a href="#" target="_blank" rel="noopener noreferrer" class="btn-white" id="joinMeetBtn">
+              Join Google Meet Room ↗
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="btn-outline" id="addToCalBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Add To Google Calendar
+            </a>
+          </div>
+
+          <div class="success-footer-note">
+            <span>Direct questions or need to reschedule? Email Usama at <a href="mailto:mailmeatusama@gmail.com" style="color: #2ee6a8; text-decoration: underline;">mailmeatusama@gmail.com</a></span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
   </script>
 
   <!-- Floating Back to Top Button -->
