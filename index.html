@@ -2462,7 +2462,8 @@
       letter-spacing: 0.8px;
     }
 
-    .pkt-badge {
+    .pkt-badge,
+    .pkt-host-pill {
       display: inline-flex;
       align-items: center;
       gap: 5px;
@@ -2474,6 +2475,140 @@
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* Client Timezone Selector */
+    .slots-tz-row {
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .slots-tz-row:focus-within {
+      border-color: rgba(0, 217, 149, 0.45);
+      background: rgba(0, 217, 149, 0.03);
+    }
+
+    .slots-tz-label-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .slots-tz-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #2ee6a8;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .slots-tz-detected-hint {
+      font-size: 10px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .slots-tz-select-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .booking-tz-select {
+      width: 100%;
+      background: #0c1522;
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      padding: 6px 26px 6px 9px;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .booking-tz-select:hover {
+      border-color: rgba(0, 217, 149, 0.5);
+    }
+
+    .booking-tz-select:focus {
+      border-color: #00d995;
+      box-shadow: 0 0 0 2px rgba(0, 217, 149, 0.2);
+    }
+
+    .booking-tz-select option,
+    .booking-tz-select optgroup {
+      background: #0c1522;
+      color: #f1f5f9;
+      font-size: 12px;
+    }
+
+    .booking-tz-select optgroup {
+      color: #2ee6a8;
+      font-weight: 700;
+      padding-top: 5px;
+    }
+
+    .slots-tz-select-chevron {
+      position: absolute;
+      right: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #2ee6a8;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Dual Time Display in Slot Button */
+    .cal-slot-time-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
+      text-align: left;
+    }
+
+    .slot-time-primary {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+      line-height: 1.25;
+    }
+
+    .cal-slot-item.active .slot-time-primary {
+      color: #2ee6a8;
+    }
+
+    .slot-time-secondary {
+      font-size: 10px;
+      font-weight: 500;
+      color: #94a3b8;
+      letter-spacing: 0.1px;
+      line-height: 1.2;
+    }
+
+    .cal-slot-item.active .slot-time-secondary {
+      color: #a7f3d0;
     }
 
     .slots-selected-date-text {
@@ -4666,7 +4801,7 @@
       <div class="booking-stepper">
         <div class="stepper-item active" id="stepIndicator1">
           <span class="stepper-num">1</span>
-          <span class="stepper-label">Select Date &amp; Time (PKT)</span>
+          <span class="stepper-label">Select Date &amp; Time</span>
         </div>
         <div class="stepper-arrow">&rsaquo;</div>
         <div class="stepper-item" id="stepIndicator2">
@@ -4683,11 +4818,11 @@
       <!-- Modal Header -->
       <div class="booking-modal-header">
         <div class="booking-live-pill">
-          <span class="live-dot"></span> Available 5:00 PM – 12:00 AM (Pakistan Time)
+          <span class="live-dot"></span> Available 5:00 PM – 12:00 AM PKT (Auto-Adjusted To Your Time)
         </div>
         <h2 class="booking-modal-title" id="bookingModalTitle">Book A Discovery Call</h2>
         <p class="booking-modal-sub" id="bookingModalSub">
-          Select an available slot according to Pakistan Standard Time (PKT). Enter your contact details in the next step to receive an instant Google Meet room and calendar reminder.
+          Select an available slot in your local time zone. Confirmation and Google Meet room are automatically synchronized with Usama's Pakistan Time (PKT).
         </p>
       </div>
 
@@ -4715,17 +4850,75 @@
             </div>
           </div>
 
-          <!-- Column 2: Available Time Slots (PKT) -->
+          <!-- Column 2: Available Time Slots -->
           <div class="slots-widget-card" data-lenis-prevent="true">
             <div class="slots-header">
               <div class="slots-header-top">
                 <span class="slots-header-title">Available Slots</span>
-                <span class="pkt-badge">
-                  <span>🇵🇰</span> PKT (UTC+5)
+                <span class="pkt-host-pill" title="Host Location: Pakistan Standard Time (PKT, UTC+5)">
+                  <span>🇵🇰</span> Host: PKT (UTC+5)
                 </span>
               </div>
               <div class="slots-selected-date-text" id="slotsSelectedDateText">Thursday, Nov 20, 2026</div>
-              <div class="slots-window-sub">Window: <strong>5:00 PM – 12:00 AM PKT</strong> (30-min strategy call)</div>
+              <div class="slots-window-sub" id="slotsWindowSub">Window: <strong>5:00 PM – 12:00 AM PKT</strong> (30-min strategy call)</div>
+
+              <!-- Client Timezone Selector Dropdown -->
+              <div class="slots-tz-row">
+                <div class="slots-tz-label-line">
+                  <span class="slots-tz-label">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    Time Zone:
+                  </span>
+                  <span class="slots-tz-detected-hint" id="tzAutoDetectedBadge">📍 Auto-Detected</span>
+                </div>
+                <div class="slots-tz-select-wrap">
+                  <select id="bookingTimeZoneSelect" class="booking-tz-select" aria-label="Select your time zone">
+                    <option value="Asia/Karachi">🇵🇰 Pakistan Time (PKT, UTC+5) — Usama Local</option>
+                    <optgroup label="🇺🇸 United States &amp; Canada">
+                      <option value="America/New_York">Eastern Time — New York, Miami, Toronto (EST/EDT)</option>
+                      <option value="America/Chicago">Central Time — Chicago, Dallas, Houston (CST/CDT)</option>
+                      <option value="America/Denver">Mountain Time — Denver, Salt Lake City (MST/MDT)</option>
+                      <option value="America/Phoenix">Arizona — Mountain Standard Time (Phoenix, MST)</option>
+                      <option value="America/Los_Angeles">Pacific Time — Los Angeles, SF, Seattle (PST/PDT)</option>
+                      <option value="America/Anchorage">Alaska Time (Anchorage, AKST/AKDT)</option>
+                      <option value="Pacific/Honolulu">Hawaii Time (Honolulu, HST)</option>
+                      <option value="America/Toronto">Canada Eastern (Toronto, Montreal, Ottawa)</option>
+                      <option value="America/Vancouver">Canada Pacific (Vancouver)</option>
+                    </optgroup>
+                    <optgroup label="🇬🇧 United Kingdom &amp; Europe">
+                      <option value="Europe/London">London, Dublin, Lisbon (GMT / BST, UTC+0/+1)</option>
+                      <option value="Europe/Paris">Central Europe — Paris, Berlin, Amsterdam, Rome (CET/CEST)</option>
+                      <option value="Europe/Athens">Eastern Europe — Athens, Bucharest, Helsinki (EET/EEST)</option>
+                    </optgroup>
+                    <optgroup label="🇦🇪 Middle East &amp; Gulf">
+                      <option value="Asia/Dubai">Gulf Standard Time — Dubai, Abu Dhabi, Muscat (GST, UTC+4)</option>
+                      <option value="Asia/Riyadh">Arabia Standard Time — Riyadh, Doha, Kuwait (AST, UTC+3)</option>
+                    </optgroup>
+                    <optgroup label="🌏 Asia &amp; Oceania">
+                      <option value="Asia/Kolkata">India Standard Time — New Delhi, Mumbai, Bengaluru (IST, UTC+5:30)</option>
+                      <option value="Asia/Dhaka">Bangladesh Time — Dhaka (BST, UTC+6)</option>
+                      <option value="Asia/Singapore">Singapore, Malaysia (SGT / MYT, UTC+8)</option>
+                      <option value="Asia/Hong_Kong">Hong Kong Time (HKT, UTC+8)</option>
+                      <option value="Asia/Tokyo">Japan Standard Time — Tokyo, Osaka (JST, UTC+9)</option>
+                      <option value="Australia/Sydney">Australia Eastern — Sydney, Melbourne (AEST/AEDT)</option>
+                      <option value="Australia/Perth">Australia Western — Perth (AWST, UTC+8)</option>
+                      <option value="Pacific/Auckland">New Zealand — Auckland, Wellington (NZST/NZDT)</option>
+                    </optgroup>
+                    <optgroup label="🌐 Universal">
+                      <option value="UTC">Coordinated Universal Time (UTC / GMT)</option>
+                    </optgroup>
+                  </select>
+                  <div class="slots-tz-select-chevron">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+              </div>
               
               <!-- Owner Slot Management Toggle (PIN Protected) -->
               <div class="slot-manager-toggle-row">
@@ -4980,6 +5173,9 @@
 
     // Slots Elements
     const slotsSelectedDateText = document.getElementById('slotsSelectedDateText');
+    const slotsWindowSub = document.getElementById('slotsWindowSub');
+    const bookingTimeZoneSelect = document.getElementById('bookingTimeZoneSelect');
+    const tzAutoDetectedBadge = document.getElementById('tzAutoDetectedBadge');
     const slotsListContainer = document.getElementById('slotsListContainer');
     const step1SelectionStatus = document.getElementById('step1SelectionStatus');
     const btnToStep2 = document.getElementById('btnToStep2');
@@ -5094,8 +5290,138 @@
     if (pktNow.getHours() >= 23 && pktNow.getMinutes() >= 30) {
       selectedDate.setDate(selectedDate.getDate() + 1);
     }
-    let selectedSlot = null; // e.g. "07:00 PM"
+    let selectedSlot = null; // Master PKT time string, e.g. "05:00 PM"
+    let selectedSlotLocalTime = null; // Client time, e.g. "07:00 AM"
+    let selectedSlotTzAbbr = null; // Timezone code, e.g. "EST"
+    let selectedSlotClientDate = null; // Client date string
     let currentBookingData = null;
+
+    // Timezone Management & Helpers
+    function getSystemTimeZone() {
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (tz && typeof tz === 'string' && tz.length > 0) return tz;
+      } catch (e) {}
+      return 'Asia/Karachi';
+    }
+
+    const detectedVisitorTz = getSystemTimeZone();
+    let selectedTimeZone = localStorage.getItem('usama_user_tz') || detectedVisitorTz;
+
+    function getTzAbbr(utcDate, tz) {
+      try {
+        const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'short' }).formatToParts(utcDate);
+        return parts.find(p => p.type === 'timeZoneName')?.value || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function formatTimeInTz(utcDate, tz) {
+      try {
+        return new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }).format(utcDate);
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function getFriendlyDateInTz(utcDate, tz) {
+      try {
+        return new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        }).format(utcDate);
+      } catch (e) {
+        return formatFriendlyDate(utcDate);
+      }
+    }
+
+    function getYmdInTz(utcDate, tz) {
+      try {
+        return new Intl.DateTimeFormat('en-CA', {
+          timeZone: tz,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).format(utcDate);
+      } catch (e) {
+        return formatYmd(utcDate);
+      }
+    }
+
+    function getTzDisplayName(tz) {
+      if (bookingTimeZoneSelect) {
+        const opt = bookingTimeZoneSelect.querySelector(`option[value="${tz}"]`);
+        if (opt) return opt.textContent.trim();
+      }
+      return tz;
+    }
+
+    function updateTzBadge() {
+      if (!tzAutoDetectedBadge) return;
+      if (selectedTimeZone === detectedVisitorTz && selectedTimeZone !== 'Asia/Karachi') {
+        tzAutoDetectedBadge.textContent = '📍 Your Local Time';
+      } else if (selectedTimeZone === 'Asia/Karachi') {
+        tzAutoDetectedBadge.textContent = '🇵🇰 Usama Local (PKT)';
+      } else {
+        tzAutoDetectedBadge.textContent = '🌐 Custom Selected';
+      }
+    }
+
+    function updateWindowSubtitle(dateObj) {
+      if (!slotsWindowSub) return;
+      const isPktTz = (selectedTimeZone === 'Asia/Karachi');
+      if (isPktTz) {
+        slotsWindowSub.innerHTML = `Window: <strong>5:00 PM – 12:00 AM PKT</strong> (30-min strategy call)`;
+      } else {
+        const startUtc = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 17 - 5, 0, 0));
+        const endUtc = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 24 - 5, 0, 0));
+        const startStr = formatTimeInTz(startUtc, selectedTimeZone);
+        const endStr = formatTimeInTz(endUtc, selectedTimeZone);
+        const tzAbbr = getTzAbbr(startUtc, selectedTimeZone);
+
+        slotsWindowSub.innerHTML = `Your Window: <strong>${startStr} – ${endStr} ${tzAbbr}</strong> • Usama's: <strong>5:00 PM – 12:00 AM PKT</strong>`;
+      }
+    }
+
+    function initTimeZoneSelector() {
+      if (!bookingTimeZoneSelect) return;
+
+      let exists = false;
+      for (let i = 0; i < bookingTimeZoneSelect.options.length; i++) {
+        if (bookingTimeZoneSelect.options[i].value === selectedTimeZone) {
+          exists = true;
+          break;
+        }
+      }
+
+      if (!exists && selectedTimeZone) {
+        const customOpt = document.createElement('option');
+        customOpt.value = selectedTimeZone;
+        const cleanName = selectedTimeZone.replace(/_/g, ' ');
+        customOpt.textContent = `📍 Local Detected: ${cleanName}`;
+        bookingTimeZoneSelect.insertBefore(customOpt, bookingTimeZoneSelect.firstChild);
+      }
+
+      bookingTimeZoneSelect.value = selectedTimeZone;
+      updateTzBadge();
+
+      bookingTimeZoneSelect.addEventListener('change', (e) => {
+        selectedTimeZone = e.target.value;
+        localStorage.setItem('usama_user_tz', selectedTimeZone);
+        updateTzBadge();
+        renderSlots();
+        updateStep1ActionState();
+      });
+    }
 
     // Daily time slots: 5:00 PM to 12:00 AM (midnight) PKT
     const slotTimes = [
@@ -5281,7 +5607,7 @@
         row.style.gap = '8px';
 
         const clientHtml = detail
-          ? `<div style="font-size: 10.5px; color: #94a3b8; margin-top: 2px;">👤 <strong>${detail.name}</strong> • 📞 ${detail.phone} • ✉️ ${detail.email}${detail.company && detail.company !== 'Not Specified' ? ` • 🏢 ${detail.company}` : ''}</div>`
+          ? `<div style="font-size: 10.5px; color: #94a3b8; margin-top: 2px;">👤 <strong>${detail.name}</strong> • 📞 ${detail.phone} • ✉️ ${detail.email}${detail.company && detail.company !== 'Not Specified' ? ` • 🏢 ${detail.company}` : ''}</div>${detail.clientTime ? `<div style="font-size: 10px; color: #38bdf8; margin-top: 1.5px;">🌐 Client Local Time: <strong>${detail.clientTime}</strong> (${detail.clientTz || 'Client Timezone'})</div>` : ''}`
           : `<div style="font-size: 10px; color: #64748b; margin-top: 1px;">(Reserved Slot)</div>`;
 
         row.innerHTML = `
@@ -5559,8 +5885,21 @@
     function renderSlots() {
       if (!slotsListContainer || !slotsSelectedDateText) return;
 
-      const dateStr = formatYmd(selectedDate);
-      slotsSelectedDateText.textContent = formatFriendlyDate(selectedDate);
+      const pktYmdStr = formatYmd(selectedDate);
+      const isPktTz = (selectedTimeZone === 'Asia/Karachi');
+
+      updateWindowSubtitle(selectedDate);
+
+      // Midpoint of window in UTC (8:00 PM PKT = 15:00 UTC)
+      const midUtc = new Date(Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 20 - 5, 0, 0));
+      const clientFriendlyDate = getFriendlyDateInTz(midUtc, selectedTimeZone);
+
+      if (isPktTz) {
+        slotsSelectedDateText.textContent = formatFriendlyDate(selectedDate);
+      } else {
+        slotsSelectedDateText.innerHTML = `${clientFriendlyDate} <span style="font-size: 11px; color: #94a3b8; font-weight: 500;">(Usama's Date: ${formatFriendlyDate(selectedDate)})</span>`;
+      }
+
       slotsListContainer.innerHTML = '';
 
       slotTimes.forEach(slot => {
@@ -5568,12 +5907,37 @@
         btn.type = 'button';
         btn.className = 'cal-slot-item';
 
-        const isBooked = isSlotBooked(dateStr, slot.text, selectedDate.getDate());
-        const isPassed = isSlotPassed(selectedDate, slot);
+        const slotUtcMs = Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), slot.hour24 - 5, slot.min, 0);
+        const slotUtcDate = new Date(slotUtcMs);
 
-        const timeSpan = document.createElement('span');
-        timeSpan.textContent = slot.text;
-        btn.appendChild(timeSpan);
+        const isPassed = (slotUtcMs <= Date.now());
+        const isBooked = isSlotBooked(pktYmdStr, slot.text, selectedDate.getDate());
+
+        const clientTime = formatTimeInTz(slotUtcDate, selectedTimeZone);
+        const tzAbbr = getTzAbbr(slotUtcDate, selectedTimeZone);
+        const clientYmd = getYmdInTz(slotUtcDate, selectedTimeZone);
+        const dayDiff = (clientYmd > pktYmdStr) ? ' (+1d)' : (clientYmd < pktYmdStr ? ' (-1d)' : '');
+
+        const timeCol = document.createElement('div');
+        timeCol.className = 'cal-slot-time-col';
+
+        const mainTimeSpan = document.createElement('span');
+        mainTimeSpan.className = 'slot-time-primary';
+
+        const subTimeSpan = document.createElement('span');
+        subTimeSpan.className = 'slot-time-secondary';
+
+        if (isPktTz) {
+          mainTimeSpan.textContent = slot.text;
+          subTimeSpan.textContent = 'PKT (UTC+5)';
+        } else {
+          mainTimeSpan.textContent = `${clientTime} ${tzAbbr}${dayDiff}`;
+          subTimeSpan.textContent = `${slot.text} PKT`;
+        }
+
+        timeCol.appendChild(mainTimeSpan);
+        timeCol.appendChild(subTimeSpan);
+        btn.appendChild(timeCol);
 
         const badge = document.createElement('span');
         badge.className = 'slot-avail-badge';
@@ -5592,10 +5956,17 @@
 
           if (selectedSlot === slot.text) {
             btn.classList.add('active');
+            selectedSlotLocalTime = clientTime;
+            selectedSlotTzAbbr = tzAbbr;
+            selectedSlotClientDate = clientFriendlyDate;
           }
 
           btn.addEventListener('click', () => {
             selectedSlot = slot.text;
+            selectedSlotLocalTime = clientTime;
+            selectedSlotTzAbbr = tzAbbr;
+            selectedSlotClientDate = getFriendlyDateInTz(slotUtcDate, selectedTimeZone);
+
             document.querySelectorAll('.cal-slot-item').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
             updateStep1ActionState();
@@ -5611,7 +5982,25 @@
       if (!btnToStep2 || !step1SelectionStatus) return;
 
       if (selectedDate && selectedSlot) {
-        step1SelectionStatus.innerHTML = `<span>✅ Selected:</span> <strong>${formatFriendlyDate(selectedDate)} @ ${selectedSlot} (PKT)</strong>`;
+        const isPktTz = (selectedTimeZone === 'Asia/Karachi');
+        if (isPktTz) {
+          step1SelectionStatus.innerHTML = `<span>✅ Selected:</span> <strong>${formatFriendlyDate(selectedDate)} @ ${selectedSlot} (PKT)</strong>`;
+        } else {
+          const slotObj = slotTimes.find(s => s.text === selectedSlot);
+          const hour24 = slotObj ? slotObj.hour24 : 17;
+          const min = slotObj ? slotObj.min : 0;
+          const slotUtcMs = Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour24 - 5, min, 0);
+          const slotUtcDate = new Date(slotUtcMs);
+          const clientTime = formatTimeInTz(slotUtcDate, selectedTimeZone);
+          const tzAbbr = getTzAbbr(slotUtcDate, selectedTimeZone);
+          const clientDate = getFriendlyDateInTz(slotUtcDate, selectedTimeZone);
+
+          selectedSlotLocalTime = clientTime;
+          selectedSlotTzAbbr = tzAbbr;
+          selectedSlotClientDate = clientDate;
+
+          step1SelectionStatus.innerHTML = `<span>✅ Selected:</span> <strong>${clientDate} @ ${clientTime} ${tzAbbr}</strong> <span style="color: #94a3b8; font-size: 11px; margin-left: 5px;">(${selectedSlot} PKT)</span>`;
+        }
         btnToStep2.disabled = false;
       } else if (selectedDate) {
         step1SelectionStatus.innerHTML = `<span class="status-icon">🕒</span> Selected date: <strong>${formatFriendlyDate(selectedDate)}</strong>. Please pick an available time slot above.`;
@@ -5656,8 +6045,13 @@
     if (btnToStep2) {
       btnToStep2.addEventListener('click', () => {
         if (!selectedDate || !selectedSlot) return;
+        const isPktTz = (selectedTimeZone === 'Asia/Karachi');
         if (recapSessionText) {
-          recapSessionText.textContent = `${formatFriendlyDate(selectedDate)} • ${selectedSlot} (PKT / UTC+5)`;
+          if (isPktTz) {
+            recapSessionText.textContent = `${formatFriendlyDate(selectedDate)} • ${selectedSlot} (PKT / UTC+5)`;
+          } else {
+            recapSessionText.textContent = `${selectedSlotClientDate || formatFriendlyDate(selectedDate)} • ${selectedSlotLocalTime} ${selectedSlotTzAbbr} (Your Time) • ${selectedSlot} PKT (Usama's Time)`;
+          }
         }
         setStep(2);
       });
@@ -5770,6 +6164,7 @@
         }
       }
 
+      initTimeZoneSelector();
       renderCalendar();
       renderSlots();
       renderSlotManagerList();
@@ -5880,6 +6275,11 @@
         const formattedDateStr = formatFriendlyDate(selectedDate);
         const ymdStr = formatYmd(selectedDate);
 
+        const isPktTz = (selectedTimeZone === 'Asia/Karachi');
+        const tzName = getTzDisplayName(selectedTimeZone);
+        const clientFormattedTime = isPktTz ? `${selectedSlot} PKT` : `${selectedSlotLocalTime} ${selectedSlotTzAbbr}`;
+        const clientFormattedDate = isPktTz ? formattedDateStr : (selectedSlotClientDate || formattedDateStr);
+
         // Lock slot in storage & save client contact metadata
         saveBookedSlot(ymdStr, selectedSlot);
         saveBookedSlotDetails(`${ymdStr}_${selectedSlot}`, {
@@ -5890,13 +6290,16 @@
           topic: topicVal,
           date: formattedDateStr,
           time: selectedSlot,
+          clientTime: clientFormattedTime,
+          clientTz: selectedTimeZone,
+          clientDate: clientFormattedDate,
           meetLink: meetLink,
           notes: notesVal || '',
           bookedAt: new Date().toLocaleString()
         });
 
         const calTitle = `Discovery Call: ${nameVal} & Usama Arshad`;
-        const calDetails = `Strategic Discovery Session\nClient: ${nameVal}\nEmail: ${emailVal}\nPhone/WhatsApp: ${phoneVal}\nCompany: ${companyVal || 'N/A'}\nTopic: ${topicVal}\nNotes: ${notesVal || 'None provided'}\n\nGoogle Meet Room: ${meetLink}\nHost: Usama Arshad (mailmeatusama@gmail.com)`;
+        const calDetails = `Strategic Discovery Session\nClient: ${nameVal}\nEmail: ${emailVal}\nPhone/WhatsApp: ${phoneVal}\nCompany: ${companyVal || 'N/A'}\nTopic: ${topicVal}\nClient Time: ${clientFormattedTime} (${tzName})\nHost Time (PKT): ${selectedSlot} (Pakistan Standard Time, UTC+5)\nNotes: ${notesVal || 'None provided'}\n\nGoogle Meet Room: ${meetLink}\nHost: Usama Arshad (mailmeatusama@gmail.com)`;
         const gcalLink = createGoogleCalendarLink(calTitle, calDetails, meetLink, startDate, endDate);
 
         currentBookingData = {
@@ -5920,8 +6323,10 @@
           'Phone / WhatsApp': phoneVal,
           'Company / Agency': companyVal || 'Not Specified',
           'Discussion Topic': topicVal,
-          'Scheduled Date': formattedDateStr,
+          'Scheduled Date (PKT)': formattedDateStr,
           'Scheduled Time (PKT)': `${selectedSlot} (Pakistan Standard Time, UTC+5)`,
+          'Client Selected Timezone': `${tzName} (${selectedTimeZone})`,
+          'Client Local Time': `${clientFormattedDate} @ ${clientFormattedTime}`,
           'Google Meet Room': meetLink,
           'Project Scope & Notes': notesVal || 'None provided',
           'Booking Timestamp': new Date().toLocaleString()
@@ -5953,6 +6358,9 @@
             topic: topicVal,
             date: formattedDateStr,
             time: selectedSlot,
+            clientTime: clientFormattedTime,
+            clientTz: selectedTimeZone,
+            clientDate: clientFormattedDate,
             meetLink: meetLink,
             notes: notesVal
           })
@@ -5960,7 +6368,13 @@
 
         // Populate Confirmation Screen
         if (confirmName) confirmName.textContent = nameVal;
-        if (confirmDateTime) confirmDateTime.textContent = `${formattedDateStr} • ${selectedSlot} (PKT)`;
+        if (confirmDateTime) {
+          if (isPktTz) {
+            confirmDateTime.textContent = `${formattedDateStr} • ${selectedSlot} (PKT)`;
+          } else {
+            confirmDateTime.textContent = `${clientFormattedDate} • ${clientFormattedTime} (Your Time) • ${selectedSlot} PKT (Usama's Time)`;
+          }
+        }
         if (confirmContact) confirmContact.textContent = `${emailVal} • ${phoneVal}`;
         if (confirmTopic) confirmTopic.textContent = topicVal;
 
@@ -6006,7 +6420,8 @@
       });
     }
 
-    // Initialize calendar & slots on load
+    // Initialize calendar, timezone & slots on load
+    initTimeZoneSelector();
     renderCalendar();
     renderSlots();
     renderSlotManagerList();

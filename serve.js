@@ -64,8 +64,9 @@ function sendEmailNotification(bookingData) {
     'Phone / WhatsApp': bookingData.phone,
     'Company': bookingData.company || 'Not Specified',
     'Strategy Focus': bookingData.topic,
-    'Date': bookingData.date,
+    'Date (PKT)': bookingData.date,
     'Time (PKT)': `${bookingData.time} (Pakistan Time, UTC+5)`,
+    'Client Local Time': bookingData.clientTime ? `${bookingData.clientTime} (${bookingData.clientTz || 'Client Timezone'})` : `${bookingData.time} (PKT)`,
     'Google Meet Room': bookingData.meetLink,
     'Notes': bookingData.notes || 'None provided',
     'Booked At': new Date().toLocaleString()
@@ -293,6 +294,9 @@ function handleRequest(req, res) {
             topic: data.topic,
             date: data.date,
             time: data.time,
+            clientTime: data.clientTime || '',
+            clientTz: data.clientTz || '',
+            clientDate: data.clientDate || '',
             meetLink: data.meetLink,
             notes: data.notes || '',
             bookedAt: new Date().toLocaleString()
@@ -306,7 +310,10 @@ function handleRequest(req, res) {
         console.log(`📞 Phone/WhatsApp: ${data.phone}`);
         console.log(`🏢 Company: ${data.company || 'Not Specified'}`);
         console.log(`🎯 Topic: ${data.topic}`);
-        console.log(`📅 Date & Time: ${data.date} at ${data.time} (PKT)`);
+        console.log(`📅 Date & Time (PKT): ${data.date} at ${data.time} (PKT)`);
+        if (data.clientTime) {
+          console.log(`🌐 Client Time: ${data.clientTime} (${data.clientTz || ''})`);
+        }
         console.log(`🔗 Google Meet: ${data.meetLink}`);
         console.log(`📝 Notes: ${data.notes || 'None'}`);
         console.log(`📧 Target Host: mailmeatusama@gmail.com`);
