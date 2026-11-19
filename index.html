@@ -5499,6 +5499,29 @@
       } catch (e) {}
     }
 
+    // Global Cloud Database for Live Website Cross-Device Synchronization (GitHub Pages / Live Site)
+    const CLOUD_SYNC_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a1f3bcb62f5ca8';
+
+    function syncToCloudDatabase() {
+      try {
+        const slotsMap = getBookedSlotsMap();
+        const detailsMap = getBookedSlotsDetailsMap();
+        fetch(CLOUD_SYNC_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'usama_portfolio_booked_slots',
+            data: {
+              bookedSlots: slotsMap,
+              bookedDetails: detailsMap
+            }
+          })
+        }).catch(err => {
+          console.warn('Cloud sync push notice:', err);
+        });
+      } catch (e) {}
+    }
+
     function removeBookedSlot(dateStr, timeStr) {
       try {
         const map = getBookedSlotsMap();
@@ -5508,42 +5531,81 @@
           localStorage.setItem('usama_booked_slots_map', JSON.stringify(map));
         }
         removeBookedSlotDetails(`${dateStr}_${timeStr}`);
+        syncToCloudDatabase();
         renderSlots();
         renderSlotManagerList();
       } catch (e) {}
     }
 
-    // Fetch and sync slots with local server in real-time
+    // Fetch and sync slots in real-time across ALL devices worldwide
     function syncServerSlots() {
-      fetch('/api/slots')
-        .then(res => res.json())
-        .then(data => {
-          if (data) {
+      // 1. Primary: Cloud Database Sync (Universal: works on GitHub Pages, usamaarshad.site, mobile, desktop)
+      fetch(CLOUD_SYNC_URL)
+        .then(res => {
+          if (!res.ok) throw new Error('Cloud fetch status ' + res.status);
+          return res.json();
+        })
+        .then(cloudData => {
+          if (cloudData && cloudData.data) {
             let changed = false;
-            if (data.bookedSlots) {
-              const currentStr = localStorage.getItem('usama_booked_slots_map') || '{}';
-              const serverStr = JSON.stringify(data.bookedSlots);
-              if (currentStr !== serverStr) {
-                localStorage.setItem('usama_booked_slots_map', serverStr);
-                changed = true;
-              }
+            const cloudSlots = cloudData.data.bookedSlots || {};
+            const cloudDetails = cloudData.data.bookedDetails || {};
+
+            const currentStr = localStorage.getItem('usama_booked_slots_map') || '{}';
+            const serverStr = JSON.stringify(cloudSlots);
+            if (currentStr !== serverStr) {
+              localStorage.setItem('usama_booked_slots_map', serverStr);
+              changed = true;
             }
-            if (data.bookedDetails) {
-              const currentDetStr = localStorage.getItem('usama_booked_slots_details') || '{}';
-              const serverDetStr = JSON.stringify(data.bookedDetails);
-              if (currentDetStr !== serverDetStr) {
-                localStorage.setItem('usama_booked_slots_details', serverDetStr);
-                changed = true;
-              }
+
+            const currentDetStr = localStorage.getItem('usama_booked_slots_details') || '{}';
+            const serverDetStr = JSON.stringify(cloudDetails);
+            if (currentDetStr !== serverDetStr) {
+              localStorage.setItem('usama_booked_slots_details', serverDetStr);
+              changed = true;
             }
+
             if (changed) {
+              renderCalendar();
               renderSlots();
               renderSlotManagerList();
               updateStep1ActionState();
             }
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          // 2. Fallback: Local Server /api/slots (when developing locally via node serve.js)
+          fetch('/api/slots')
+            .then(res => res.json())
+            .then(data => {
+              if (data) {
+                let changed = false;
+                if (data.bookedSlots) {
+                  const currentStr = localStorage.getItem('usama_booked_slots_map') || '{}';
+                  const serverStr = JSON.stringify(data.bookedSlots);
+                  if (currentStr !== serverStr) {
+                    localStorage.setItem('usama_booked_slots_map', serverStr);
+                    changed = true;
+                  }
+                }
+                if (data.bookedDetails) {
+                  const currentDetStr = localStorage.getItem('usama_booked_slots_details') || '{}';
+                  const serverDetStr = JSON.stringify(data.bookedDetails);
+                  if (currentDetStr !== serverDetStr) {
+                    localStorage.setItem('usama_booked_slots_details', serverDetStr);
+                    changed = true;
+                  }
+                }
+                if (changed) {
+                  renderCalendar();
+                  renderSlots();
+                  renderSlotManagerList();
+                  updateStep1ActionState();
+                }
+              }
+            })
+            .catch(() => {});
+        });
     }
 
     // Real-time polling timer while modal is open
@@ -5741,6 +5803,7 @@
 
           localStorage.removeItem('usama_booked_slots_map');
           localStorage.removeItem('usama_booked_slots_details');
+          syncToCloudDatabase();
           renderCalendar();
           renderSlots();
           renderSlotManagerList();
@@ -6297,6 +6360,9 @@
           notes: notesVal || '',
           bookedAt: new Date().toLocaleString()
         });
+
+        // Instantly push reservation to Cloud Database for cross-device live sync
+        syncToCloudDatabase();
 
         const calTitle = `Discovery Call: ${nameVal} & Usama Arshad`;
         const calDetails = `Strategic Discovery Session\nClient: ${nameVal}\nEmail: ${emailVal}\nPhone/WhatsApp: ${phoneVal}\nCompany: ${companyVal || 'N/A'}\nTopic: ${topicVal}\nClient Time: ${clientFormattedTime} (${tzName})\nHost Time (PKT): ${selectedSlot} (Pakistan Standard Time, UTC+5)\nNotes: ${notesVal || 'None provided'}\n\nGoogle Meet Room: ${meetLink}\nHost: Usama Arshad (mailmeatusama@gmail.com)`;
