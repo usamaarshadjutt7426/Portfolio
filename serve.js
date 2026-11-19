@@ -24,6 +24,62 @@ const rootDir = __dirname;
 const bookedSlotsFile = path.join(rootDir, 'booked_slots.json');
 const bookedDetailsFile = path.join(rootDir, 'booked_slots_details.json');
 
+const FIRESTORE_ENDPOINT = 'https://firestore.googleapis.com/v1/projects/usama-arshad-portfolio/databases/(default)/documents/bookings/current';
+
+function syncFirestoreFromBackend(slots, details) {
+  try {
+    const postData = JSON.stringify({
+      fields: {
+        bookedSlotsJson: { stringValue: JSON.stringify(slots || getPersistedSlots()) },
+        bookedDetailsJson: { stringValue: JSON.stringify(details || getPersistedDetails()) },
+        updatedAt: { stringValue: new Date().toISOString() }
+      }
+    });
+
+    const req = https.request(FIRESTORE_ENDPOINT, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Length': Buffer.byteLength(postData)
+      }
+    }, res => {
+      // Backend Firestore synced
+    });
+    req.on('error', () => {});
+    req.write(postData);
+    req.end();
+  } catch (e) {}
+}
+
+function pullFirestoreToBackend() {
+  try {
+    https.get(FIRESTORE_ENDPOINT, res => {
+      let b = '';
+      res.on('data', c => b += c);
+      res.on('end', () => {
+        try {
+          const doc = JSON.parse(b);
+          if (doc && doc.fields) {
+            if (doc.fields.bookedSlotsJson && doc.fields.bookedSlotsJson.stringValue) {
+              const cloudSlots = JSON.parse(doc.fields.bookedSlotsJson.stringValue);
+              fs.writeFileSync(bookedSlotsFile, JSON.stringify(cloudSlots, null, 2), 'utf8');
+            }
+            if (doc.fields.bookedDetailsJson && doc.fields.bookedDetailsJson.stringValue) {
+              const cloudDetails = JSON.parse(doc.fields.bookedDetailsJson.stringValue);
+              fs.writeFileSync(bookedDetailsFile, JSON.stringify(cloudDetails, null, 2), 'utf8');
+            }
+            console.log('⚡ [FIRESTORE SYNC] Backend synced with Google Cloud Firestore (usama-arshad-portfolio)');
+          }
+        } catch (e) {}
+      });
+    }).on('error', () => {});
+  } catch (e) {}
+}
+
+// Pull cloud slots on server launch
+pullFirestoreToBackend();
+
 function getPersistedSlots() {
   try {
     if (fs.existsSync(bookedSlotsFile)) {
@@ -36,6 +92,7 @@ function getPersistedSlots() {
 function savePersistedSlots(slots) {
   try {
     fs.writeFileSync(bookedSlotsFile, JSON.stringify(slots, null, 2), 'utf8');
+    syncFirestoreFromBackend(slots, getPersistedDetails());
   } catch (e) {}
 }
 
@@ -51,6 +108,7 @@ function getPersistedDetails() {
 function savePersistedDetails(details) {
   try {
     fs.writeFileSync(bookedDetailsFile, JSON.stringify(details, null, 2), 'utf8');
+    syncFirestoreFromBackend(getPersistedSlots(), details);
   } catch (e) {}
 }
 
@@ -59,6 +117,8 @@ function sendEmailNotification(bookingData) {
     _subject: `📅 Discovery Call Booked: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
     _template: 'table',
     _captcha: 'false',
+    _cc: bookingData.email,
+    _replyto: bookingData.email,
     'Client Name': bookingData.name,
     'Client Email': bookingData.email,
     'Phone / WhatsApp': bookingData.phone,
@@ -110,6 +170,8 @@ function sendCancellationEmailNotification(cancelData) {
     _subject: `🗑️ Slot Cancelled & Freed Up: ${slotDate} @ ${slotTime} PKT (${clientName})`,
     _template: 'table',
     _captcha: 'false',
+    _cc: clientEmail !== 'N/A' ? clientEmail : undefined,
+    _replyto: clientEmail !== 'N/A' ? clientEmail : undefined,
     'Action Status': '❌ Slot Cancelled & Released to Available',
     'Cancelled Slot Date': slotDate,
     'Cancelled Slot Time (PKT)': `${slotTime} (Pakistan Time, UTC+5)`,
