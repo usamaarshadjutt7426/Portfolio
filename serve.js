@@ -112,7 +112,50 @@ function savePersistedDetails(details) {
   } catch (e) {}
 }
 
+function getBackendGasWebhookUrl() {
+  try {
+    const details = getPersistedDetails();
+    if (details && details.__gasWebhookUrl) return details.__gasWebhookUrl;
+  } catch (e) {}
+  return process.env.GAS_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbxb6FsbAAZWvU30vHJFdsAHiRE-agFXEdXFrkZmbd5sOuCgpsTC2Ouy7kruzQ6LIqOg6g/exec';
+}
+
 function sendEmailNotification(bookingData) {
+  // 1. Google Apps Script Dispatch (Sends to Client & Host)
+  const webhookUrl = getBackendGasWebhookUrl();
+  if (webhookUrl) {
+    try {
+      const gasPayload = JSON.stringify({
+        action: 'book',
+        clientName: bookingData.name,
+        clientEmail: bookingData.email,
+        phone: bookingData.phone,
+        company: bookingData.company,
+        topic: bookingData.topic,
+        date: bookingData.date,
+        time: bookingData.time,
+        clientDate: bookingData.clientDate,
+        clientTime: bookingData.clientTime,
+        clientTz: bookingData.clientTz,
+        meetLink: bookingData.meetLink,
+        notes: bookingData.notes
+      });
+      const gReq = https.request(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+          'Content-Length': Buffer.byteLength(gasPayload)
+        }
+      }, gRes => {
+        console.log(`⚡ [GAS BOOKING DISPATCH] Status: ${gRes.statusCode}`);
+      });
+      gReq.on('error', () => {});
+      gReq.write(gasPayload);
+      gReq.end();
+    } catch (e) {}
+  }
+
+  // 2. FormSubmit Host Notification (Guaranteed Fail-Safe)
   const payload = JSON.stringify({
     _subject: `📅 Discovery Call Booked: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
     _template: 'table',
@@ -158,14 +201,45 @@ function sendEmailNotification(bookingData) {
 
 function sendCancellationEmailNotification(cancelData) {
   const client = cancelData.client || {};
-  const clientName = client.name || 'Saved Contact';
-  const clientEmail = client.email || 'N/A';
-  const clientPhone = client.phone || 'N/A';
-  const clientCompany = client.company || 'Not Specified';
-  const clientTopic = client.topic || 'Discovery Call';
+  const clientName = client.name || cancelData.name || 'Saved Contact';
+  const clientEmail = client.email || cancelData.email || 'N/A';
+  const clientPhone = client.phone || cancelData.phone || 'N/A';
+  const clientCompany = client.company || cancelData.company || 'Not Specified';
+  const clientTopic = client.topic || cancelData.topic || 'Discovery Call';
   const slotDate = client.date || cancelData.date;
   const slotTime = client.time || cancelData.time;
 
+  // 1. Google Apps Script Dispatch (Sends to Client & Host)
+  const webhookUrl = getBackendGasWebhookUrl();
+  if (webhookUrl && clientEmail && clientEmail.includes('@') && clientEmail !== 'N/A') {
+    try {
+      const gasCancelPayload = JSON.stringify({
+        action: 'cancel',
+        clientName: clientName,
+        clientEmail: clientEmail,
+        date: slotDate,
+        time: slotTime,
+        clientTime: client.clientTime || '',
+        clientTz: client.clientTz || '',
+        topic: clientTopic,
+        reason: 'Slot cancelled by Host'
+      });
+      const gReq = https.request(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+          'Content-Length': Buffer.byteLength(gasCancelPayload)
+        }
+      }, gRes => {
+        console.log(`⚡ [GAS CANCELLATION DISPATCH] Status: ${gRes.statusCode}`);
+      });
+      gReq.on('error', () => {});
+      gReq.write(gasCancelPayload);
+      gReq.end();
+    } catch (e) {}
+  }
+
+  // 2. FormSubmit Host Cancellation Alert (Guaranteed Fail-Safe)
   const payload = JSON.stringify({
     _subject: `🗑️ Slot Cancelled & Freed Up: ${slotDate} @ ${slotTime} PKT (${clientName})`,
     _template: 'table',
@@ -255,6 +329,16 @@ function handleRequest(req, res) {
     const details = getPersistedDetails();
 
     if (action === 'clear_all') {
+      Object.keys(details).forEach(k => {
+        const c = details[k];
+        if (c && c.email) {
+          sendCancellationEmailNotification({
+            date: c.date,
+            time: c.time,
+            client: c
+          });
+        }
+      });
       savePersistedSlots({});
       savePersistedDetails({});
       console.log('\n--------------------------------------------------');
@@ -264,6 +348,14 @@ function handleRequest(req, res) {
     } else if (action === 'reject' && date && time) {
       const key = `${date}_${time}`;
       const savedClient = details[key] || null;
+
+      if (savedClient) {
+        sendCancellationEmailNotification({
+          date: date,
+          time: time,
+          client: savedClient
+        });
+      }
 
       if (slots[date]) {
         slots[date] = slots[date].filter(t => t !== time);
@@ -364,6 +456,7 @@ function handleRequest(req, res) {
             bookedAt: new Date().toLocaleString()
           };
           savePersistedDetails(details);
+          sendEmailNotification(data);
         }
 
         console.log('\n==================================================');

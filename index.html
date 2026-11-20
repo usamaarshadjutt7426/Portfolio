@@ -3551,8 +3551,6 @@
                   <span>📍 Lahore, Punjab, Pakistan</span>
                   <span style="opacity: 0.3; margin: 0 6px;">|</span>
                   <span style="color: var(--text-dim);">Software &amp; Digital Solutions</span>
-                  <span style="opacity: 0.3; margin: 0 6px;">|</span>
-                  <a href="https://www.neksogix.com/" target="_blank" rel="noopener noreferrer" class="company-site-badge" title="neksogix.com">neksogix.com ↗</a>
                 </p>
               </div>
               <div class="company-badge-promo" style="font-family: var(--font-heading); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #2ee6a8; background: rgba(0, 217, 149, 0.08); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(0, 217, 149, 0.25);">
@@ -4943,13 +4941,35 @@
               </div>
 
               <!-- Google Cloud Firestore Database Status Panel -->
-              <div class="db-sync-bar" style="margin: 6px 0 10px; padding: 7px 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-size: 11px;">
+              <div class="db-sync-bar" style="margin: 6px 0 6px; padding: 7px 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; font-size: 11px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
                   <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <span id="firebaseStatusDot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2ee6a8; flex-shrink: 0; box-shadow: 0 0 8px rgba(46, 230, 168, 0.6);"></span>
                     <span id="firebaseStatusText" style="color: #cbd5e1; font-weight: 500;">Google Cloud Firestore: Live Synced (usama-arshad-portfolio)</span>
                   </div>
                   <button type="button" id="btnForceSyncCloud" style="background: rgba(46, 230, 168, 0.15); border: 1px solid rgba(46, 230, 168, 0.3); color: #2ee6a8; border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 10px; font-weight: 600;">🔄 Sync Now</button>
+                </div>
+              </div>
+
+              <!-- Automated Client & Host Email Dispatcher Panel -->
+              <div class="email-dispatch-bar" style="margin: 0 0 10px; padding: 7px 10px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(0, 217, 149, 0.25); border-radius: 8px; font-size: 11px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                  <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    <span id="emailStatusDot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2ee6a8; flex-shrink: 0; box-shadow: 0 0 8px rgba(46, 230, 168, 0.6);"></span>
+                    <span style="color: #ffffff; font-weight: 600;">Client &amp; Host Emails:</span>
+                    <span id="emailStatusBadge" style="color: #2ee6a8; font-weight: 500;">Active</span>
+                  </div>
+                  <button type="button" id="btnToggleEmailConfig" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #94a3b8; border-radius: 4px; padding: 2px 7px; cursor: pointer; font-size: 10px;">⚙️ Webhook</button>
+                </div>
+                <div id="emailConfigBox" style="display: none; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); margin-top: 7px;">
+                  <div style="color: #94a3b8; font-size: 10.5px; line-height: 1.4; margin-bottom: 6px;">
+                    Google Apps Script Web App sends confirmation &amp; cancellation emails directly from <strong>mailmeatusama@gmail.com</strong> into the client's inbox.
+                  </div>
+                  <div style="display: flex; gap: 6px;">
+                    <input type="url" id="gasWebhookInput" placeholder="https://script.google.com/macros/s/.../exec" style="flex: 1; background: #0c1522; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff; padding: 5px 8px; font-size: 11px;">
+                    <button type="button" id="btnSaveWebhookUrl" style="background: #00d995; color: #070a0f; border: none; font-weight: 700; border-radius: 6px; padding: 4px 10px; font-size: 10.5px; cursor: pointer;">Save</button>
+                    <button type="button" id="btnTestEmailDispatch" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; border-radius: 6px; padding: 4px 8px; font-size: 10.5px; cursor: pointer;">🧪 Test</button>
+                  </div>
                 </div>
               </div>
 
@@ -5068,8 +5088,8 @@
           </div>
 
           <h3 class="success-title">Discovery Call Confirmed!</h3>
-          <p class="success-subtitle">
-            Your meeting has been locked. All session details have been dispatched to Usama Arshad at <strong>mailmeatusama@gmail.com</strong>.
+          <p class="success-subtitle" id="confirmSuccessSubtitle">
+            Your meeting has been locked. A confirmation email with your Google Meet link has been dispatched to your email (<strong id="confirmSentClientEmail" style="color: #00d995;"></strong>) and to Usama Arshad.
           </p>
 
           <!-- Meeting Summary Card -->
@@ -5520,6 +5540,201 @@
     const FIRESTORE_PROJECT_ID = 'usama-arshad-portfolio';
     const FIRESTORE_ENDPOINT = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/bookings/current`;
 
+    // --- AUTOMATED BOOKING & CANCELLATION EMAIL DISPATCH SYSTEM ---
+    const DEFAULT_GAS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxb6FsbAAZWvU30vHJFdsAHiRE-agFXEdXFrkZmbd5sOuCgpsTC2Ouy7kruzQ6LIqOg6g/exec';
+
+    function getGasWebhookUrl() {
+      return (localStorage.getItem('usama_gas_webhook_url') || window.USAMA_GAS_WEBHOOK_URL || DEFAULT_GAS_WEBHOOK_URL).trim();
+    }
+
+    function setGasWebhookUrl(url) {
+      const trimmed = (url || '').trim();
+      localStorage.setItem('usama_gas_webhook_url', trimmed);
+      syncToCloudDatabase();
+      updateEmailStatusUI();
+    }
+
+    function updateEmailStatusUI() {
+      const dot = document.getElementById('emailStatusDot');
+      const badge = document.getElementById('emailStatusBadge');
+      const input = document.getElementById('gasWebhookInput');
+      const webhook = getGasWebhookUrl();
+
+      if (input && document.activeElement !== input) {
+        input.value = webhook;
+      }
+
+      if (badge && dot) {
+        if (webhook) {
+          dot.style.background = '#2ee6a8';
+          dot.style.boxShadow = '0 0 8px rgba(46, 230, 168, 0.6)';
+          badge.textContent = 'Active (Client + Host)';
+          badge.style.color = '#2ee6a8';
+        } else {
+          dot.style.background = '#facc15';
+          dot.style.boxShadow = '0 0 8px rgba(250, 204, 21, 0.6)';
+          badge.textContent = 'Ready (Setup Webhook)';
+          badge.style.color = '#facc15';
+        }
+      }
+    }
+
+    // Dispatch automated booking confirmation to Client & Host
+    async function dispatchBookingNotification(bookingData) {
+      const webhookUrl = getGasWebhookUrl();
+
+      // 1. Google Apps Script Web App (Sends styled HTML confirmation to Client + Host)
+      if (webhookUrl) {
+        try {
+          fetch(webhookUrl, {
+            method: 'POST',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'book',
+              clientName: bookingData.name,
+              clientEmail: bookingData.email,
+              phone: bookingData.phone,
+              company: bookingData.company,
+              topic: bookingData.topic,
+              date: bookingData.date,
+              time: bookingData.time,
+              clientDate: bookingData.clientDate,
+              clientTime: bookingData.clientTime,
+              clientTz: bookingData.clientTz,
+              meetLink: bookingData.meetLink,
+              notes: bookingData.notes
+            })
+          })
+          .then(res => res.json())
+          .then(resp => {
+            console.log('⚡ [GAS BOOKING DISPATCH SUCCESS]:', resp);
+          })
+          .catch(err => {
+            console.warn('⚠️ [GAS BOOKING NOTICE]:', err);
+          });
+        } catch (e) {
+          console.warn('GAS fetch error:', e);
+        }
+      }
+
+      // 2. FormSubmit Host Notification (Always active as guaranteed fail-safe)
+      const emailPayload = {
+        _subject: `📅 New Discovery Call: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
+        _template: 'table',
+        _captcha: 'false',
+        _replyto: bookingData.email,
+        'Client Full Name': bookingData.name,
+        'Work Email': bookingData.email,
+        'Phone / WhatsApp': bookingData.phone,
+        'Company / Agency': bookingData.company || 'Not Specified',
+        'Discussion Topic': bookingData.topic,
+        'Scheduled Date (PKT)': bookingData.date,
+        'Scheduled Time (PKT)': `${bookingData.time} (Pakistan Standard Time, UTC+5)`,
+        'Client Selected Timezone': `${bookingData.clientTz || 'Client TZ'}`,
+        'Client Local Time': `${bookingData.clientDate || ''} @ ${bookingData.clientTime || ''}`,
+        'Google Meet Room': bookingData.meetLink,
+        'Project Scope & Notes': bookingData.notes || 'None provided',
+        'Client Notification': webhookUrl ? 'Dispatched via Google Apps Script' : 'Pending webhook config',
+        'Booking Timestamp': new Date().toLocaleString()
+      };
+
+      fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(emailPayload)
+      }).catch(err => {
+        console.warn('FormSubmit booking notice:', err);
+      });
+
+      // 3. Ping local dev server if present
+      fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingData)
+      }).catch(() => {});
+    }
+
+    // Dispatch automated cancellation email to Client & Host
+    async function dispatchCancellationNotification(cancelData) {
+      const webhookUrl = getGasWebhookUrl();
+      const client = cancelData.client || {};
+      const clientName = client.name || cancelData.name || 'Valued Client';
+      const clientEmail = client.email || cancelData.email || '';
+      const slotDate = client.date || cancelData.date;
+      const slotTime = client.time || cancelData.time;
+      const topic = client.topic || cancelData.topic || 'Discovery Call';
+      const reason = cancelData.reason || 'Slot freed up / schedule adjustment';
+
+      // 1. Google Apps Script Webhook (Sends styled cancellation to Client + Host)
+      if (webhookUrl) {
+        try {
+          fetch(webhookUrl, {
+            method: 'POST',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'cancel',
+              clientName: clientName,
+              clientEmail: clientEmail,
+              date: slotDate,
+              time: slotTime,
+              clientTime: client.clientTime || '',
+              clientTz: client.clientTz || '',
+              topic: topic,
+              reason: reason
+            })
+          })
+          .then(res => res.json())
+          .then(resp => {
+            console.log('⚡ [GAS CANCELLATION DISPATCH SUCCESS]:', resp);
+          })
+          .catch(err => {
+            console.warn('⚠️ [GAS CANCELLATION NOTICE]:', err);
+          });
+        } catch (e) {
+          console.warn('GAS cancel fetch error:', e);
+        }
+      }
+
+      // 2. FormSubmit Host Cancellation Alert (Always active as guaranteed fail-safe)
+      const cancelEmailPayload = {
+        _subject: `🗑️ Slot Cancelled & Freed Up: ${slotDate} @ ${slotTime} PKT (${clientName})`,
+        _template: 'table',
+        _captcha: 'false',
+        _replyto: (clientEmail && clientEmail !== 'N/A') ? clientEmail : undefined,
+        'Action': '❌ Slot Cancelled & Freed Up by Host',
+        'Cancelled Slot Date': slotDate,
+        'Cancelled Slot Time (PKT)': `${slotTime} (Pakistan Time, UTC+5)`,
+        'Originally Booked Person': clientName,
+        'Client Email': clientEmail || 'N/A',
+        'Client Phone / WhatsApp': client.phone || 'N/A',
+        'Company / Agency': client.company || 'Not Specified',
+        'Discussion Topic': topic,
+        'Client Notes': client.notes || 'None',
+        'Cancellation Timestamp': new Date().toLocaleString(),
+        'Client Notification': (clientEmail && webhookUrl) ? 'Dispatched via Google Apps Script' : 'Pending webhook config',
+        'Notice': 'This slot has been released in the Slot Manager and is now 100% Available again on your website.'
+      };
+
+      fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(cancelEmailPayload)
+      }).catch(err => {
+        console.warn('FormSubmit cancellation notice:', err);
+      });
+
+      // 3. Ping local dev server if present
+      fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(slotDate)}&time=${encodeURIComponent(slotTime)}`).catch(() => {});
+    }
+
     function updateDbStatusBadge(status, message) {
       const dot = document.getElementById('firebaseStatusDot');
       const text = document.getElementById('firebaseStatusText');
@@ -5569,11 +5784,13 @@
     function syncToCloudDatabase() {
       const slotsMap = getBookedSlotsMap();
       const detailsMap = getBookedSlotsDetailsMap();
+      const gasUrl = getGasWebhookUrl();
       
       const firestoreBody = {
         fields: {
           bookedSlotsJson: { stringValue: JSON.stringify(slotsMap) },
           bookedDetailsJson: { stringValue: JSON.stringify(detailsMap) },
+          gasWebhookUrl: { stringValue: gasUrl || '' },
           updatedAt: { stringValue: new Date().toISOString() }
         }
       };
@@ -5635,6 +5852,15 @@
           try {
             if (doc.fields.bookedDetailsJson && doc.fields.bookedDetailsJson.stringValue) {
               details = JSON.parse(doc.fields.bookedDetailsJson.stringValue);
+            }
+          } catch (e) {}
+          try {
+            if (doc.fields.gasWebhookUrl && doc.fields.gasWebhookUrl.stringValue) {
+              const cloudWebhook = doc.fields.gasWebhookUrl.stringValue.trim();
+              if (cloudWebhook && cloudWebhook !== localStorage.getItem('usama_gas_webhook_url')) {
+                localStorage.setItem('usama_gas_webhook_url', cloudWebhook);
+                updateEmailStatusUI();
+              }
             }
           } catch (e) {}
           applyCloudDataState(slots, details);
@@ -5775,35 +6001,11 @@
           const clientTopic = detail ? (detail.topic || 'Discovery Call') : 'N/A';
           const clientNotes = detail ? (detail.notes || 'None') : 'None';
 
-          // 1. Dispatch Cancellation Alert Email to mailmeatusama@gmail.com via FormSubmit
-          const cancelEmailPayload = {
-            _subject: `🗑️ Slot Cancelled & Freed Up: ${item.date} @ ${item.time} PKT (${clientName})`,
-            _template: 'table',
-            _captcha: 'false',
-            _cc: (clientEmail && clientEmail !== 'N/A') ? clientEmail : undefined,
-            _replyto: (clientEmail && clientEmail !== 'N/A') ? clientEmail : undefined,
-            'Action': '❌ Slot Cancelled & Freed Up by Owner',
-            'Cancelled Slot Date': item.date,
-            'Cancelled Slot Time (PKT)': `${item.time} (Pakistan Time, UTC+5)`,
-            'Originally Booked Person': clientName,
-            'Client Email': clientEmail,
-            'Client Phone / WhatsApp': clientPhone,
-            'Company / Agency': clientCompany,
-            'Discussion Topic': clientTopic,
-            'Client Notes': clientNotes,
-            'Cancellation Timestamp': new Date().toLocaleString(),
-            'Notice': 'This slot has been released in the Slot Manager and is now 100% Available again on your website.'
-          };
-
-          fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(cancelEmailPayload)
-          }).catch(err => {
-            console.warn('Frontend cancellation email notice:', err);
+          // 1. Dispatch automated cancellation email to Client & Host
+          dispatchCancellationNotification({
+            date: item.date,
+            time: item.time,
+            client: detail || { name: clientName, email: clientEmail, phone: clientPhone, company: clientCompany, topic: clientTopic, notes: clientNotes }
           });
 
           // 2. Remove slot locally & re-render in 0ms
@@ -5828,7 +6030,10 @@
             })
             .catch(() => {});
 
-          showActionToast(`Slot on <strong>${item.date} @ ${item.time}</strong> freed up! Cancellation email sent to mailmeatusama@gmail.com.`);
+          const notifiedEmailStr = (clientEmail && clientEmail !== 'N/A')
+            ? `<br>Cancellation email sent to <strong>${clientEmail}</strong> and Usama.`
+            : ' Slot is now Available.';
+          showActionToast(`Slot on <strong>${item.date} @ ${item.time}</strong> freed up!${notifiedEmailStr}`);
         });
         slotManagerList.appendChild(row);
       });
@@ -5842,7 +6047,63 @@
         } else {
           slotManagerPanel.classList.toggle('active');
           renderSlotManagerList();
+          updateEmailStatusUI();
         }
+      });
+    }
+
+    // Email Dispatcher Webhook Drawer Controls
+    const btnToggleEmailConfig = document.getElementById('btnToggleEmailConfig');
+    const emailConfigBox = document.getElementById('emailConfigBox');
+    if (btnToggleEmailConfig && emailConfigBox) {
+      btnToggleEmailConfig.addEventListener('click', () => {
+        const isHidden = emailConfigBox.style.display === 'none';
+        emailConfigBox.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) updateEmailStatusUI();
+      });
+    }
+
+    const btnSaveWebhookUrl = document.getElementById('btnSaveWebhookUrl');
+    const gasWebhookInput = document.getElementById('gasWebhookInput');
+    if (btnSaveWebhookUrl && gasWebhookInput) {
+      btnSaveWebhookUrl.addEventListener('click', () => {
+        const val = gasWebhookInput.value.trim();
+        if (val && !val.startsWith('https://script.google.com/macros/s/')) {
+          alert('Please enter a valid Google Apps Script Web App URL (starts with https://script.google.com/macros/s/...)');
+          return;
+        }
+        setGasWebhookUrl(val);
+        showActionToast(val ? '✅ Email Webhook URL saved & synced across all devices!' : 'ℹ️ Email Webhook URL cleared.');
+      });
+    }
+
+    const btnTestEmailDispatch = document.getElementById('btnTestEmailDispatch');
+    if (btnTestEmailDispatch) {
+      btnTestEmailDispatch.addEventListener('click', () => {
+        const url = getGasWebhookUrl();
+        if (!url) {
+          alert('Please paste and save your Google Apps Script Web App URL first!');
+          return;
+        }
+        btnTestEmailDispatch.textContent = 'Sending...';
+        btnTestEmailDispatch.disabled = true;
+        fetch(url, {
+          method: 'POST',
+          redirect: 'follow',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'test', testEmail: 'mailmeatusama@gmail.com' })
+        })
+        .then(r => r.json())
+        .then(resp => {
+          btnTestEmailDispatch.textContent = '✓ Sent!';
+          showActionToast('🧪 Test email dispatched to <strong>mailmeatusama@gmail.com</strong>! Check your inbox.');
+          setTimeout(() => { btnTestEmailDispatch.textContent = '🧪 Test'; btnTestEmailDispatch.disabled = false; }, 3000);
+        })
+        .catch(err => {
+          btnTestEmailDispatch.textContent = '❌ Error';
+          showActionToast('⚠️ Failed to dispatch test email. Please check your Web App URL and permissions.');
+          setTimeout(() => { btnTestEmailDispatch.textContent = '🧪 Test'; btnTestEmailDispatch.disabled = false; }, 3000);
+        });
       });
     }
 
@@ -5862,21 +6123,20 @@
           openPinModal();
           return;
         }
-        if (confirm('Free up all custom reserved slots? This will reset all slots back to Available and send you a notification email.')) {
-          // Send notification email
-          const cancelAllPayload = {
-            _subject: '🗑️ All Reserved Slots Freed Up by Owner',
-            _template: 'table',
-            _captcha: 'false',
-            'Action': 'All slots reset to 100% Available',
-            'Timestamp': new Date().toLocaleString(),
-            'Notice': 'All custom reservations have been cleared in the Slot Manager.'
-          };
-          fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(cancelAllPayload)
-          }).catch(() => {});
+        if (confirm('Free up all custom reserved slots? This will reset all slots back to Available and notify any booked clients.')) {
+          // Notify each booked client
+          const detailsMap = getBookedSlotsDetailsMap();
+          Object.keys(detailsMap).forEach(key => {
+            const detail = detailsMap[key];
+            if (detail && detail.email) {
+              dispatchCancellationNotification({
+                date: detail.date,
+                time: detail.time,
+                client: detail,
+                reason: 'All custom slots reset by Owner'
+              });
+            }
+          });
 
           localStorage.removeItem('usama_booked_slots_map');
           localStorage.removeItem('usama_booked_slots_details');
@@ -5903,9 +6163,24 @@
         if (!action) return;
 
         if (action === 'reject' && dateParam && timeParam) {
+          const key = `${dateParam}_${timeParam}`;
+          const detailsMap = getBookedSlotsDetailsMap();
+          const detail = detailsMap[key] || null;
+
+          if (detail && detail.email) {
+            dispatchCancellationNotification({
+              date: dateParam,
+              time: timeParam,
+              client: detail,
+              reason: 'Booking rejected by Host'
+            });
+          }
+
           removeBookedSlot(dateParam, timeParam);
           fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(dateParam)}&time=${encodeURIComponent(timeParam)}`).catch(() => {});
-          showActionToast(`🗑️ <strong>Booking Rejected &amp; Slot Released!</strong><br>The slot on <strong>${dateParam} @ ${timeParam} (PKT)</strong> is now 100% Available again.`, 6000);
+          
+          const sentClientNote = (detail && detail.email) ? `<br>Cancellation email sent to <strong>${detail.email}</strong>.` : '';
+          showActionToast(`🗑️ <strong>Booking Rejected &amp; Slot Released!</strong><br>The slot on <strong>${dateParam} @ ${timeParam} (PKT)</strong> is now 100% Available again.${sentClientNote}`, 6000);
           
           try {
             const [y, m, d] = dateParam.split('-').map(Number);
@@ -6308,6 +6583,7 @@
       renderCalendar();
       renderSlots();
       renderSlotManagerList();
+      updateEmailStatusUI();
       updateStep1ActionState();
       startRealTimeSync();
 
@@ -6456,63 +6732,27 @@
           dateStr: ymdStr
         };
 
-        // Dispatch clean & simple email notification to Usama Arshad (mailmeatusama@gmail.com) via FormSubmit
-        const emailPayload = {
-          _subject: `📅 New Discovery Call: ${nameVal} - ${formattedDateStr} @ ${selectedSlot} PKT`,
-          _template: 'table',
-          _captcha: 'false',
-          _cc: emailVal,
-          _replyto: emailVal,
-          'Client Full Name': nameVal,
-          'Work Email': emailVal,
-          'Phone / WhatsApp': phoneVal,
-          'Company / Agency': companyVal || 'Not Specified',
-          'Discussion Topic': topicVal,
-          'Scheduled Date (PKT)': formattedDateStr,
-          'Scheduled Time (PKT)': `${selectedSlot} (Pakistan Standard Time, UTC+5)`,
-          'Client Selected Timezone': `${tzName} (${selectedTimeZone})`,
-          'Client Local Time': `${clientFormattedDate} @ ${clientFormattedTime}`,
-          'Google Meet Room': meetLink,
-          'Project Scope & Notes': notesVal || 'None provided',
-          'Booking Timestamp': new Date().toLocaleString()
-        };
-
-        fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(emailPayload)
-        }).then(r => r.json()).then(data => {
-          console.log('FormSubmit notification response:', data);
-        }).catch(err => {
-          console.warn('FormSubmit notification status:', err);
+        // Dispatch automated booking confirmation to Client & Host
+        dispatchBookingNotification({
+          ymd: ymdStr,
+          name: nameVal,
+          email: emailVal,
+          phone: phoneVal,
+          company: companyVal || 'Not Specified',
+          topic: topicVal,
+          date: formattedDateStr,
+          time: selectedSlot,
+          clientTime: clientFormattedTime,
+          clientTz: `${tzName} (${selectedTimeZone})`,
+          clientDate: clientFormattedDate,
+          meetLink: meetLink,
+          notes: notesVal || 'None provided'
         });
-
-        // Also ping local server if available
-        fetch('/api/booking', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ymd: ymdStr,
-            name: nameVal,
-            email: emailVal,
-            phone: phoneVal,
-            company: companyVal,
-            topic: topicVal,
-            date: formattedDateStr,
-            time: selectedSlot,
-            clientTime: clientFormattedTime,
-            clientTz: selectedTimeZone,
-            clientDate: clientFormattedDate,
-            meetLink: meetLink,
-            notes: notesVal
-          })
-        }).catch(() => {});
 
         // Populate Confirmation Screen
         if (confirmName) confirmName.textContent = nameVal;
+        const confirmSentClientEmail = document.getElementById('confirmSentClientEmail');
+        if (confirmSentClientEmail) confirmSentClientEmail.textContent = emailVal;
         if (confirmDateTime) {
           if (isPktTz) {
             confirmDateTime.textContent = `${formattedDateStr} • ${selectedSlot} (PKT)`;
@@ -6570,6 +6810,7 @@
     renderCalendar();
     renderSlots();
     renderSlotManagerList();
+    updateEmailStatusUI();
     updateStep1ActionState();
     syncServerSlots();
     checkUrlActions();
