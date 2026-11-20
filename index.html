@@ -5592,6 +5592,7 @@
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
               action: 'book',
+              ymd: bookingData.ymd || '',
               clientName: bookingData.name,
               clientEmail: bookingData.email,
               phone: bookingData.phone,
@@ -5619,9 +5620,10 @@
       } else {
         // Fallback to FormSubmit ONLY if Google Apps Script is not configured
         const emailPayload = {
-          _subject: `📅 New Discovery Call: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
+          _subject: `New Discovery Call: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
           _template: 'table',
           _captcha: 'false',
+          _cc: bookingData.email,
           _replyto: bookingData.email,
           'Client Full Name': bookingData.name,
           'Work Email': bookingData.email,
@@ -5661,15 +5663,19 @@
     async function dispatchCancellationNotification(cancelData) {
       const webhookUrl = getGasWebhookUrl();
       const client = cancelData.client || {};
-      const clientName = client.name || cancelData.name || 'Valued Client';
-      const clientEmail = client.email || cancelData.email || '';
-      const slotDate = client.date || cancelData.date;
-      const slotTime = client.time || cancelData.time;
+      const clientName = (client.name || cancelData.name || 'Valued Client').trim();
+      const clientEmail = (client.email || cancelData.email || '').trim();
+      const slotDate = client.date || cancelData.date || 'Scheduled Date';
+      const slotTime = client.time || cancelData.time || 'Scheduled Time';
       const topic = client.topic || cancelData.topic || 'Discovery Call';
-      const reason = cancelData.reason || 'Slot freed up / schedule adjustment';
+      const reason = cancelData.reason || 'Slot cancelled by Host';
+      const clientTimeStr = client.clientTime || '';
+      const clientTzStr = client.clientTz || '';
+
+      const hasValidClientEmail = (clientEmail && clientEmail.includes('@') && clientEmail !== 'N/A');
 
       // 1. Google Apps Script Webhook (Sends styled cancellation to Client + Host)
-      if (webhookUrl) {
+      if (webhookUrl && hasValidClientEmail) {
         try {
           fetch(webhookUrl, {
             method: 'POST',
@@ -5681,15 +5687,14 @@
               clientEmail: clientEmail,
               date: slotDate,
               time: slotTime,
-              clientTime: client.clientTime || '',
-              clientTz: client.clientTz || '',
+              clientTime: clientTimeStr,
+              clientTz: clientTzStr,
               topic: topic,
               reason: reason
             })
           })
-          .then(res => res.json())
-          .then(resp => {
-            console.log('⚡ [GAS CANCELLATION DISPATCH SUCCESS]:', resp);
+          .then(res => {
+            console.log('⚡ [GAS CANCELLATION DISPATCH SENT]');
           })
           .catch(err => {
             console.warn('⚠️ [GAS CANCELLATION NOTICE]:', err);
@@ -5697,24 +5702,28 @@
         } catch (e) {
           console.warn('GAS cancel fetch error:', e);
         }
-      } else {
-        // Fallback to FormSubmit ONLY if Google Apps Script is not configured
+      }
+
+      // 2. FormSubmit Redundant Guaranteed Delivery (Delivers directly to Client & Host)
+      // Provides guaranteed fail-safe delivery even if Google Apps Script is unreachable
+      try {
         const cancelEmailPayload = {
-          _subject: `🗑️ Slot Cancelled & Freed Up: ${slotDate} @ ${slotTime} PKT (${clientName})`,
+          _subject: `Meeting Cancelled: Discovery Call with Usama Arshad (${slotDate})`,
           _template: 'table',
           _captcha: 'false',
-          _replyto: (clientEmail && clientEmail !== 'N/A') ? clientEmail : undefined,
-          'Action': '❌ Slot Cancelled & Freed Up by Host',
+          _cc: hasValidClientEmail ? clientEmail : undefined,
+          _replyto: 'mailmeatusama@gmail.com',
+          'Status': 'Meeting Cancelled and Slot Released',
           'Cancelled Slot Date': slotDate,
           'Cancelled Slot Time (PKT)': `${slotTime} (Pakistan Time, UTC+5)`,
-          'Originally Booked Person': clientName,
-          'Client Email': clientEmail || 'N/A',
+          'Client Full Name': clientName,
+          'Client Work Email': clientEmail || 'N/A',
           'Client Phone / WhatsApp': client.phone || 'N/A',
           'Company / Agency': client.company || 'Not Specified',
           'Discussion Topic': topic,
-          'Client Notes': client.notes || 'None',
-          'Cancellation Timestamp': new Date().toLocaleString(),
-          'Notice': 'This slot has been released in the Slot Manager and is now 100% Available again on your website.'
+          'Notice': 'We apologize for any inconvenience. If you would like to reschedule, you can choose a new available slot at usamaarshad.site/#book-call.',
+          'Reschedule Link': 'https://usamaarshad.site/#book-call',
+          'Cancellation Timestamp': new Date().toLocaleString()
         };
 
         fetch('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
@@ -5727,10 +5736,10 @@
         }).catch(err => {
           console.warn('FormSubmit cancellation notice:', err);
         });
-      }
+      } catch (e) {}
 
-      // 2. Ping local dev server if present (for slot storage sync only)
-      fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(slotDate)}&time=${encodeURIComponent(slotTime)}&skip_email=1`).catch(() => {});
+      // 3. Ping local dev server if present (for slot storage sync only)
+      fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(slotDate)}&time=${encodeURIComponent(slotTime)}&clientEmail=${encodeURIComponent(clientEmail)}&clientName=${encodeURIComponent(clientName)}&skip_email=1`).catch(() => {});
     }
 
     function updateDbStatusBadge(status, message) {
@@ -5957,7 +5966,14 @@
       slotManagerList.innerHTML = '';
       allEntries.forEach(item => {
         const key = `${item.date}_${item.time}`;
-        const detail = detailsMap[key] || null;
+        let detail = detailsMap[key] || null;
+        if (!detail) {
+          const matchKey = Object.keys(detailsMap).find(k => {
+            const d = detailsMap[k];
+            return d && d.time === item.time && (d.date === item.date || k.startsWith(item.date));
+          });
+          if (matchKey) detail = detailsMap[matchKey];
+        }
 
         const row = document.createElement('div');
         row.className = 'slot-manager-item';
@@ -5976,7 +5992,7 @@
             <div style="color: #ffffff; font-weight: 600; font-size: 12px;">📅 ${item.date} • ⏰ ${item.time} (PKT)</div>
             ${clientHtml}
           </div>
-          <button type="button" class="btn-release-slot" title="Free up this slot & send cancellation alert to your email">✕ Free Up</button>
+          <button type="button" class="btn-release-slot" title="Free up this slot & send cancellation alert to client">✕ Free Up</button>
         `;
 
         row.querySelector('.btn-release-slot').addEventListener('click', () => {
@@ -5992,18 +6008,32 @@
             viewMonthDate = new Date(y, m - 1, 1);
           } catch(e) {}
 
-          const clientName = detail ? detail.name : 'Reserved Slot';
-          const clientEmail = detail ? detail.email : 'N/A';
-          const clientPhone = detail ? detail.phone : 'N/A';
-          const clientCompany = detail ? (detail.company || 'Not Specified') : 'N/A';
-          const clientTopic = detail ? (detail.topic || 'Discovery Call') : 'N/A';
-          const clientNotes = detail ? (detail.notes || 'None') : 'None';
+          const clientName = (detail && detail.name) ? detail.name : 'Valued Client';
+          const clientEmail = (detail && detail.email) ? detail.email : '';
+          const clientPhone = (detail && detail.phone) ? detail.phone : 'N/A';
+          const clientCompany = (detail && detail.company) ? detail.company : 'Not Specified';
+          const clientTopic = (detail && detail.topic) ? detail.topic : 'Outbound Outreach & Strategic B2B Growth';
+          const clientNotes = (detail && detail.notes) ? detail.notes : 'None';
+          const clientTimeStr = (detail && detail.clientTime) ? detail.clientTime : '';
+          const clientTzStr = (detail && detail.clientTz) ? detail.clientTz : '';
+          const slotDateStr = (detail && detail.date) ? detail.date : item.date;
 
           // 1. Dispatch automated cancellation email to Client & Host
           dispatchCancellationNotification({
-            date: item.date,
+            date: slotDateStr,
             time: item.time,
-            client: detail || { name: clientName, email: clientEmail, phone: clientPhone, company: clientCompany, topic: clientTopic, notes: clientNotes }
+            client: detail || {
+              name: clientName,
+              email: clientEmail,
+              phone: clientPhone,
+              company: clientCompany,
+              topic: clientTopic,
+              notes: clientNotes,
+              clientTime: clientTimeStr,
+              clientTz: clientTzStr,
+              date: slotDateStr,
+              time: item.time
+            }
           });
 
           // 2. Remove slot locally & re-render in 0ms
@@ -6013,7 +6043,7 @@
           updateStep1ActionState();
 
           // 3. Sync with server (which also dispatches backend cancellation email for 100% guarantee)
-          fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(item.date)}&time=${encodeURIComponent(item.time)}`)
+          fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(item.date)}&time=${encodeURIComponent(item.time)}&clientEmail=${encodeURIComponent(clientEmail)}&clientName=${encodeURIComponent(clientName)}`)
             .then(res => res.json())
             .then(data => {
               if (data && data.bookedSlots) {
@@ -6028,7 +6058,7 @@
             })
             .catch(() => {});
 
-          const notifiedEmailStr = (clientEmail && clientEmail !== 'N/A')
+          const notifiedEmailStr = (clientEmail && clientEmail.includes('@') && clientEmail !== 'N/A')
             ? `<br>Cancellation email sent to <strong>${clientEmail}</strong> and Usama.`
             : ' Slot is now Available.';
           showActionToast(`Slot on <strong>${item.date} @ ${item.time}</strong> freed up!${notifiedEmailStr}`);
@@ -6126,10 +6156,10 @@
           const detailsMap = getBookedSlotsDetailsMap();
           Object.keys(detailsMap).forEach(key => {
             const detail = detailsMap[key];
-            if (detail && detail.email) {
+            if (detail && detail.email && detail.email.includes('@') && detail.email !== 'N/A') {
               dispatchCancellationNotification({
-                date: detail.date,
-                time: detail.time,
+                date: detail.date || key.split('_')[0],
+                time: detail.time || key.split('_')[1],
                 client: detail,
                 reason: 'All custom slots reset by Owner'
               });
@@ -6154,48 +6184,85 @@
       try {
         const params = new URLSearchParams(window.location.search);
         const action = params.get('action');
-        const dateParam = params.get('date');
-        const timeParam = params.get('time');
-        const clientParam = params.get('client') || 'Client';
+        const dateParam = params.get('date') || '';
+        const timeParam = params.get('time') || '';
+        const ymdParam = params.get('ymd') || '';
+        const clientEmailParam = (params.get('clientEmail') || params.get('email') || '').trim();
+        const clientNameParam = (params.get('clientName') || params.get('name') || '').trim();
+        const topicParam = params.get('topic') || '';
+        const clientTimeParam = params.get('clientTime') || '';
 
         if (!action) return;
 
-        if (action === 'reject' && dateParam && timeParam) {
-          const key = `${dateParam}_${timeParam}`;
+        if ((action === 'reject' || action === 'cancel') && (dateParam || ymdParam) && timeParam) {
           const detailsMap = getBookedSlotsDetailsMap();
-          const detail = detailsMap[key] || null;
+          let detail = null;
+          if (ymdParam) detail = detailsMap[`${ymdParam}_${timeParam}`];
+          if (!detail && dateParam) detail = detailsMap[`${dateParam}_${timeParam}`];
+          if (!detail) {
+            const matchKey = Object.keys(detailsMap).find(k => {
+              const d = detailsMap[k];
+              return d && d.time === timeParam && (d.date === dateParam || (ymdParam && k.startsWith(ymdParam)));
+            });
+            if (matchKey) detail = detailsMap[matchKey];
+          }
 
-          if (detail && detail.email) {
+          const finalClientName = clientNameParam || (detail ? detail.name : 'Valued Client');
+          const finalClientEmail = clientEmailParam || (detail ? detail.email : '');
+          const finalDate = (detail && detail.date) ? detail.date : (dateParam || ymdParam);
+          const finalTopic = topicParam || (detail ? detail.topic : 'Outbound Outreach & Strategic B2B Growth');
+          const finalClientTime = clientTimeParam || (detail ? detail.clientTime : '');
+          const finalPhone = (detail ? detail.phone : '');
+          const finalCompany = (detail ? detail.company : '');
+
+          if (finalClientEmail && finalClientEmail.includes('@') && finalClientEmail !== 'N/A') {
             dispatchCancellationNotification({
-              date: dateParam,
+              date: finalDate,
               time: timeParam,
-              client: detail,
-              reason: 'Booking rejected by Host'
+              client: {
+                name: finalClientName,
+                email: finalClientEmail,
+                phone: finalPhone,
+                company: finalCompany,
+                topic: finalTopic,
+                clientTime: finalClientTime,
+                date: finalDate,
+                time: timeParam
+              },
+              reason: 'Booking cancelled by Host'
             });
           }
 
-          removeBookedSlot(dateParam, timeParam);
-          fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(dateParam)}&time=${encodeURIComponent(timeParam)}`).catch(() => {});
+          if (ymdParam) removeBookedSlot(ymdParam, timeParam);
+          if (dateParam) removeBookedSlot(dateParam, timeParam);
+
+          fetch(`/api/booking/action?action=reject&date=${encodeURIComponent(ymdParam || dateParam)}&time=${encodeURIComponent(timeParam)}&clientEmail=${encodeURIComponent(finalClientEmail)}&clientName=${encodeURIComponent(finalClientName)}&skip_email=1`).catch(() => {});
           
-          const sentClientNote = (detail && detail.email) ? `<br>Cancellation email sent to <strong>${detail.email}</strong>.` : '';
-          showActionToast(`🗑️ <strong>Booking Rejected &amp; Slot Released!</strong><br>The slot on <strong>${dateParam} @ ${timeParam} (PKT)</strong> is now 100% Available again.${sentClientNote}`, 6000);
+          const sentClientNote = (finalClientEmail && finalClientEmail.includes('@')) 
+            ? `<br>Cancellation email sent to <strong>${finalClientEmail}</strong> and Usama.` 
+            : '';
+          showActionToast(`Slot Cancelled &amp; Released!<br>The slot on <strong>${dateParam || ymdParam} @ ${timeParam} (PKT)</strong> is now 100% Available again.${sentClientNote}`, 6000);
           
           try {
-            const [y, m, d] = dateParam.split('-').map(Number);
-            selectedDate = new Date(y, m - 1, d);
-            viewMonthDate = new Date(y, m - 1, 1);
+            const targetDateStr = ymdParam || dateParam;
+            const [y, m, d] = targetDateStr.split('-').map(Number);
+            if (y && m && d) {
+              selectedDate = new Date(y, m - 1, d);
+              viewMonthDate = new Date(y, m - 1, 1);
+            }
           } catch(e) {}
 
           window.history.replaceState({}, document.title, window.location.pathname);
           setTimeout(() => {
-            window.openBookingModal();
+            if (typeof window.openBookingModal === 'function') window.openBookingModal();
           }, 350);
-        } else if (action === 'released' && dateParam && timeParam) {
-          removeBookedSlot(dateParam, timeParam);
-          showActionToast(`✅ Slot on <strong>${dateParam} @ ${timeParam}</strong> verified as 100% Available.`, 5000);
+        } else if (action === 'released' && (dateParam || ymdParam) && timeParam) {
+          if (dateParam) removeBookedSlot(dateParam, timeParam);
+          if (ymdParam) removeBookedSlot(ymdParam, timeParam);
+          showActionToast(`Slot on <strong>${dateParam || ymdParam} @ ${timeParam}</strong> verified as 100% Available.`, 5000);
           window.history.replaceState({}, document.title, window.location.pathname);
         } else if (action === 'accept' && dateParam && timeParam) {
-          showActionToast(`📅 Discovery Call with <strong>${clientParam}</strong> for <strong>${dateParam} @ ${timeParam}</strong> confirmed!`, 5000);
+          showActionToast(`Discovery Call with <strong>${clientNameParam || 'Client'}</strong> for <strong>${dateParam} @ ${timeParam}</strong> confirmed!`, 5000);
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       } catch (e) {}
@@ -6704,6 +6771,7 @@
           topic: topicVal,
           date: formattedDateStr,
           time: selectedSlot,
+          ymd: ymdStr,
           clientTime: clientFormattedTime,
           clientTz: selectedTimeZone,
           clientDate: clientFormattedDate,
@@ -6740,6 +6808,7 @@
           topic: topicVal,
           date: formattedDateStr,
           time: selectedSlot,
+          ymd: ymdStr,
           clientTime: clientFormattedTime,
           clientTz: `${tzName} (${selectedTimeZone})`,
           clientDate: clientFormattedDate,

@@ -157,7 +157,7 @@ function sendEmailNotification(bookingData) {
 
   // 2. FormSubmit Host Notification (Guaranteed Fail-Safe)
   const payload = JSON.stringify({
-    _subject: `📅 Discovery Call Booked: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
+    _subject: `Discovery Call Booked: ${bookingData.name} - ${bookingData.date} @ ${bookingData.time} PKT`,
     _template: 'table',
     _captcha: 'false',
     _cc: bookingData.email,
@@ -239,14 +239,14 @@ function sendCancellationEmailNotification(cancelData) {
     } catch (e) {}
   }
 
-  // 2. FormSubmit Host Cancellation Alert (Guaranteed Fail-Safe)
+  // 2. FormSubmit Redundant Cancellation Alert (Sends directly to Client and Host)
   const payload = JSON.stringify({
-    _subject: `🗑️ Slot Cancelled & Freed Up: ${slotDate} @ ${slotTime} PKT (${clientName})`,
+    _subject: `Meeting Cancelled: Discovery Call with Usama Arshad (${slotDate})`,
     _template: 'table',
     _captcha: 'false',
-    _cc: clientEmail !== 'N/A' ? clientEmail : undefined,
-    _replyto: clientEmail !== 'N/A' ? clientEmail : undefined,
-    'Action Status': '❌ Slot Cancelled & Released to Available',
+    _cc: (clientEmail && clientEmail !== 'N/A' && clientEmail.includes('@')) ? clientEmail : undefined,
+    _replyto: 'mailmeatusama@gmail.com',
+    'Action Status': 'Meeting Cancelled and Slot Released',
     'Cancelled Slot Date': slotDate,
     'Cancelled Slot Time (PKT)': `${slotTime} (Pakistan Time, UTC+5)`,
     'Originally Booked Person': clientName,
@@ -256,7 +256,8 @@ function sendCancellationEmailNotification(cancelData) {
     'Discussion Focus': clientTopic,
     'Client Scope Notes': client.notes || 'None',
     'Cancellation Timestamp': new Date().toLocaleString(),
-    'Notice': 'This booked slot has been freed up in the Slot Manager and is now Available again on your portfolio.'
+    'Reschedule Link': 'https://usamaarshad.site/#book-call',
+    'Notice': 'This booked slot has been freed up and is now Available again on your portfolio.'
   });
 
   const req = https.request('https://formsubmit.co/ajax/mailmeatusama@gmail.com', {
@@ -345,9 +346,32 @@ function handleRequest(req, res) {
       console.log('🗑️ [ALL SLOTS CLEARED & FREED UP BY OWNER]');
       console.log('Status: All slots are now 100% Available');
       console.log('--------------------------------------------------\n');
-    } else if (action === 'reject' && date && time) {
-      const key = `${date}_${time}`;
-      const savedClient = details[key] || null;
+    } else if (action === 'reject' && (date || searchParams.get('ymd')) && time) {
+      const ymd = searchParams.get('ymd') || '';
+      let savedClient = details[`${date}_${time}`] || (ymd ? details[`${ymd}_${time}`] : null);
+      if (!savedClient) {
+        const matchKey = Object.keys(details).find(k => {
+          const d = details[k];
+          return d && d.time === time && (d.date === date || (ymd && k.startsWith(ymd)));
+        });
+        if (matchKey) savedClient = details[matchKey];
+      }
+
+      const clientEmail = searchParams.get('clientEmail') || searchParams.get('email') || (savedClient ? savedClient.email : '');
+      const clientName = searchParams.get('clientName') || searchParams.get('name') || (savedClient ? savedClient.name : 'Valued Client');
+
+      if (!savedClient && clientEmail) {
+        savedClient = {
+          name: clientName,
+          email: clientEmail,
+          phone: searchParams.get('phone') || 'N/A',
+          company: searchParams.get('company') || 'Not Specified',
+          topic: searchParams.get('topic') || 'Discovery Call',
+          date: date,
+          time: time
+        };
+      }
+
       const skipEmail = searchParams.get('skip_email') === '1';
 
       if (savedClient && !skipEmail) {
@@ -361,13 +385,16 @@ function handleRequest(req, res) {
       if (slots[date]) {
         slots[date] = slots[date].filter(t => t !== time);
         if (slots[date].length === 0) delete slots[date];
-        savePersistedSlots(slots);
       }
+      if (ymd && slots[ymd]) {
+        slots[ymd] = slots[ymd].filter(t => t !== time);
+        if (slots[ymd].length === 0) delete slots[ymd];
+      }
+      savePersistedSlots(slots);
 
-      if (details[key]) {
-        delete details[key];
-        savePersistedDetails(details);
-      }
+      if (details[`${date}_${time}`]) delete details[`${date}_${time}`];
+      if (ymd && details[`${ymd}_${time}`]) delete details[`${ymd}_${time}`];
+      savePersistedDetails(details);
 
       console.log('\n--------------------------------------------------');
       console.log('🗑️ [SLOT FREED UP BY OWNER IN MANAGER]');

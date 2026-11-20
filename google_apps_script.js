@@ -15,9 +15,9 @@
  * HOW TO DEPLOY:
  * 1. Open https://script.google.com/ in your browser (logged into mailmeatusama@gmail.com).
  * 2. Click "+ New project".
- * 3. Delete any default code in Code.gs, paste this entire file, and click Save (💾).
+ * 3. Delete any default code in Code.gs, paste this entire file, and click Save.
  * 4. Click the blue "Deploy" button at top right -> "New deployment".
- * 5. Under "Select type", click the gear icon (⚙️) and select "Web app".
+ * 5. Under "Select type", click the gear icon and select "Web app".
  * 6. Set Description: "Portfolio Booking Dispatcher".
  * 7. Set "Execute as": "Me (mailmeatusama@gmail.com)".
  * 8. Set "Who has access": "Anyone" (CRITICAL: must be Anyone so your website can call it).
@@ -66,7 +66,7 @@ function doPost(e) {
 
       // (A) Send Email to CLIENT
       if (clientEmail && clientEmail.includes('@')) {
-        const clientSubject = `📅 Meeting Confirmed: Discovery Call with Usama Arshad (${slotDate})`;
+        const clientSubject = `Meeting Confirmed: Discovery Call with Usama Arshad (${slotDate})`;
         const clientHtml = buildClientBookingHtml({
           clientName,
           clientEmail,
@@ -87,7 +87,7 @@ function doPost(e) {
       }
 
       // (B) Send Email to HOST (Usama Arshad)
-      const hostSubject = `📅 New Discovery Call: ${clientName} - ${slotDate} @ ${slotTime} PKT`;
+      const hostSubject = `New Discovery Call: ${clientName} - ${slotDate} @ ${slotTime} PKT`;
       const hostHtml = buildHostBookingHtml({
         clientName,
         clientEmail,
@@ -99,7 +99,7 @@ function doPost(e) {
         clientTimeStr,
         meetLink,
         notes,
-        releaseUrl: `${WEBSITE_URL}/?action=reject&date=${encodeURIComponent(slotDate)}&time=${encodeURIComponent(slotTime)}`
+        releaseUrl: `${WEBSITE_URL}/?action=reject&date=${encodeURIComponent(slotDate)}&time=${encodeURIComponent(slotTime)}&ymd=${encodeURIComponent(data.ymd || '')}&clientName=${encodeURIComponent(clientName)}&clientEmail=${encodeURIComponent(clientEmail)}&topic=${encodeURIComponent(topic)}&phone=${encodeURIComponent(phone)}&company=${encodeURIComponent(company)}&clientTime=${encodeURIComponent(clientTimeStr)}`
       });
 
       GmailApp.sendEmail(HOST_EMAIL, hostSubject, '', {
@@ -129,7 +129,7 @@ function doPost(e) {
       // (A) Send Cancellation Email to CLIENT
       let clientNotified = false;
       if (clientEmail && clientEmail.includes('@') && clientEmail !== 'N/A') {
-        const clientCancelSubject = `❌ Meeting Cancelled: Discovery Call with Usama Arshad (${slotDate})`;
+        const clientCancelSubject = `Meeting Cancelled: Discovery Call with Usama Arshad (${slotDate})`;
         const clientCancelHtml = buildClientCancellationHtml({
           clientName,
           slotDate,
@@ -149,7 +149,7 @@ function doPost(e) {
       }
 
       // (B) Send Cancellation Alert to HOST (Usama Arshad)
-      const hostCancelSubject = `🗑️ Slot Cancelled & Released: ${slotDate} @ ${slotTime} PKT (${clientName})`;
+      const hostCancelSubject = `Slot Cancelled & Released: ${slotDate} @ ${slotTime} PKT (${clientName})`;
       const hostCancelHtml = buildHostCancellationHtml({
         clientName,
         clientEmail,
@@ -178,10 +178,10 @@ function doPost(e) {
     // =========================================================================
     if (action === 'test') {
       const targetEmail = data.testEmail || HOST_EMAIL;
-      GmailApp.sendEmail(targetEmail, `🧪 Webhook Test: Usama Arshad Portfolio Email System`, '', {
+      GmailApp.sendEmail(targetEmail, `Webhook Test: Usama Arshad Portfolio Email System`, '', {
         name: `${HOST_NAME} System Test`,
         htmlBody: `<div style="font-family:sans-serif;padding:20px;background:#0b111e;color:#fff;border-radius:12px;">
-          <h2 style="color:#00d995;margin-top:0;">⚡ Google Apps Script Webhook is Live!</h2>
+          <h2 style="color:#00d995;margin-top:0;">Google Apps Script Webhook is Live</h2>
           <p>Your automated booking and cancellation email dispatcher is correctly configured and functioning 100%.</p>
           <p><strong>Host:</strong> ${HOST_NAME} (${HOST_EMAIL})</p>
           <p><strong>Website:</strong> <a href="${WEBSITE_URL}" style="color:#2ee6a8;">${WEBSITE_URL}</a></p>
@@ -200,6 +200,71 @@ function doPost(e) {
 }
 
 function doGet(e) {
+  try {
+    if (e && e.parameter && (e.parameter.action === 'cancel' || e.parameter.action === 'reject')) {
+      const p = e.parameter;
+      const clientEmail = (p.clientEmail || p.email || '').trim();
+      const clientName = (p.clientName || p.name || 'Valued Client').trim();
+      const slotDate = p.date || 'Scheduled Date';
+      const slotTime = p.time || 'Scheduled Time';
+      const clientTimeStr = p.clientTime ? `${p.clientTime} (${p.clientTz || 'Your Timezone'})` : `${slotTime} (PKT)`;
+      const topic = p.topic || 'Discovery Call';
+      const reason = p.reason || 'Slot cancelled by Host';
+
+      let clientNotified = false;
+      if (clientEmail && clientEmail.includes('@') && clientEmail !== 'N/A') {
+        const clientCancelSubject = `Meeting Cancelled: Discovery Call with Usama Arshad (${slotDate})`;
+        const clientCancelHtml = buildClientCancellationHtml({
+          clientName,
+          slotDate,
+          slotTime,
+          clientTimeStr,
+          topic,
+          reason,
+          rebookUrl: `${WEBSITE_URL}/#book-call`
+        });
+
+        GmailApp.sendEmail(clientEmail, clientCancelSubject, '', {
+          name: `${HOST_NAME} via Portfolio`,
+          htmlBody: clientCancelHtml,
+          replyTo: HOST_EMAIL
+        });
+        clientNotified = true;
+      }
+
+      // Host Cancellation Alert
+      const hostCancelSubject = `Slot Cancelled & Released: ${slotDate} @ ${slotTime} PKT (${clientName})`;
+      const hostCancelHtml = buildHostCancellationHtml({
+        clientName,
+        clientEmail,
+        slotDate,
+        slotTime,
+        topic,
+        reason,
+        clientNotified
+      });
+
+      GmailApp.sendEmail(HOST_EMAIL, hostCancelSubject, '', {
+        name: `Portfolio Slot Manager`,
+        htmlBody: hostCancelHtml,
+        replyTo: (clientEmail && clientEmail !== 'N/A') ? clientEmail : HOST_EMAIL
+      });
+
+      return HtmlService.createHtmlOutput(`<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Meeting Cancelled</title></head>
+<body style="background:#070a0f;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:90vh;text-align:center;padding:20px;">
+  <div style="background:#0d1424;border:1px solid #00d995;border-radius:16px;padding:36px;max-width:500px;">
+    <h2 style="color:#00d995;margin-top:0;">Slot Cancelled &amp; Released</h2>
+    <p style="color:#94a3b8;font-size:14px;line-height:1.6;">The booking for <strong>${escapeHtml(clientName)}</strong> on <strong>${escapeHtml(slotDate)} @ ${escapeHtml(slotTime)}</strong> has been cancelled and the slot is now Available again.</p>
+    <p style="color:#2ee6a8;font-size:13px;">${clientNotified ? 'Cancellation notification has been sent to ' + escapeHtml(clientEmail) : 'No client email provided.'}</p>
+    <a href="${WEBSITE_URL}/?action=released&date=${encodeURIComponent(slotDate)}&time=${encodeURIComponent(slotTime)}" style="display:inline-block;margin-top:16px;background:#00d995;color:#070a0f;font-weight:bold;text-decoration:none;padding:12px 24px;border-radius:8px;">Open Portfolio Website</a>
+  </div>
+</body>
+</html>`);
+    }
+  } catch (err) {}
+
   return createJsonResponse({
     status: 'online',
     service: 'Usama Arshad Portfolio Booking & Cancellation Email Dispatcher',
@@ -235,7 +300,7 @@ function buildClientBookingHtml(d) {
           <tr>
             <td style="background:linear-gradient(135deg,#0a1b2a 0%,#0f2e36 100%);padding:32px 28px;text-align:center;border-bottom:1px solid rgba(0,217,149,0.2);">
               <div style="display:inline-block;background:rgba(0,217,149,0.15);border:1px solid #00d995;color:#00d995;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">
-                ✓ Discovery Call Confirmed
+                Discovery Call Confirmed
               </div>
               <h1 style="color:#ffffff;font-size:24px;font-weight:700;margin:0 0 6px 0;line-height:1.3;">Your Meeting is Locked In!</h1>
               <p style="color:#94a3b8;font-size:14px;margin:0;">1-on-1 Strategic Session with Usama Arshad</p>
@@ -256,26 +321,26 @@ function buildClientBookingHtml(d) {
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#131c31;border:1px solid rgba(255,255,255,0.08);border-radius:14px;margin-bottom:24px;overflow:hidden;">
                 <tr>
                   <td style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.06);">
-                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">📅 Date</div>
+                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">Date</div>
                     <div style="color:#ffffff;font-size:15px;font-weight:600;margin-top:3px;">${escapeHtml(d.slotDate)}</div>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.06);">
-                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">⏰ Time</div>
+                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">Time</div>
                     <div style="color:#00d995;font-size:15px;font-weight:700;margin-top:3px;">${escapeHtml(d.clientTimeStr)}</div>
                     <div style="color:#64748b;font-size:12px;margin-top:2px;">Host Time: ${escapeHtml(d.slotTime)} (Pakistan Standard Time, UTC+5)</div>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.06);">
-                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">🎯 Discussion Topic</div>
+                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">Discussion Topic</div>
                     <div style="color:#f1f5f9;font-size:14px;margin-top:3px;">${escapeHtml(d.topic)}</div>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:18px 20px;">
-                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">👤 Host</div>
+                    <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">Host</div>
                     <div style="color:#ffffff;font-size:14px;font-weight:600;margin-top:3px;">Usama Arshad <span style="color:#94a3b8;font-weight:400;">(${HOST_EMAIL})</span></div>
                   </td>
                 </tr>
@@ -286,7 +351,7 @@ function buildClientBookingHtml(d) {
                 <tr>
                   <td align="center">
                     <a href="${escapeHtml(d.meetLink)}" target="_blank" style="display:inline-block;width:92%;box-sizing:border-box;background:#00d995;color:#070a0f;font-weight:700;font-size:15px;text-decoration:none;padding:14px 24px;border-radius:10px;text-align:center;box-shadow:0 6px 20px rgba(0,217,149,0.35);">
-                      🎥 Join Google Meet Video Room ↗
+                      Join Google Meet Video Room ↗
                     </a>
                   </td>
                 </tr>
@@ -302,7 +367,7 @@ function buildClientBookingHtml(d) {
                 <tr>
                   <td align="center">
                     <a href="${escapeHtml(d.gcalUrl)}" target="_blank" style="display:inline-block;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#cbd5e1;font-weight:600;font-size:13.5px;text-decoration:none;padding:10px 20px;border-radius:8px;text-align:center;">
-                      📅 Add to Google Calendar (With Reminders)
+                      Add to Google Calendar (With Reminders)
                     </a>
                   </td>
                 </tr>
@@ -311,7 +376,7 @@ function buildClientBookingHtml(d) {
               <!-- Reschedule & Note Info -->
               <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;color:#94a3b8;font-size:13px;line-height:1.6;">
                 <p style="margin:0 0 10px 0;">
-                  💡 <strong>Need to prepare or reschedule?</strong> Simply reply directly to this email or contact Usama Arshad at <a href="mailto:${HOST_EMAIL}" style="color:#2ee6a8;text-decoration:underline;">${HOST_EMAIL}</a>.
+                  <strong>Need to prepare or reschedule?</strong> Simply reply directly to this email or contact Usama Arshad at <a href="mailto:${HOST_EMAIL}" style="color:#2ee6a8;text-decoration:underline;">${HOST_EMAIL}</a>.
                 </p>
                 <p style="margin:0;">
                   Looking forward to speaking with you!
@@ -357,7 +422,7 @@ function buildClientCancellationHtml(d) {
           <tr>
             <td style="background:linear-gradient(135deg,#231118 0%,#180e1e 100%);padding:32px 28px;text-align:center;border-bottom:1px solid rgba(239,68,68,0.2);">
               <div style="display:inline-block;background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#f87171;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">
-                ✕ Meeting Cancelled
+                Notice: Meeting Cancelled
               </div>
               <h1 style="color:#ffffff;font-size:24px;font-weight:700;margin:0 0 6px 0;line-height:1.3;">Discovery Call Notice</h1>
               <p style="color:#94a3b8;font-size:14px;margin:0;">Scheduled Session with Usama Arshad</p>
@@ -379,7 +444,7 @@ function buildClientCancellationHtml(d) {
                 <tr>
                   <td style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.06);">
                     <div style="color:#94a3b8;font-size:11.5px;text-transform:uppercase;font-weight:600;">Status</div>
-                    <div style="color:#f87171;font-size:14px;font-weight:700;margin-top:2px;">❌ Cancelled &amp; Released</div>
+                    <div style="color:#f87171;font-size:14px;font-weight:700;margin-top:2px;">Cancelled &amp; Released</div>
                   </td>
                 </tr>
                 <tr>
@@ -405,7 +470,7 @@ function buildClientCancellationHtml(d) {
                 <tr>
                   <td align="center">
                     <a href="${escapeHtml(d.rebookUrl)}" target="_blank" style="display:inline-block;width:92%;box-sizing:border-box;background:#00d995;color:#070a0f;font-weight:700;font-size:15px;text-decoration:none;padding:14px 24px;border-radius:10px;text-align:center;box-shadow:0 6px 20px rgba(0,217,149,0.35);">
-                      📅 Choose a New Available Slot ↗
+                      Choose a New Available Slot
                     </a>
                   </td>
                 </tr>
@@ -445,7 +510,7 @@ function buildHostBookingHtml(d) {
 <html>
 <body style="font-family:Arial,sans-serif;background:#0b111e;color:#f1f5f9;padding:20px;margin:0;">
   <div style="max-width:580px;margin:0 auto;background:#131c31;border:1px solid #00d995;border-radius:14px;padding:24px;">
-    <h2 style="color:#00d995;margin-top:0;">📅 New Discovery Call Booked!</h2>
+    <h2 style="color:#00d995;margin-top:0;">New Discovery Call Booked</h2>
     <p style="color:#cbd5e1;font-size:14px;">A client has confirmed a booking on your portfolio website.</p>
     
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;color:#cbd5e1;">
@@ -475,7 +540,7 @@ function buildHostCancellationHtml(d) {
 <html>
 <body style="font-family:Arial,sans-serif;background:#0b111e;color:#f1f5f9;padding:20px;margin:0;">
   <div style="max-width:580px;margin:0 auto;background:#131c31;border:1px solid #ef4444;border-radius:14px;padding:24px;">
-    <h2 style="color:#f87171;margin-top:0;">🗑️ Slot Cancelled &amp; Released</h2>
+    <h2 style="color:#f87171;margin-top:0;">Slot Cancelled &amp; Released</h2>
     <p style="color:#cbd5e1;font-size:14px;">The following slot has been cancelled and is now 100% Available again on your website:</p>
     
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;color:#cbd5e1;">
@@ -484,7 +549,7 @@ function buildHostCancellationHtml(d) {
       <tr style="border-bottom:1px solid #1e293b;"><td style="padding:8px 0;color:#94a3b8;">Booked Client:</td><td style="padding:8px 0;color:#fff;">${escapeHtml(d.clientName)}</td></tr>
       <tr style="border-bottom:1px solid #1e293b;"><td style="padding:8px 0;color:#94a3b8;">Client Email:</td><td style="padding:8px 0;color:#38bdf8;">${escapeHtml(d.clientEmail)}</td></tr>
       <tr style="border-bottom:1px solid #1e293b;"><td style="padding:8px 0;color:#94a3b8;">Topic:</td><td style="padding:8px 0;color:#cbd5e1;">${escapeHtml(d.topic)}</td></tr>
-      <tr><td style="padding:8px 0;color:#94a3b8;">Client Email Sent:</td><td style="padding:8px 0;color:${d.clientNotified ? '#00d995' : '#f87171'};font-weight:bold;">${d.clientNotified ? '✓ Yes, Cancellation Notice Sent to Client' : '✕ No Client Email Found'}</td></tr>
+      <tr><td style="padding:8px 0;color:#94a3b8;">Client Email Sent:</td><td style="padding:8px 0;color:${d.clientNotified ? '#00d995' : '#f87171'};font-weight:bold;">${d.clientNotified ? 'Yes, Cancellation Notice Sent to Client' : 'No Client Email Found'}</td></tr>
     </table>
 
     <p style="color:#94a3b8;font-size:12px;margin-top:16px;">This slot is now available for new clients to book on usamaarshad.site.</p>
