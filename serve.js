@@ -348,8 +348,9 @@ function handleRequest(req, res) {
     } else if (action === 'reject' && date && time) {
       const key = `${date}_${time}`;
       const savedClient = details[key] || null;
+      const skipEmail = searchParams.get('skip_email') === '1';
 
-      if (savedClient) {
+      if (savedClient && !skipEmail) {
         sendCancellationEmailNotification({
           date: date,
           time: time,
@@ -456,7 +457,6 @@ function handleRequest(req, res) {
             bookedAt: new Date().toLocaleString()
           };
           savePersistedDetails(details);
-          sendEmailNotification(data);
         }
 
         console.log('\n==================================================');
