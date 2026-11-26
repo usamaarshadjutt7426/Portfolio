@@ -3533,7 +3533,7 @@
           <div>
             <div class="card-top-row">
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="card-badge current-badge">Present Company • 1 yr 2 mos</span>
+                <span class="card-badge current-badge" data-tenure-start="2025-08" data-tenure-prefix="Present Company • ">Present Company • 1 yr 4 mos</span>
                 <span class="card-badge" style="background: rgba(0, 217, 149, 0.1); border-color: rgba(0, 217, 149, 0.3); color: #2ee6a8;">🌐 Remote</span>
               </div>
               <span class="exp-date">August 2025 – Present</span>
@@ -3565,7 +3565,7 @@
                   <h4 class="subrole-title">Senior Business Development Executive</h4>
                   <span class="card-badge current-badge" style="padding: 2px 10px; font-size: 10px;">Current Level</span>
                 </div>
-                <span class="subrole-badge">May 2026 – Present • 5 mos</span>
+                <span class="subrole-badge" data-tenure-start="2026-05" data-tenure-prefix="May 2026 – Present • ">May 2026 – Present • 7 mos</span>
               </div>
               <ul class="exp-desc-list">
                 <li>Manage and execute Upwork-based business development: client research, opportunity identification, bespoke technical proposal writing, strategic bidding, and client communications.</li>
@@ -3624,7 +3624,7 @@
                 <span class="card-badge current-badge">Present Role • B2B Lead Gen</span>
                 <span class="card-badge" style="background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">🏢 Onsite</span>
               </div>
-              <span class="exp-date">July 2026 – Present</span>
+              <span class="exp-date" data-tenure-start="2026-07" data-tenure-prefix="July 2026 – Present (" data-tenure-suffix=")">July 2026 – Present (5 mos)</span>
             </div>
             <h3 class="exp-role-title">Business Development Specialist</h3>
             <p class="exp-company">
@@ -4256,6 +4256,40 @@
 
   <!-- Background Canvas Frame Animation & Smooth Scroll Script -->
   <script>
+    // Dynamic Tenure Synchronization (PKT UTC+5, LinkedIn-style inclusive month counting)
+    function formatTenureDuration(startYear, startMonth, nowYear, nowMonth) {
+      const totalMonths = Math.max(1, (nowYear - startYear) * 12 + (nowMonth - startMonth) + 1);
+      const years = Math.floor(totalMonths / 12);
+      const months = totalMonths % 12;
+      const parts = [];
+      if (years > 0) parts.push(`${years} ${years === 1 ? 'yr' : 'yrs'}`);
+      if (months > 0) parts.push(`${months} ${months === 1 ? 'mo' : 'mos'}`);
+      return parts.join(' ');
+    }
+
+    function syncPresentTenures() {
+      const pktNow = new Date(Date.now() + 5 * 3600000);
+      const nowYear = pktNow.getUTCFullYear();
+      const nowMonth = pktNow.getUTCMonth() + 1;
+      document.querySelectorAll('[data-tenure-start]').forEach(el => {
+        const rawStart = el.getAttribute('data-tenure-start');
+        if (!rawStart) return;
+        const [yStr, mStr] = rawStart.split('-');
+        const startYear = parseInt(yStr, 10);
+        const startMonth = parseInt(mStr, 10);
+        if (!Number.isFinite(startYear) || !Number.isFinite(startMonth)) return;
+        const prefix = el.getAttribute('data-tenure-prefix') || '';
+        const suffix = el.getAttribute('data-tenure-suffix') || '';
+        el.textContent = `${prefix}${formatTenureDuration(startYear, startMonth, nowYear, nowMonth)}${suffix}`;
+      });
+    }
+
+    syncPresentTenures();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') syncPresentTenures();
+    });
+    setInterval(syncPresentTenures, 3600000);
+
     // Mobile Drawer Navigation Toggle & Backdrop
     const mobileToggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
