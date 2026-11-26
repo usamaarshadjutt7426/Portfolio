@@ -1505,6 +1505,31 @@
     }
 
     @media (max-width: 768px) {
+      :root {
+        --card-bg: rgba(10, 14, 22, 0.22);
+      }
+
+      .bg-overlay {
+        background:
+          radial-gradient(circle at 50% 34%, rgba(10, 12, 16, 0.02) 0%, rgba(10, 12, 16, 0.36) 52%, rgba(10, 12, 16, 0.82) 100%),
+          linear-gradient(180deg, rgba(10,12,16,0.58) 0%, rgba(10,12,16,0.08) 34%, rgba(10,12,16,0.82) 100%);
+      }
+
+      .av-card {
+        background: rgba(10, 14, 22, 0.22);
+        backdrop-filter: blur(2.5px);
+        -webkit-backdrop-filter: blur(2.5px);
+        border-color: rgba(255, 255, 255, 0.14);
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.88);
+      }
+
+      .contact-banner-card {
+        background: linear-gradient(135deg, rgba(16, 22, 32, 0.42) 0%, rgba(10, 14, 22, 0.5) 100%);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.88);
+      }
+
       .hero-name-title {
         font-size: clamp(38px, 11vw, 68px);
         letter-spacing: 2px;
@@ -1529,7 +1554,7 @@
       .hero-desc {
         font-size: 16px;
         line-height: 1.6;
-        margin-top: clamp(260px, 35vh, 340px);
+        margin-top: clamp(230px, 31vh, 300px);
         margin-bottom: 28px;
         min-height: 110px;
         text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
@@ -1548,7 +1573,7 @@
       }
 
       section {
-        padding: 55px 0;
+        padding: 88px 0;
       }
 
       .hero-section {
@@ -1560,7 +1585,7 @@
       .hero-desc {
         font-size: 15.5px;
         line-height: 1.62;
-        margin-top: clamp(270px, 36vh, 350px);
+        margin-top: clamp(230px, 31vh, 300px);
         margin-bottom: 26px;
         min-height: 100px;
       }
@@ -1654,7 +1679,7 @@
       .capabilities-split,
       .experience-grid {
         grid-template-columns: 1fr !important;
-        gap: 16px !important;
+        gap: 28px !important;
       }
 
       .tools-grid,
@@ -3848,6 +3873,14 @@
       mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
     }
 
+    @media (max-width: 768px) {
+      .editorial-marquee-wrap {
+        background: rgba(10, 13, 19, 0.22);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+      }
+    }
+
     @keyframes editorialMarquee {
       0% { transform: translate3d(0, 0, 0); }
       100% { transform: translate3d(-50%, 0, 0); }
@@ -3888,13 +3921,13 @@
       opacity: 0.75;
     }
 
-    /* Closed Deals & Anonymized Client Impact Section */
+    /* Closed Deals & Client Endorsements (Compact Scrollable Showcase) */
     .deals-kpi-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
-      padding: 24px 28px;
-      margin-bottom: 24px;
+      padding: 22px 28px;
+      margin-bottom: 22px;
     }
 
     .deal-kpi-item {
@@ -3902,6 +3935,7 @@
       flex-direction: column;
       gap: 4px;
       position: relative;
+      padding-right: 12px;
     }
 
     .deal-kpi-item:not(:last-child)::after {
@@ -3916,36 +3950,44 @@
 
     .deal-kpi-val {
       font-family: var(--font-heading);
-      font-size: clamp(26px, 3vw, 34px);
+      font-size: clamp(22px, 2.4vw, 28px);
       font-weight: 700;
       color: #2ee6a8;
-      line-height: 1.1;
+      line-height: 1.15;
     }
 
     .deal-kpi-lbl {
       font-family: var(--font-heading);
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 1.3px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       color: var(--text-dim);
+    }
+
+    .deals-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
     .deals-filter-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
+      gap: 8px;
     }
 
     .deal-filter-btn {
       font-family: var(--font-heading);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.7px;
       text-transform: uppercase;
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: 30px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.04);
@@ -3967,18 +4009,97 @@
       box-shadow: 0 0 18px rgba(0, 217, 149, 0.16);
     }
 
+    .deals-carousel-shell {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .deals-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 6;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(12, 16, 24, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #ffffff;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+      transition: border-color 0.22s ease, background 0.22s ease, color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .deals-nav-btn.prev {
+      left: -18px;
+    }
+
+    .deals-nav-btn.next {
+      right: -18px;
+    }
+
+    .deals-nav-btn:hover {
+      border-color: rgba(0, 217, 149, 0.7);
+      background: rgba(0, 217, 149, 0.18);
+      color: #2ee6a8;
+      transform: translateY(-50%) scale(1.08);
+      box-shadow: 0 10px 26px rgba(0, 217, 149, 0.25);
+    }
+
+    @media (max-width: 768px) {
+      .deals-nav-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 17px;
+      }
+      .deals-nav-btn.prev {
+        left: 4px;
+      }
+      .deals-nav-btn.next {
+        right: 4px;
+      }
+    }
+
     .deals-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      width: 100%;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: none;
+      scroll-behavior: auto;
+      padding: 6px 6px 10px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 3%, #000 97%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 3%, #000 97%, transparent 100%);
+    }
+
+    .deals-grid::-webkit-scrollbar {
+      display: none;
+      height: 0;
     }
 
     .deal-card {
-      padding: 26px 28px;
+      flex: 0 0 330px;
+      min-width: 310px;
+      max-width: 340px;
+      scroll-snap-align: start;
+      padding: 20px 22px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 14px;
+      gap: 11px;
     }
 
     .deal-card.is-hidden {
@@ -3986,80 +4107,110 @@
     }
 
     .deal-card.is-entering {
-      animation: revealUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: revealUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .deal-card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .deal-domain-pill {
       font-family: var(--font-heading);
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.9px;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.85);
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 4px 11px;
+      padding: 3px 10px;
       border-radius: 20px;
+      white-space: nowrap;
     }
 
-    .deal-value-pill {
-      font-family: var(--font-heading);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      color: #2ee6a8;
-      background: rgba(0, 217, 149, 0.1);
-      border: 1px solid rgba(0, 217, 149, 0.3);
-      padding: 4px 11px;
-      border-radius: 20px;
+    .deal-stars {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+      flex-shrink: 0;
     }
 
     .deal-title {
       font-family: var(--font-heading);
-      font-size: 18px;
+      font-size: 15.5px;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.3;
     }
 
     .deal-quote {
-      font-size: 14px;
-      line-height: 1.65;
+      font-size: 13px;
+      line-height: 1.55;
       color: var(--text-muted);
       font-style: italic;
-      position: relative;
-      padding-left: 14px;
+      padding-left: 11px;
       border-left: 2px solid rgba(0, 217, 149, 0.45);
+    }
+
+    .deal-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .deal-attribution {
       font-family: var(--font-heading);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
       color: var(--text-dim);
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .deal-attribution strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .deal-tier-tag {
+      font-family: var(--font-heading);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #2ee6a8;
+      background: rgba(0, 217, 149, 0.09);
+      border: 1px solid rgba(0, 217, 149, 0.25);
+      padding: 2px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     @media (max-width: 820px) {
-      .deals-grid {
-        grid-template-columns: 1fr;
-      }
       .deals-kpi-bar {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 14px;
+        padding: 20px 22px;
       }
       .deal-kpi-item:not(:last-child)::after {
         display: none;
+      }
+      .deal-card {
+        flex: 0 0 82vw;
+        min-width: 265px;
       }
     }
   </style>
@@ -4432,64 +4583,74 @@
       </div>
     </section>
 
-    <!-- CLOSED ENGAGEMENTS & CLIENT IMPACT (ANONYMIZED / NDA-SAFE) -->
+    <!-- CLIENT IMPACT & ENDORSEMENTS -->
     <section id="deals">
       <div class="section-category">
-        <span>Closed Engagements &amp; Client Impact</span>
-        <span class="section-category-link">NDA-Safe Anonymized Track Record</span>
+        <span>Client Impact &amp; Endorsements</span>
+        <span class="section-category-link">Global Technical Sales Track Record</span>
       </div>
 
       <div class="av-card deals-kpi-bar">
         <div class="deal-kpi-item">
-          <span class="deal-kpi-val">$6.1K+</span>
-          <span class="deal-kpi-lbl">Closed Technical Revenue</span>
+          <span class="deal-kpi-val">Thousands of $</span>
+          <span class="deal-kpi-lbl">Closed Client Revenue</span>
         </div>
         <div class="deal-kpi-item">
-          <span class="deal-kpi-val">11</span>
-          <span class="deal-kpi-lbl">Scoped &amp; Delivered Projects</span>
+          <span class="deal-kpi-val">5.0 ★ Rated</span>
+          <span class="deal-kpi-lbl">Client Satisfaction</span>
         </div>
         <div class="deal-kpi-item">
-          <span class="deal-kpi-val">36</span>
-          <span class="deal-kpi-lbl">Milestone Releases Coordinated</span>
+          <span class="deal-kpi-val">Global Reach</span>
+          <span class="deal-kpi-lbl">US, Europe &amp; Remote Teams</span>
         </div>
       </div>
 
-      <div class="deals-filter-row" role="tablist" aria-label="Filter Client Engagements">
-        <button type="button" class="deal-filter-btn active" data-deal-filter="featured" role="tab" aria-selected="true">Featured (4)</button>
-        <button type="button" class="deal-filter-btn" data-deal-filter="ai-data" role="tab" aria-selected="false">AI &amp; Data (5)</button>
-        <button type="button" class="deal-filter-btn" data-deal-filter="web-ops" role="tab" aria-selected="false">Web, DevOps &amp; Automation (6)</button>
-        <button type="button" class="deal-filter-btn" data-deal-filter="all" role="tab" aria-selected="false">All Engagements (11)</button>
+      <div class="deals-controls-row">
+        <div class="deals-filter-row" role="tablist" aria-label="Filter Client Engagements">
+          <button type="button" class="deal-filter-btn active" data-deal-filter="featured" role="tab" aria-selected="true">Featured (4)</button>
+          <button type="button" class="deal-filter-btn" data-deal-filter="ai-data" role="tab" aria-selected="false">AI &amp; Data (5)</button>
+          <button type="button" class="deal-filter-btn" data-deal-filter="web-ops" role="tab" aria-selected="false">Web, DevOps &amp; Automation (6)</button>
+          <button type="button" class="deal-filter-btn" data-deal-filter="all" role="tab" aria-selected="false">All Engagements (11)</button>
+        </div>
       </div>
 
-      <div class="deals-grid" id="dealsGrid">
+      <div class="deals-carousel-shell">
+        <button type="button" class="deals-nav-btn prev" id="dealsPrevBtn" aria-label="Scroll left">‹</button>
+        <div class="deals-grid" id="dealsGrid">
         <!-- 1. Enterprise Data Engineering Retainer -->
         <div class="av-card deal-card" data-deal-cat="ai-data" data-featured="true">
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">Data Engineering · USA</span>
-              <span class="deal-value-pill">$2.48K+ • 11 Milestones</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Enterprise Data Pipeline &amp; Architecture Retainer</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Enterprise Data Pipeline Retainer</h3>
           </div>
           <p class="deal-quote">
-            "Translated complex ETL and warehouse bottlenecks into a clear multi-sprint roadmap—keeping alignment and milestone delivery effortless across 11 phases."
+            "Translated complex ETL bottlenecks into a clear multi-sprint roadmap—keeping delivery effortless across consecutive phases."
           </p>
-          <div class="deal-attribution">— Data Engineering Stakeholder · US Tech Enterprise</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Terron S</strong> · US Tech</span>
+            <span class="deal-tier-tag">Multi-Sprint</span>
+          </div>
         </div>
 
         <!-- 2. Healthcare AI Advisory -->
         <div class="av-card deal-card" data-deal-cat="ai-data" data-featured="true">
           <div>
             <div class="deal-card-top">
-              <span class="deal-domain-pill">HealthTech AI · Long-Term</span>
-              <span class="deal-value-pill">$1.35K+ • Retained</span>
+              <span class="deal-domain-pill">HealthTech AI</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Healthcare AI Engineering &amp; Scoping Engagement</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Healthcare AI Scoping &amp; Advisory</h3>
           </div>
           <p class="deal-quote">
-            "Rare mix of technical AI literacy and structured discovery. De-risked domain-specific healthcare constraints before kickoff and locked in a smooth long-term partnership."
+            "Rare mix of AI literacy and structured discovery. De-risked healthcare constraints upfront for a smooth long-term partnership."
           </p>
-          <div class="deal-attribution">— Founder · HealthTech AI Venture</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Individual Client</strong> · HealthTech AI</span>
+            <span class="deal-tier-tag">Long-Term</span>
+          </div>
         </div>
 
         <!-- 3. AI EdTech Evaluation System -->
@@ -4497,14 +4658,17 @@
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">AI Systems · EdTech</span>
-              <span class="deal-value-pill">$1.10K+ • 7 Milestones</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">AI Instructional Evaluation Platform</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">AI Instructional Evaluation Platform</h3>
           </div>
           <p class="deal-quote">
-            "Turned an ambitious AI evaluation concept into a structured 7-milestone delivery plan—bridging product vision with clear engineering checkpoints."
+            "Turned an ambitious AI concept into a structured multi-milestone delivery plan with crystal-clear engineering checkpoints."
           </p>
-          <div class="deal-attribution">— Product Director · EdTech Innovation Lab</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Walid Ouda</strong> · EdTech</span>
+            <span class="deal-tier-tag">Full-Cycle</span>
+          </div>
         </div>
 
         <!-- 4. Custom Automation & Bots -->
@@ -4512,14 +4676,17 @@
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">Automation · Europe</span>
-              <span class="deal-value-pill">$350 • Multi-Phase</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Custom Workflow Bots &amp; Automation Suite</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Custom Workflow Bots &amp; Automation</h3>
           </div>
           <p class="deal-quote">
-            "Quickly diagnosed our manual workflow bottlenecks and scoped custom automation bots with zero fluff and transparent turnaround expectations."
+            "Quickly diagnosed our manual bottlenecks and scoped custom automation bots with zero fluff and reliable turnaround."
           </p>
-          <div class="deal-attribution">— Operations Lead · European Digital Studio</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Damiano Scolari</strong> · EU Studio</span>
+            <span class="deal-tier-tag">Multi-Phase</span>
+          </div>
         </div>
 
         <!-- 5. Enterprise RAG & LLM Pipeline -->
@@ -4527,14 +4694,17 @@
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">AI &amp; RAG · Global</span>
-              <span class="deal-value-pill">$300 • Scoped Sprint</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">LLM Retrieval &amp; RAG Pipeline Integration</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">LLM Retrieval &amp; RAG Integration</h3>
           </div>
           <p class="deal-quote">
-            "Spoke our engineering team's language from call one—accurately scoping retrieval architecture, vector indexing, and delivery milestones."
+            "Spoke our engineering team's language from call one—accurately scoping retrieval architecture and vector indexing."
           </p>
-          <div class="deal-attribution">— AI Product Lead · SaaS Analytics</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Tausif S</strong> · SaaS Analytics</span>
+            <span class="deal-tier-tag">AI Sprint</span>
+          </div>
         </div>
 
         <!-- 6. Secure Panel UI & Local SSL Routing -->
@@ -4542,59 +4712,71 @@
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">DevOps &amp; UI · Europe</span>
-              <span class="deal-value-pill">$250 • Fixed Scope</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Containerized Control Panel &amp; SSL Routing</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Docker Panel UI &amp; Local SSL Routing</h3>
           </div>
           <p class="deal-quote">
-            "Clarified Docker networking and local SSL routing edge cases upfront—making technical alignment between security specs and frontend UI seamless."
+            "Clarified Docker networking and SSL routing edge cases upfront—making alignment between security and UI seamless."
           </p>
-          <div class="deal-attribution">— Infrastructure Lead · EU Software Team</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Mihaela Elena S</strong> · EU Software</span>
+            <span class="deal-tier-tag">Dedicated</span>
+          </div>
         </div>
 
         <!-- 7. Automotive Marketplace Enhancement -->
         <div class="av-card deal-card is-hidden" data-deal-cat="web-ops">
           <div>
             <div class="deal-card-top">
-              <span class="deal-domain-pill">Full-Stack Web · DACH</span>
-              <span class="deal-value-pill">$170 • 6 Iterations</span>
+              <span class="deal-domain-pill">Full-Stack · DACH</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Automotive Listings Portal Enhancement</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Automotive Listings Portal Upgrade</h3>
           </div>
           <p class="deal-quote">
-            "Reliable, responsive communication across 6 iterative release cycles—keeping feature priorities and UX upgrades moving on schedule."
+            "Responsive communication across iterative release cycles—keeping feature priorities and UX upgrades right on schedule."
           </p>
-          <div class="deal-attribution">— Managing Stakeholder · Automotive Portal (Germany)</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>D GmbH</strong> · Germany</span>
+            <span class="deal-tier-tag">Iterative</span>
+          </div>
         </div>
 
         <!-- 8. Data Analysis Methods & Tooling -->
         <div class="av-card deal-card is-hidden" data-deal-cat="ai-data">
           <div>
             <div class="deal-card-top">
-              <span class="deal-domain-pill">Data &amp; Analytics · Global</span>
-              <span class="deal-value-pill">$50 • Rapid Delivery</span>
+              <span class="deal-domain-pill">Data &amp; Analytics</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Statistical Methods &amp; Data Tooling Sprint</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Statistical Methods &amp; Data Tooling</h3>
           </div>
           <p class="deal-quote">
-            "Crisp requirement breakdown and fast technical execution—delivering clean analytical clarity without unnecessary back-and-forth."
+            "Crisp requirement breakdown and fast technical execution—delivering clean analytical clarity without back-and-forth."
           </p>
-          <div class="deal-attribution">— Research Stakeholder · Data Analytics</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Ella</strong> · Data Analytics</span>
+            <span class="deal-tier-tag">Advisory</span>
+          </div>
         </div>
 
         <!-- 9. FastAPI Middleware Audit -->
         <div class="av-card deal-card is-hidden" data-deal-cat="web-ops">
           <div>
             <div class="deal-card-top">
-              <span class="deal-domain-pill">Python / API · Global</span>
-              <span class="deal-value-pill">$50 • Architecture Audit</span>
+              <span class="deal-domain-pill">Python / API</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">FastAPI Middleware Code &amp; Security Review</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">FastAPI Middleware Architecture Review</h3>
           </div>
           <p class="deal-quote">
-            "Sharp technical scoping on our Python FastAPI middleware layer—surfacing architectural bottlenecks quickly and clearly."
+            "Sharp technical scoping on our FastAPI middleware layer—surfacing architectural bottlenecks quickly and clearly."
           </p>
-          <div class="deal-attribution">— Backend Engineering Lead · SaaS Platform</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Jella Villorente</strong> · SaaS</span>
+            <span class="deal-tier-tag">Audit</span>
+          </div>
         </div>
 
         <!-- 10. Ops Sheets & Forms Automation -->
@@ -4602,14 +4784,17 @@
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">Ops Automation · USA</span>
-              <span class="deal-value-pill">$45+ • 3 Phases</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Automated Reporting &amp; Intake Workflows</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Automated Intake &amp; Reporting Ops</h3>
           </div>
           <p class="deal-quote">
-            "Streamlined our structured data capture and reporting pipelines across 3 iterative phases with strong attention to operational detail."
+            "Streamlined our structured data capture and reporting pipelines across iterative phases with great operational detail."
           </p>
-          <div class="deal-attribution">— Program Coordinator · US STEM Organization</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>MakerState</strong> · US STEM</span>
+            <span class="deal-tier-tag">Ops Suite</span>
+          </div>
         </div>
 
         <!-- 11. Next.js Predictive Timing App -->
@@ -4617,15 +4802,20 @@
           <div>
             <div class="deal-card-top">
               <span class="deal-domain-pill">Next.js &amp; ML · USA</span>
-              <span class="deal-value-pill">Scoped Delivery</span>
+              <span class="deal-stars" aria-label="5 out of 5 stars">★★★★★</span>
             </div>
-            <h3 class="deal-title" style="margin-top: 12px;">Next.js End-Time Prediction Module</h3>
+            <h3 class="deal-title" style="margin-top: 10px;">Next.js Predictive Timing Module</h3>
           </div>
           <p class="deal-quote">
-            "Fast, frictionless scoping and delivery alignment on our Next.js prediction module—zero communication overhead."
+            "Fast, frictionless scoping and delivery alignment on our Next.js prediction module with zero communication overhead."
           </p>
-          <div class="deal-attribution">— Principal Consultant · US Advisory Firm</div>
+          <div class="deal-footer-row">
+            <span class="deal-attribution"><strong>Kanehl Consulting LLC</strong> · USA</span>
+            <span class="deal-tier-tag">Scoped</span>
+          </div>
         </div>
+      </div>
+        <button type="button" class="deals-nav-btn next" id="dealsNextBtn" aria-label="Scroll right">›</button>
       </div>
     </section>
 
@@ -5291,7 +5481,7 @@
       const drawH = bh * scale;
       const x = (cw - drawW) / 2;
 
-      const targetFaceY = ch * (isMobile ? 0.39 : (isTablet ? 0.45 : 0.48));
+      const targetFaceY = ch * (isMobile ? 0.33 : (isTablet ? 0.43 : 0.48));
       let y = targetFaceY - (drawH * 0.27);
 
       if (y < -drawH * 0.03) {
@@ -5948,50 +6138,154 @@
           document.addEventListener('mouseleave', () => cursorRing.classList.remove('visible'));
         }
       }
+    })();
 
-      // 4. Anonymized Closed Deals & Client Impact Filter Tabs
+    // Client Reviews Floating Auto-Scroll Carousel + Filter Tabs
+    (function initDealsFloatingCarousel() {
+      const dealsGrid = document.getElementById('dealsGrid');
+      const dealsPrevBtn = document.getElementById('dealsPrevBtn');
+      const dealsNextBtn = document.getElementById('dealsNextBtn');
       const dealFilterBtns = document.querySelectorAll('.deal-filter-btn');
-      const dealCards = document.querySelectorAll('#dealsGrid .deal-card');
+      const dealCards = Array.from(document.querySelectorAll('#dealsGrid .deal-card'));
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      dealFilterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const filter = btn.getAttribute('data-deal-filter');
-          if (!filter || btn.classList.contains('active')) return;
+      if (!dealsGrid) return;
 
-          dealFilterBtns.forEach(b => {
-            b.classList.remove('active');
-            b.setAttribute('aria-selected', 'false');
-          });
-          btn.classList.add('active');
-          btn.setAttribute('aria-selected', 'true');
+      let loopWidth = 0;
+      let floatPos = 0;
+      let isHoverPaused = false;
+      let manualPauseUntil = 0;
+      let lastFrameTime = 0;
 
-          let visibleIdx = 0;
-          dealCards.forEach(card => {
-            const cat = card.getAttribute('data-deal-cat');
-            const isFeatured = card.getAttribute('data-featured') === 'true';
-            const shouldShow =
-              filter === 'all' ||
-              (filter === 'featured' && isFeatured) ||
-              cat === filter;
+      function measureLoopWidth() {
+        const firstOrig = dealCards.find(c => !c.classList.contains('is-hidden'));
+        const firstClone = dealsGrid.querySelector('.deal-card[data-clone="true"]');
+        if (firstOrig && firstClone) {
+          loopWidth = Math.max(0, firstClone.offsetLeft - firstOrig.offsetLeft);
+        } else {
+          loopWidth = 0;
+        }
+      }
 
-            card.classList.remove('is-entering');
-            if (shouldShow) {
-              card.classList.remove('is-hidden');
-              card.classList.add('is-revealed', 'reveal-done');
-              card.style.animationDelay = `${Math.min(visibleIdx, 6) * 55}ms`;
+      function syncDealsTrack(filter, animateFilter) {
+        dealsGrid.querySelectorAll('.deal-card[data-clone="true"]').forEach(n => n.remove());
+
+        const visibleOriginals = [];
+        let visibleIdx = 0;
+        dealCards.forEach(card => {
+          const cat = card.getAttribute('data-deal-cat');
+          const isFeatured = card.getAttribute('data-featured') === 'true';
+          const shouldShow =
+            filter === 'all' ||
+            (filter === 'featured' && isFeatured) ||
+            cat === filter;
+
+          card.classList.remove('is-entering');
+          if (shouldShow) {
+            card.classList.remove('is-hidden');
+            card.classList.add('is-revealed', 'reveal-done');
+            if (animateFilter) {
+              card.style.animationDelay = `${Math.min(visibleIdx, 6) * 45}ms`;
               void card.offsetWidth;
               card.classList.add('is-entering');
               card.addEventListener('animationend', () => {
                 card.classList.remove('is-entering');
                 card.style.animationDelay = '';
               }, { once: true });
-              visibleIdx++;
-            } else {
-              card.classList.add('is-hidden');
             }
+            visibleOriginals.push(card);
+            visibleIdx++;
+          } else {
+            card.classList.add('is-hidden');
+          }
+        });
+
+        // Append seamless clones for continuous floating scroll
+        visibleOriginals.forEach(orig => {
+          const clone = orig.cloneNode(true);
+          clone.setAttribute('data-clone', 'true');
+          clone.setAttribute('aria-hidden', 'true');
+          clone.classList.remove('reveal-target', 'is-entering');
+          clone.classList.add('is-revealed', 'reveal-done');
+          clone.style.animationDelay = '';
+          dealsGrid.appendChild(clone);
+        });
+
+        floatPos = 0;
+        dealsGrid.scrollLeft = 0;
+        requestAnimationFrame(measureLoopWidth);
+      }
+
+      // Spotlight support for original + cloned cards
+      if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        dealsGrid.addEventListener('pointermove', e => {
+          const card = e.target.closest('.deal-card');
+          if (!card) return;
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+        }, { passive: true });
+      }
+
+      // Pause ONLY while cursor/touch is on the reviews strip
+      dealsGrid.addEventListener('mouseenter', () => { isHoverPaused = true; });
+      dealsGrid.addEventListener('mouseleave', () => {
+        floatPos = dealsGrid.scrollLeft;
+        isHoverPaused = false;
+      });
+      dealsGrid.addEventListener('touchstart', () => { manualPauseUntil = performance.now() + 2500; }, { passive: true });
+
+      if (dealsPrevBtn && dealsNextBtn) {
+        const scrollStep = () => Math.min(350, dealsGrid.clientWidth * 0.85);
+        dealsPrevBtn.addEventListener('click', () => {
+          manualPauseUntil = performance.now() + 700;
+          if (loopWidth > 0 && dealsGrid.scrollLeft <= 12) {
+            dealsGrid.scrollLeft += loopWidth;
+          }
+          dealsGrid.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
+        });
+        dealsNextBtn.addEventListener('click', () => {
+          manualPauseUntil = performance.now() + 700;
+          dealsGrid.scrollBy({ left: scrollStep(), behavior: 'smooth' });
+        });
+      }
+
+      dealFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-deal-filter');
+          if (!filter || btn.classList.contains('active')) return;
+          dealFilterBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
           });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          syncDealsTrack(filter, true);
         });
       });
+
+      syncDealsTrack('featured', false);
+      window.addEventListener('resize', measureLoopWidth, { passive: true });
+
+      if (!reducedMotion) {
+        function floatDealsTick(now) {
+          if (!lastFrameTime) lastFrameTime = now;
+          const dt = Math.min(48, now - lastFrameTime);
+          lastFrameTime = now;
+
+          if (!isHoverPaused && now >= manualPauseUntil && loopWidth > 0) {
+            floatPos += dt * 0.055;
+            if (floatPos >= loopWidth) {
+              floatPos -= loopWidth;
+            }
+            dealsGrid.scrollLeft = floatPos;
+          } else {
+            floatPos = dealsGrid.scrollLeft;
+          }
+          requestAnimationFrame(floatDealsTick);
+        }
+        requestAnimationFrame(floatDealsTick);
+      }
     })();
 
   </script>
